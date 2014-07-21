@@ -1,0 +1,13 @@
+kind	nice	wild	funny	best	nice
+fast	quick	kind	heavy	small	quick
+skinny	small	little	shin	strong	thin
+remote	automatic	mean	savage	distant	distant
+detest	argue	reveal	hate	discover	hate
+gracious	clever	pretty	present	pleasant	pleasant
+predict	foretell	decide	discover	prevent	foretell
+kin	exult	friend	relative	twist	relative 
+pensive	caged	thoughtful	oppressed	happy	thoughtful
+banish	hate	exile	fade	clean	exile
+saccharine	leave	sweet	quit	arid	saccharine
+drag	sleepy	proud	pull	crush	pull
+
