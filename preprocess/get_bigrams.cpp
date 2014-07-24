@@ -51,7 +51,7 @@ void process_sentence(std::string const & s)
     std::string w_prev;
     for (const auto& t : tokens) {
         std::string str_current=t;
-        clean(str_current);
+        //clean(str_current);
         if (counters.find( w_prev ) != counters.end())
             accumulate(counters[w_prev],str_current);
             //std::cout << w_prev<<" " << t << std::endl;

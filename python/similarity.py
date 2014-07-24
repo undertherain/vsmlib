@@ -53,9 +53,9 @@ def purge():
         if os.path.isdir(full): shutil.rmtree(full)
         if os.path.isfile(full): os.remove(full)
 
-def clean(lst):
-    for s in lst:
-        s.replace("/","_")
+#def clean(lst):
+    #for s in lst:
+     #   s.replace("/","_")
 
 
 path_corpus = ''
@@ -66,6 +66,7 @@ frequencies=nltk.FreqDist()
 cfd = nltk.ConditionalFreqDist()
 cfd_pmi = nltk.ConditionalFreqDist()
     
+########################### bigrams    ###########################################
 def get_cfd(w):
     cache_cfd(w)
     return cfd[w]
@@ -75,13 +76,13 @@ def cache_cfd_pmi(w):
     cache_cfd(w)
     cfd_pmi[w]=copy.deepcopy(cfd[w])
     pmi=cfd_pmi[w]
-    lst_prefetch_frequecies=list(pmi.keys())
-    lst_prefetch_frequecies.append(w)
-    cache_frequencies(lst_prefetch_frequecies)
+    #lst_prefetch_frequecies=list(pmi.keys())
+    #lst_prefetch_frequecies.append(w)
+    #cache_frequencies(lst_prefetch_frequecies)
     #normalize frequency
     for key in pmi:
      #   print (key)
-        pmi[key]=(pmi[key]/(get_frequency(key)*get_frequency(w)+1))
+        pmi[key]=math.log(pmi[key]*get_word_count()/(get_frequency(key)*get_frequency(w)),2)
         #pmi[key]=(pmi[key]*get_frequency(key)*get_frequency(w)/get_word_count())
 
 def load_bigrams_from_file(word):
@@ -101,6 +102,7 @@ def cache_cfd(w):
         my_call(["../preprocess/get_bigrams", path_corpus,  os.path.join(dir_cache,"bigrams"), w], cwd="../preprocess")
     load_bigrams_from_file(w)
 
+################ vectors #############
 def vec_module(a):
     result=0
     for k in a.values():
@@ -118,7 +120,6 @@ def cmp_vectors_cosine(a,b):
 
 metric = cmp_vectors_cosine
     
-
 def cmp_vectors_euc(a,b):
     result=0;
     keys = a.keys() | b.keys()
@@ -126,21 +127,21 @@ def cmp_vectors_euc(a,b):
         result += (a[key]-b[key])**2
     return 1/(math.sqrt(result)+1)
 
-
 def cmp_words(a,b):
     return metric(collocation_measure(a),collocation_measure(b))
  
 def cmp_first_tail(l,verbose=False):
     max_score=-1;
     max_element=None
+    scores=[]
     if verbose: 
         print (l[0]," vs")
     for i in l[1:]:
         score=cmp_words(l[0],i)
-        if score>max_score:
-            max_score,max_element=score,i
+        scores.append(score)
         if verbose: print (i.ljust(10)+"\t"+str(score))
-    return max_element
+    confidence = sorted(scores)[-1]-sorted(scores)[-2]
+    return l[scores.index(max(scores))+1], confidence
 
 def show_common_context(a,b,N=12):
     ca= get_cfd(a)
@@ -160,6 +161,7 @@ def show_common_context(a,b,N=12):
         print (str(k).ljust(12),"\t",ca[k],"\t",cb[k])
     #return joint
 
+####################   frequencies  #####################
 def get_frequencies_from_corpora(lst):
     print ("extracting forrequencies from corpora ",len(lst),"requested")
     temp_freq=nltk.FreqDist()
@@ -170,20 +172,20 @@ def get_frequencies_from_corpora(lst):
                 temp_freq[tkn_clean]+=1
     return temp_freq
 
-def get_frequencies_from_corpora2(lst):
+#def get_frequencies_from_corpora2(lst):
     #print ("extracting forrequencies from corpora 2 ",len(lst),"requested")
-    dump_list_to_file("../preprocess/words_of_interest.txt",lst)
-    my_call(["../preprocess/get_frequency", path_corpus, os.path.join(dir_cache,"frequencies")], cwd="../preprocess")
-    prefetch_frequencies(lst)
+ #   dump_list_to_file("../preprocess/words_of_interest.txt",lst)
+  #  my_call(["../preprocess/get_frequency", path_corpus, os.path.join(dir_cache,"frequencies")], cwd="../preprocess")
+   # prefetch_frequencies(lst)
 
-def cache_frequencies(l):
-    clean(l)
-    prefetch_frequencies(l)
-    lst = [w for w in l if not w in frequencies]
-    if len(lst)==0: 
-        return
-    check_dir(os.path.join(dir_cache,"frequencies"))
-    get_frequencies_from_corpora2(lst)
+#def cache_frequencies(l):
+#    clean(l)
+#    prefetch_frequencies(l)
+#    lst = [w for w in l if not w in frequencies]
+#    if len(lst)==0: 
+#        return
+#    check_dir(os.path.join(dir_cache,"frequencies"))
+#    get_frequencies_from_corpora2(lst)
 
     #temp_freq=get_frequencies_from_corpora(lst)
     #print ("writing extracted frequencies to fs")
@@ -198,20 +200,31 @@ def dump_freq_to_file(w,freq):
     f.write(str(freq))
     f.close()
 
-def prefetch_frequencies(l):
-    lst = [w for w in l if not w in frequencies]
+#def prefetch_frequencies(l):
+#    lst = [w for w in l if not w in frequencies]
     #print (len(frequencies),"frequencies in the list, ",len(l),"  requested to load")
-    for w in lst:
-        path_freq=os.path.join(dir_cache,"frequencies",w)
+#    for w in lst:
+#        path_freq=os.path.join(dir_cache,"frequencies",w)
         #print(path_freq)
-        if os.path.isfile(path_freq):
-            frequencies[w] = int(open(path_freq).readline())
+#        if os.path.isfile(path_freq):
+#            frequencies[w] = int(open(path_freq).readline())
             #if frequencies[w]==0:
             #    print ("ow, prefetched 0 frequency for",w)
     #print (len(frequencies),"are now frequencies in the list, ")
 
+def prefetch_frequencies_all():
+    if not os.path.isfile(os.path.join(dir_cache,"frequencies")):
+        my_call(["../preprocess/get_frequency_all", path_corpus, dir_cache], cwd="../preprocess")
+    for line in open(os.path.join(dir_cache,"frequencies")):
+        tokens=line.split()
+        frequencies[tokens[0]]=int(tokens[1])
+
 def get_frequency(w):
-    if w in frequencies: return frequencies[w]
+    if w in frequencies:
+        return frequencies[w]
+    else:
+        print ("oh frequency not in the list ",w)
+    return 0
     #print ("frequency was not in the list!")
     path_freq=os.path.join(dir_cache,"frequencies",w)
     if os.path.isfile(path_freq):
@@ -238,3 +251,6 @@ def get_word_count():
     f.write(str(cnt_words))
     f.close()
     return cnt_words
+
+def init():
+    prefetch_frequencies_all()
