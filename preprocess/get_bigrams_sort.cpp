@@ -11,24 +11,13 @@
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
 #include "string_tools.hpp"
-using boost::property_tree::ptree;
+#include "basic_utils/buffer_byte.hpp"
+
 
 unsigned long long cnt_words;
 typedef std::map<std::string,unsigned long> Accumulator;
 std::map<std::string,Accumulator> counters;
-
-
-void load_words()
-{
-	std::ifstream d_file("words_of_interest.txt");
-    std::string line;
-    while( std::getline( d_file, line ) ) 
-    {
-        trim3(line);
-        counters.insert(std::make_pair(line,Accumulator()));
-    }
-}
-
+//unsigned long cnt_white;
 void accumulate(Accumulator & ac,std::string w)
 {
     if (ac.find( w ) != ac.end())
@@ -46,6 +35,9 @@ void clean(std::string & str)
 
 void process_sentence(std::string const & s)
 {
+  //  for (unsigned int i=0; i<s.length(); i++)
+    //    if (s[i]==' ') cnt_white++;
+    return ;
     boost::char_separator<char> sep(" .,:;!?()[]\t'\"");
     boost::tokenizer<boost::char_separator<char> > tokens(s, sep);
     std::string w_prev;
@@ -94,21 +86,22 @@ int main(int argc, char * argv[])
       std::cerr << "usage: " << argv[0] << " corpus_file output_dir [word]\n";
       return 0;
     } 
-    if (argc<4)  
-        load_words();
-    else
-        counters.insert(std::make_pair(std::string(argv[3]),Accumulator()));
+    //counters.insert(std::make_pair(std::string(argv[3]),Accumulator()));
     std::string path_out(argv[2]);
-    std::ifstream d_file(argv[1]);
-    if (!d_file.is_open()) throw std::runtime_error("can not open corpus file");
-    std::string line;
-    while (std::getline(d_file, line)) 
+    //std::ifstream d_file(argv[1]);
+    std::string s="test";
+    BufferByte buf_in=BufferByte::LoadFromFile(argv[1]);
+   // buf_in.Print();
+   // count separators
+    Index cnt_white=0;
+    for (Index i=0;i<buf_in.size;i++)
     {
-        process_sentence(line);
-    }
-    for (const auto& t : counters) 
-    {
-        dump_stat(t.first,path_out,t.second);
-    }
+        if (buf_in.buffer[i]==' ') cnt_white++;
+     }
+    std::cout<<cnt_white<<"\t words found";
+    Index * ptr_delimiters=new Index[cnt_white];
+    //allocate arary of separators 
+    //populate array of separators
+    delete [] ptr_delimiters;
 	return 0;
 }

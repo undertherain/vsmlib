@@ -220,6 +220,7 @@ def prefetch_frequencies_all():
         frequencies[tokens[0]]=int(tokens[1])
 
 def get_frequency(w):
+    if w[0]=='-': return get_frequency(w[1:])
     if w in frequencies:
         return frequencies[w]
     else:
