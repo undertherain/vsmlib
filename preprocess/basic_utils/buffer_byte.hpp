@@ -26,6 +26,7 @@ public:
 	static Index GetFileSize(std::string filename);
 	//static BufferByte LoadFromDir();
 	static BufferByte LoadFromFile(std::string nameFileIn);
+	bool less(Index l,Index r);
 };
 	
 #endif

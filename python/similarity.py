@@ -25,6 +25,7 @@ class CollocationMeasures(object):
         return cfd_pmi[w]
 
 collocation_measure = None
+PREFETCH_INDIVIDUAL_WORDS = False
 
 def dump_list_to_file(filename,lst):
     f = open(filename,"w")
@@ -69,6 +70,7 @@ cfd_pmi = nltk.ConditionalFreqDist()
 ########################### bigrams    ###########################################
 def get_cfd(w):
     cache_cfd(w)
+    #if now w in cfd: cfd[w]=nltk.ConditionalFreqDist()
     return cfd[w]
 
 def cache_cfd_pmi(w):
@@ -81,8 +83,11 @@ def cache_cfd_pmi(w):
     #cache_frequencies(lst_prefetch_frequecies)
     #normalize frequency
     for key in pmi:
-     #   print (key)
-        pmi[key]=math.log(pmi[key]*get_word_count()/(get_frequency(key)*get_frequency(w)),2)
+        if get_frequency(key)==0:
+            pmi[key]=0
+        else:
+            pmi[key]=math.log(pmi[key]*get_word_count()/(get_frequency(key)*get_frequency(w)),2)
+            if pmi[key]<0:pmi[key]=0;
         #pmi[key]=(pmi[key]*get_frequency(key)*get_frequency(w)/get_word_count())
 
 def load_bigrams_from_file(word):
@@ -97,10 +102,12 @@ def init_cfd():
 
 def cache_cfd(w):
     if w in cfd: return;
-    if not os.path.isfile(os.path.join(dir_cache,"bigrams",w)):
-        check_dir( os.path.join(dir_cache,"bigrams"))
-        my_call(["../preprocess/get_bigrams", path_corpus,  os.path.join(dir_cache,"bigrams"), w], cwd="../preprocess")
-    load_bigrams_from_file(w)
+    if PREFETCH_INDIVIDUAL_WORDS:
+        if not os.path.isfile(os.path.join(dir_cache,"bigrams",w)):
+            check_dir( os.path.join(dir_cache,"bigrams"))
+            my_call(["../preprocess/get_bigrams", path_corpus,  os.path.join(dir_cache,"bigrams"), w], cwd="../preprocess")
+    if os.path.isfile(os.path.join(dir_cache,"bigrams",w)):
+        load_bigrams_from_file(w)
 
 ################ vectors #############
 def vec_module(a):
@@ -224,7 +231,7 @@ def get_frequency(w):
     if w in frequencies:
         return frequencies[w]
     else:
-        print ("oh frequency not in the list ",w)
+        print ("oh frequency not in the list '",w,"'")
     return 0
     #print ("frequency was not in the list!")
     path_freq=os.path.join(dir_cache,"frequencies",w)

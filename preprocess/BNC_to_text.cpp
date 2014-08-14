@@ -28,6 +28,8 @@ void trim3(std::string & str)
 {
   str.erase(str.begin(), find_if(str.begin(), str.end(), [](char& ch)->bool { return !isspace(ch); }));
   str.erase(find_if(str.rbegin(), str.rend(), [](char& ch)->bool { return !isspace(ch); }).base(), str.end());
+  for (unsigned int i=0;i<str.length();i++)
+    if (str[i]=='/') str[i]=' ';
   //return str;
 }  
 
@@ -46,6 +48,7 @@ inline bool is_word_valid(std::string const & w)
 {
 	if (w.length()<3) return false;
   if (!std::isalpha(w[0])) return false;
+  if (!std::isalpha(w[1])) return false;
 	if(stopwords.find(w) != stopwords.end()) return false;
 	return true;
 }

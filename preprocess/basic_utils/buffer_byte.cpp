@@ -1,6 +1,7 @@
 #include <string>
 #include <stdexcept>
 #include <cstdio>
+#include <cstring>
 #include <vector>
 #include <list>
 
@@ -35,6 +36,11 @@ BufferByte::~BufferByte()
 #ifdef PRINT_ALL
     std::cout<<"destructing bytebuffer";
 #endif
+}
+
+bool BufferByte::less(Index r,Index l)
+{
+    return std::strcmp(reinterpret_cast<const char *>(buffer+l), reinterpret_cast<const char *>(buffer+r)) < 0;
 }
 
 byte & BufferByte::operator[](const Index idx) const

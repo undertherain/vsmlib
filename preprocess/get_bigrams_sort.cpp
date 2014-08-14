@@ -5,6 +5,7 @@
 #include <set>
 #include <map>
 #include <exception>
+#include <algorithm>
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -17,7 +18,7 @@
 unsigned long long cnt_words;
 typedef std::map<std::string,unsigned long> Accumulator;
 std::map<std::string,Accumulator> counters;
-//unsigned long cnt_white;
+
 void accumulate(Accumulator & ac,std::string w)
 {
     if (ac.find( w ) != ac.end())
@@ -79,6 +80,24 @@ void dump_stat(std::string name,std::string dir_out, Accumulator const & ac)
     file.close();
 }
 
+void print_line(const byte * buf) 
+{
+    for (unsigned long i=0;i<12;i++)
+        std::cout<<buf[i];
+}
+
+class Comparator
+{
+    byte * ptr=NULL;
+public:
+    Comparator (byte * _ptr):ptr(_ptr){}
+    bool operator ()(Index r,Index l)
+    {
+        return std::strcmp(reinterpret_cast<const char *>(ptr+l), reinterpret_cast<const char *>(ptr+r)) > 0;
+    }
+};
+
+
 int main(int argc, char * argv[])
 {
    if (argc<3)
@@ -92,16 +111,35 @@ int main(int argc, char * argv[])
     std::string s="test";
     BufferByte buf_in=BufferByte::LoadFromFile(argv[1]);
    // buf_in.Print();
-   // count separators
     Index cnt_white=0;
     for (Index i=0;i<buf_in.size;i++)
     {
         if (buf_in.buffer[i]==' ') cnt_white++;
-     }
-    std::cout<<cnt_white<<"\t words found";
+    }
+    std::cout<<cnt_white<<"\t words found\n";
+    //Index pos_prev = 0; // todo this should be negative!!!!
+    Index pos_current = 0;
     Index * ptr_delimiters=new Index[cnt_white];
-    //allocate arary of separators 
-    //populate array of separators
+    ptr_delimiters[pos_current++]=0;
+    std::cerr<<"buf_in.size = "<<buf_in.size<<"\n";
+    for (Index i=0;i<buf_in.size;i++)
+    {
+        if (buf_in.buffer[i]==' ')
+        {   
+            while (buf_in.buffer[i+1]=='\n') i++;
+            ptr_delimiters[pos_current++]=i+1;
+        }
+    }
+    std::sort (ptr_delimiters, ptr_delimiters+pos_current,Comparator(buf_in.buffer));
+    for (unsigned long i=0;i<cnt_white;i++)
+    {
+        Index pos_symbol=0;
+        while ((pos_symbol<buf_in.size)){}
+        //std::cout<<ptr_delimiters[i]<<"\t";
+        //print_line(buf_in.buffer+ptr_delimiters[i]);
+        //std::cout<<"\n";
+    }
+
     delete [] ptr_delimiters;
 	return 0;
 }

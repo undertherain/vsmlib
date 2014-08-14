@@ -37,6 +37,13 @@ void accumulate(Accumulator & ac,std::string w)
         ac.insert(std::make_pair(w,1));
 }
 
+void accumulate(std::string first, std::string second)
+{
+    if (counters.find( first ) == counters.end())
+        counters.insert(std::make_pair(first,Accumulator()));
+    accumulate(counters[first],second);
+}
+
 void clean(std::string & str)
 {
     for (unsigned int i=0;i<str.length();i++)
@@ -52,12 +59,14 @@ void process_sentence(std::string const & s)
     for (const auto& t : tokens) {
         std::string w_current=t;
         //clean(str_current);
-        if (counters.find( w_prev ) != counters.end())
-            accumulate(counters[w_prev],w_current);
+       // if (counters.find( w_prev ) != counters.end())
+        if (w_prev.length()>1)
+//            accumulate(counters[w_prev],w_current);
+            accumulate(w_prev,w_current);
         //std::cerr<<"w_prev = "<<w_prev<<" , w_current = "<<w_current<<"\n";
-        if (w_prev.length()!=0)
-        if (counters.find( w_current ) != counters.end())
-            accumulate(counters[w_current],std::string("-")+w_prev);
+        //if (w_prev.length()!=0)
+        //if (counters.find( w_current ) != counters.end())
+          //  accumulate(counters[w_current],std::string("-")+w_prev);
 //            accumulate(counters[w_current],w_prev);
 //        std::cout << w_prev<<" " << t << std::endl;
         w_prev=w_current;
@@ -94,10 +103,10 @@ int main(int argc, char * argv[])
       std::cerr << "usage: " << argv[0] << " corpus_file output_dir [word]\n";
       return 0;
     } 
-    if (argc<4)  
-        load_words();
-    else
-        counters.insert(std::make_pair(std::string(argv[3]),Accumulator()));
+  //  if (argc<4)  
+    //    load_words();
+    //else
+      //  counters.insert(std::make_pair(std::string(argv[3]),Accumulator()));
     std::string path_out(argv[2]);
     std::ifstream d_file(argv[1]);
     if (!d_file.is_open()) throw std::runtime_error("can not open corpus file");
