@@ -17,8 +17,7 @@ TernaryTreeNode<Index> * tree=NULL;
 
 inline void accumulate(const std::string & w)
 {
-    increment<Index>(tree,w.c_str());
-//    set_id<Index>(tree,w.c_str());
+        set_id<Index>(tree,w.c_str());
 }
 
 void process_sentence(std::string const & s)
@@ -60,6 +59,8 @@ int main(int argc, char * argv[])
     {
         throw  std::runtime_error("can not open output file "+str_path+" , check the path");
     }
+
+    //id's set!
     traverse<Index>(tree,0);
     file.close();
  //   dump_stat(path_out,counters);

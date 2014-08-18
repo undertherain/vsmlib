@@ -2,7 +2,7 @@ char  buffer[255];
 //unsigned long long cnt_words;
 //std::ofstream file;
 
-
+Index id=1;
 
 template <typename T>
 class TernaryTreeNode
@@ -14,11 +14,9 @@ public:
     TernaryTreeNode * right;
     T data;
 };
-TernaryTreeNode<unsigned long> * tree=NULL;
-
 
 template <typename T>
-void insert(TernaryTreeNode<T> * node, const char * str)
+void set_id(TernaryTreeNode<T> * node, const char * str)
 {
 /*  if (head==NULL)
     { 
@@ -33,7 +31,56 @@ void insert(TernaryTreeNode<T> * node, const char * str)
         if (c==node->c)
         {
             if (node->down==NULL) 
+            {
+                node->down= new TernaryTreeNode<T>();
+                node->down->c=str[depth+1];     
+            }
+            node=node->down;
+            depth++;
+            continue;
+        } 
+        if (c<node->c)
+        {
+            if (node->left==NULL)   
             {   
+                node->left= new TernaryTreeNode<T>();
+                node->left->c=c;
+            }
+            node=node->left;
+            continue;
+        } 
+        if (c>node->c)
+        {
+            if (node->right==NULL) 
+            {
+                node->right= new TernaryTreeNode<T>();
+                node->right->c=c;
+            }
+            node=node->right;
+            //continue;
+        }
+    }
+    if (!node->data) node->data=id++;
+}
+
+
+template <typename T>
+void increment(TernaryTreeNode<T> * node, const char * str)
+{
+/*  if (head==NULL)
+    { 
+        head= new TernaryTreeNode<T>();
+        head->c=str[0];
+    }*/ 
+    //TernaryTreeNode<T> * node = head;
+    unsigned int depth=0;
+    while (depth<strlen(str)-1)
+    {
+        char c=str[depth];
+        if (c==node->c)
+        {
+            if (node->down==NULL) 
+            {
                 node->down= new TernaryTreeNode<T>();
                 node->down->c=str[depth+1];     
             }
@@ -63,6 +110,35 @@ void insert(TernaryTreeNode<T> * node, const char * str)
         }
     }
     node->data+=1;
+}
+
+template <typename T>
+T get_value(const TernaryTreeNode<T> * node, const char * str)
+{
+    unsigned int depth=0;
+    while (depth<strlen(str)-1)
+    {
+        char c=str[depth];
+        if (c==node->c)
+        {
+            if (node->down==NULL) return 0;
+            node=node->down;
+            depth++;
+            continue;
+        } 
+        if (c<node->c)
+        {
+            if (node->left==NULL)  return 0;
+            node=node->left;
+            continue;
+        } 
+        if (c>node->c)
+        {
+            if (node->right==NULL) return 0;
+            node=node->right;
+        }
+    }
+    return node->data;
 }
 
 
