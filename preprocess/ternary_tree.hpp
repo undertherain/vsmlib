@@ -147,7 +147,7 @@ void traverse(const TernaryTreeNode<T> * node,unsigned int depth)
 {
     buffer[depth]=node->c;  
     if (node->data)
-    file<<std::string(buffer,buffer+depth+1)<<"\t"<<node->data<<"\n";
+    file<<std::string(buffer,buffer+depth+1)<<"\t"<<node->data-1<<"\n";
     if (node->left!=NULL) traverse<T>(node->left,depth);
     buffer[depth]=node->c;  
     if (node->down!=NULL) traverse<T>(node->down,depth+1);

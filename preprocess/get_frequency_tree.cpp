@@ -13,6 +13,7 @@ typedef unsigned long Index;
 #include "string_tools.hpp"
 #include "ternary_tree.hpp"
 TernaryTreeNode<Index> * tree=NULL;
+TernaryTreeNode<Index> * tree_ids=NULL;
 
 
 inline void accumulate(const std::string & w)

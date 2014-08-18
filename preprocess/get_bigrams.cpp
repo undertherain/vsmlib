@@ -11,7 +11,7 @@
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
 #include "string_tools.hpp"
-using boost::property_tree::ptree;
+//using boost::property_tree::ptree;
 
 unsigned long long cnt_words;
 typedef std::map<std::string,unsigned long> Accumulator;
