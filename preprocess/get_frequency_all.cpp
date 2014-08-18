@@ -5,6 +5,7 @@
 #include <set>
 #include <unordered_set>
 #include <map>
+#include <unordered_map>
 #include <exception>
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -15,9 +16,10 @@
 using boost::property_tree::ptree;
 
 unsigned long long cnt_words;
-typedef std::map<std::string,unsigned long> Accumulator;
+//typedef std::map<std::string,unsigned long> Accumulator;
+typedef std::unordered_map<std::string,unsigned long> Accumulator;
 
-std::unordered_set<std::string> keys;
+//std::unordered_set<std::string> keys;
 Accumulator counters;
 
 inline void accumulate(Accumulator & ac,std::string w)
@@ -61,13 +63,14 @@ int main(int argc, char * argv[])
 {
    if (argc<3)
     {
-      std::cerr << "usage: " << argv[0] << " corpus_file output_dir [word]\n";
+      std::cerr << "usage: " << argv[0] << " corpus_file output_dir \n";
       return 0;
     }
 
     std::string path_out(argv[2]);
     std::ifstream d_file(argv[1]);
     if (!d_file.is_open()) throw std::runtime_error("can not open corpus file");
+    
     std::string line;
     while (std::getline(d_file, line)) 
     {

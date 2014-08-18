@@ -50,6 +50,7 @@ void process_sentence(std::string const & s)
         //std::cerr<<"w_prev = "<<w_prev<<" , w_current = "<<w_current<<"\n";
         if (w_prev.length()!=0)
         if (counters.find( w_current ) != counters.end())
+//            accumulate(counters[w_current],std::string("-")+w_prev);
             accumulate(counters[w_current],std::string("-")+w_prev);
 //            accumulate(counters[w_current],w_prev);
 //        std::cout << w_prev<<" " << t << std::endl;

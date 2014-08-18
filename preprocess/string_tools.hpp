@@ -5,3 +5,8 @@ void trim3(std::string & str)
   //return str;
 }  
 
+void trim_c(char ** str)
+{
+	
+}
+
