@@ -123,7 +123,8 @@ def cmp_vectors_cosine(a,b):
     keys = a.keys() & b.keys()
     for key in keys:
         result += a[key]*b[key]
-    return (result)/(vec_module(a)*vec_module(b)+1)
+#    return (result)/(vec_module(a)*vec_module(b)+1)
+    return (result)/(vec_module(a)*vec_module(b))
 
 metric = cmp_vectors_cosine
     

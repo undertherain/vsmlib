@@ -7,7 +7,6 @@
 #include <boost/tokenizer.hpp>
 #include <boost/filesystem.hpp>
 
-std::ofstream file;
 typedef unsigned long Index;
 
 #include "string_tools.hpp"
@@ -18,7 +17,7 @@ TernaryTreeNode<Index> * tree_ids=NULL;
 
 inline void accumulate(const std::string & w)
 {
-    increment<Index>(tree,w.c_str());
+    set_id_and_increment(tree,w.c_str());
 //    set_id<Index>(tree,w.c_str());
 }
 
@@ -27,8 +26,10 @@ void process_sentence(std::string const & s)
     boost::char_separator<char> sep(" .,:;!?()[]\t\"'");
     boost::tokenizer<boost::char_separator<char> > tokens(s, sep);
     for (const auto& t : tokens) {
+        //std::cerr<<"\ttoken : "<<t<<'\n';
         std::string str = t;
         trim3(str);
+        if (str.length()>2)
         accumulate(str);
     }
 }
@@ -51,17 +52,19 @@ int main(int argc, char * argv[])
     std::string line;
     while (std::getline(d_file, line)) 
     {
+        //std::cerr<<"line: "<<line<<"\n";
         process_sentence(line);
     }
     //std::cerr <<"apple = "<<get_value<unsigned long>(tree,"apps")<<"\n";
     boost::filesystem::path path_full = boost::filesystem::path(path_out) / boost::filesystem::path("frequencies");
     std::string str_path=path_full.string();
+    std::ofstream file;
     file.open (str_path);
     if(!file)
     {
         throw  std::runtime_error("can not open output file "+str_path+" , check the path");
     }
-    traverse<Index>(tree,0);
+    dump_frequency<Index>(file,tree,0);
     file.close();
  //   dump_stat(path_out,counters);
     return 0;

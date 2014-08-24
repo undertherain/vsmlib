@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <cmath>
 #include <fstream>
 #include <sstream>
 #include <exception>
@@ -10,17 +11,18 @@
 #include <map>
 #include <unordered_map>
 
-std::ofstream file;
 typedef unsigned long Index;
 
 #include "string_tools.hpp"
 #include "ternary_tree.hpp"
-TernaryTreeNode<Index> * tree_ids=NULL;
+TernaryTreeNode<Index> * tree=NULL;
+//TernaryTreeNode<Index> * tree_freq=NULL;
 
 
 unsigned long long cnt_words;
 typedef std::map<Index,Index> Accumulator;
 std::map<Index,Accumulator> counters;
+std::vector<Index> freq_per_id;
 
 template <typename T>
     std::string ConvertToStr(const T & val)
@@ -30,12 +32,6 @@ template <typename T>
         std::string str = out.str();
         return str;
     }
-
-inline void accumulate_ids(const std::string & w)
-{
-        set_id<Index>(tree_ids,w.c_str());
-}
-
 
 void accumulate(Accumulator & ac,Index w)
 {
@@ -61,23 +57,35 @@ void process_sentence_ids(std::string const & s)
     for (const auto& t : tokens) {
         std::string str = t;
         trim3(str);
-        accumulate_ids(str);
+        if (str.length()<2) continue;
+        cnt_words++;
+        Index i=set_id_and_increment(tree,str.c_str());
+        if (freq_per_id.size()<i+1) freq_per_id.push_back(0);
+        freq_per_id[i]++;
+        //increment<Index>(tree_freq,str.c_str());
     }
 }
 
 
 void process_sentence(std::string const & s)
 {
+   if (s.length()<2) return;
     boost::char_separator<char> sep(" .,:;!?()[]\t'\"");
     boost::tokenizer<boost::char_separator<char> > tokens(s, sep);
     std::string w_prev;
     for (const auto& t : tokens) {
         std::string w_current=t;
+        trim3(w_current);
+        if (w_current.length()<2) continue;
         //clean(str_current);
        // if (counters.find( w_prev ) != counters.end())
-        if (w_prev.length()>1)
 //            accumulate(counters[w_prev],w_current);
-            accumulate(get_value(tree_ids,w_prev.c_str()),get_value(tree_ids,w_current.c_str()));
+    if (w_prev.length()>1)
+    {
+            //if get_id(tree,w_prev.c_str())
+            accumulate(get_id(tree,w_prev.c_str()),get_id(tree,w_current.c_str()));
+            //std::cerr<<w_prev<<"\t"<<w_current<<'\n';
+    }
         //std::cerr<<"w_prev = "<<w_prev<<" , w_current = "<<w_current<<"\n";
 //        if (w_prev.length()!=0)
         //if (counters.find( w_current ) != counters.end())
@@ -88,8 +96,40 @@ void process_sentence(std::string const & s)
     }
 }
 
+void write_value_to_file(std::string name,Index value)
+{
+    std::ofstream file(name);
+    file<<value;
+    file.close();
+}
 
+void write_vector_to_file(std::string name,std::vector<Index> const &  values)
+{
+    std::ofstream file(name);
+    for (Index i=0;i<values.size();i++)
+        file<<i<<"\t"<<values[i]<<"\n";
+    file.close();
+}
 
+void dump_crs(std::string path_out)
+{
+    std::string str_path = (boost::filesystem::path(path_out) / boost::filesystem::path("bigrams.data")).string();
+    std::ofstream file;
+    file.open (str_path);
+    if(!file) throw  std::runtime_error("can not open output file "+str_path+" , check the path");
+    for (const auto& first : counters) 
+    {
+        for (const auto& second : first.second) 
+        {
+            //if (t.second>0)
+            //file<<first.first-1<<"\t"<<second.first-1<<"\t"<<second.second<<"\n";
+            double v=log2((static_cast<double>(second.second)*cnt_words)/(freq_per_id[first.first]*freq_per_id[second.first]));
+            //std::cerr<<"first.first = "<<first.first<<"["<<freq_per_id[first.first]<<"]\t second.first = "<<second.first<<"["<<freq_per_id[second.first]<<"]\n";
+            file<<v<<"\n";
+        }
+
+    }
+}
 
 int main(int argc, char * argv[])
 {
@@ -98,19 +138,54 @@ int main(int argc, char * argv[])
       std::cerr << "usage: " << argv[0] << " corpus_file output_dir \n";
       return 0;
     }
-    tree_ids = new TernaryTreeNode<unsigned long>();
-    tree_ids->c='m';
+    tree = new TernaryTreeNode<unsigned long>();
+    tree->c='m';
+/*
+    set_id_and_increment(tree,"cat");
+    set_id_and_increment(tree,"cax");
+    set_id_and_increment(tree,"banana");
+    //set_id_and_increment(tree,"applx");
+    std::cerr <<"frequencies:\n";
+    dump_frequency(std::cerr, tree,0);
+    std::cerr <<"ids:\n";
+    dump_ids(std::cerr, tree,0);
+    get_id(tree,"cat");
+    get_id(tree,"cax");
+    get_id(tree,"banana");
+  */  
+//    return 0;
 
     std::string path_out(argv[2]);
     std::ifstream d_file(argv[1]);
     if (!d_file.is_open()) throw std::runtime_error("can not open corpus file");
     
+    std::cerr<<"assigning ids\n";
     std::string line;
     while (std::getline(d_file, line)) 
     {
         process_sentence_ids(line);
     }
+    boost::filesystem::path path_full = boost::filesystem::path(path_out) / boost::filesystem::path("ids");
+    std::string str_path=path_full.string();
+    std::ofstream file;
+    file.open (str_path);
+    if(!file)  throw  std::runtime_error("can not open output file "+str_path+" , check the path");
+    dump_ids<Index>(file,tree,0);
+    file.close();
 
+    path_full = boost::filesystem::path(path_out) / boost::filesystem::path("frequencies");
+    str_path=path_full.string();
+    file.open (str_path);
+    if(!file)  throw  std::runtime_error("can not open output file "+str_path+" , check the path");
+    dump_frequency<Index>(file,tree,0);
+    file.close();
+
+    write_value_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("cnt_unique_words")).string(),id_global);
+    write_value_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("cnt_words")).string(),cnt_words);
+    write_vector_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("freq_per_id")).string(),freq_per_id);
+    //end dump ids
+
+    std::cerr<<"extracting bigrams\n";
     d_file.clear();
     d_file.seekg(std::ios_base::beg);
     
@@ -118,42 +193,25 @@ int main(int argc, char * argv[])
     {
         process_sentence(line);
     }
-    //dump ids
 
-    boost::filesystem::path path_full = boost::filesystem::path(path_out) / boost::filesystem::path("ids");
-    std::string str_path=path_full.string();
-    file.open (str_path);
-    if(!file)
-    {
-        throw  std::runtime_error("can not open output file "+str_path+" , check the path");
-    }
-    traverse<Index>(tree_ids,0);
-    file.close();
-
-    //end dump ids
-
+    
     path_full = boost::filesystem::path(path_out) / boost::filesystem::path("bigrams_list");
     str_path=path_full.string();
     file.open (str_path);
-    if(!file)
-    {
-        throw  std::runtime_error("can not open output file "+str_path+" , check the path");
-    }
-
+    if(!file) throw  std::runtime_error("can not open output file "+str_path+" , check the path");
     for (const auto& first : counters) 
     {
-        //dump_stat(first.first,path_out,t.second);
         for (const auto& second : first.second) 
         {
             //if (t.second>0)
-            file<<first.first-1<<"\t"<<second.first-1<<"\t"<<second.second<<"\n";
+//            file<<first.first<<"\t"<<second.first<<"\t"<<second.second<<"\n";
+            double v=log2((static_cast<double>(second.second)*cnt_words)/(freq_per_id[first.first]*freq_per_id[second.first]));
+            file<<first.first<<"\t"<<second.first<<"\t"<<v<<"\n";
         }
 
     }
 
     file.close();
-
-
-
+    dump_crs(path_out);
     return 0;
 }
