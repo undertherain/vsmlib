@@ -16,6 +16,24 @@ public:
     Index id;
 };
 
+void check_tree()
+{
+/*
+    set_id_and_increment(tree,"cat");
+    set_id_and_increment(tree,"cax");
+    set_id_and_increment(tree,"banana");
+    //set_id_and_increment(tree,"applx");
+    std::cerr <<"frequencies:\n";
+    dump_frequency(std::cerr, tree,0);
+    std::cerr <<"ids:\n";
+    dump_ids(std::cerr, tree,0);
+    get_id(tree,"cat");
+    get_id(tree,"cax");
+    get_id(tree,"banana");
+  */  
+//    return 0;
+}
+    
 Index set_id_and_increment(TernaryTreeNode<Index> * node, const char * str)
 {
 /*  if (head==NULL)

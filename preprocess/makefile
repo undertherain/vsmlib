@@ -1,8 +1,8 @@
 .Phony: clean
 LIBS = -lboost_filesystem -lboost_system
 
-CXXFLAGS = -Wall -std=c++14 -O3 -ggdb3 -g3
-all: BNC_to_text get_bigrams get_bigrams_sort get_frequency get_frequency_all get_frequency_tree get_bigrams_tree
+CXXFLAGS = -Wall -std=c++14 -O3 -ggdb3 -g3 -fdiagnostics-color=auto
+all: BNC_to_text get_bigrams_tree
 
 BNC_to_text: BNC_to_text.cpp
 	g++  $^ $(CXXFLAGS) -o $@ $(LIBS)
