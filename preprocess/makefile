@@ -2,7 +2,7 @@
 LIBS = -lboost_filesystem -lboost_system
 
 CXXFLAGS = -Wall -std=c++14 -O3 -ggdb3 -g3 -fdiagnostics-color=auto
-all: BNC_to_text get_bigrams_tree
+all: BNC_to_text get_bigrams_tree sparse
 
 BNC_to_text: BNC_to_text.cpp
 	g++  $^ $(CXXFLAGS) -o $@ $(LIBS)
@@ -27,6 +27,10 @@ get_frequency_tree: get_frequency_tree.cpp
 
 buffer_byte.o: basic_utils/buffer_byte.cpp
 	g++  $^ $(CXXFLAGS) -c -o $@ $(LIBS)
+
+sparse: sparse.cpp
+	g++  $^ $(CXXFLAGS) -o $@ $(LIBS)
+
 
 clean:
 	rm *.o

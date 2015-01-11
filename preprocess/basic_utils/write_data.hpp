@@ -91,3 +91,52 @@ void dump_crs(std::string path_out)
 
        file.close();
    }
+
+void dump_crs_bin(std::string path_out)
+{
+    //std::ostringstream oss(std::ios::binary);
+    std::ofstream file;
+    std::string str_path = (boost::filesystem::path(path_out) / boost::filesystem::path("bigrams.data.bin")).string();
+    file.open (str_path,  std::ios::out | std::ios::binary);
+    //std::ios::binary 
+    if(!file) throw  std::runtime_error("can not open output file "+str_path+" , check the path");
+    for (const auto& first : counters)  //vriting data
+    {
+        for (const auto& second : first.second) 
+        {
+            float v=log2((static_cast<double>(second.second)*cnt_words)/(freq_per_id[first.first]*freq_per_id[second.first]));
+            //file<<v<<"\n";
+            file.write( reinterpret_cast<const char*>(&v),sizeof(v));
+        }
+    }
+    file.close();
+    str_path = (boost::filesystem::path(path_out) / boost::filesystem::path("bigrams.col_ind.bin")).string();
+    file.open (str_path,  std::ios::out | std::ios::binary);
+    for (const auto& first : counters)  //vriting columnt indices
+    {
+        for (const auto& second : first.second) 
+        {
+            size_t v=second.first;
+            file.write( reinterpret_cast<const char*>(&v),sizeof(v));
+        }
+    }
+    file.close();
+    str_path = (boost::filesystem::path(path_out) / boost::filesystem::path("bigrams.row_ptr.bin")).string();
+    file.open (str_path);
+    size_t row_ptr=0;
+    Index id_last=0;
+    for (const auto& first : counters)  //vriting columnt indices
+    {
+        //std::cerr<<"first.first = "<<first.first<<"\t count = "<<first.second.size()<<"\n";
+        if (first.first==0) file.write( reinterpret_cast<const char*>(&row_ptr),sizeof(row_ptr));
+        else
+            for (Index k=id_last;k<first.first;k++)
+                file.write( reinterpret_cast<const char*>(&row_ptr),sizeof(row_ptr));
+            id_last=first.first;
+            row_ptr+=first.second.size();
+        }
+        for (Index k=id_last;k<id_global;k++)
+           file.write( reinterpret_cast<const char*>(&row_ptr),sizeof(row_ptr));
+
+       file.close();
+   }

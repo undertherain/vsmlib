@@ -231,5 +231,6 @@ for (const auto& first : counters)
 }
 file.close();
 dump_crs(path_out.string());
+dump_crs_bin(path_out.string());
 return 0;
 }
