@@ -5,6 +5,8 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
+
 
 size_t get_cnt_lines(const std::string &name_file)
 {
@@ -14,6 +16,10 @@ size_t get_cnt_lines(const std::string &name_file)
 size_t get_filesize(const std::string & name_file)
 {
     std::ifstream in(name_file, std::ifstream::ate | std::ifstream::binary);
+    if (!in.is_open())
+    {
+    	throw std::runtime_error ("get_filesize() can not open file");
+    }
     return in.tellg(); 
 }
 
@@ -180,12 +186,20 @@ public:
 	}
 };
 
+void load_word_ids()
+{
+	std::ifstream in("/storage/scratch/small_bin/ids");
+	if (!in.is_open()) {std::cerr<<"can not open file\n";}
+}
 
 int main(int argc, char* argv[])
 {
-	std::cout<<"Heelo sparse\n";
+	std::string dir_root="/storage/scratch/small_bin/";
+	if (argc>1)
+		dir_root = std::string(argv[1]);
+	std::cerr<<"opening "<<dir_root<<"\n";
 	Sparse<float> m;
-	m.load("/storage/scratch/small_bin/");
+	m.load(dir_root);
 	m.print();
 	int i = 1;
 	int j = 4;
@@ -196,5 +210,6 @@ int main(int argc, char* argv[])
 	std::cerr << "most similar rows to "<< i <<" are: \n";
 	for (auto i: most_similar)
     	std::cout << i.id <<" - " <<i.score<<"\n";
+    //load dictionary of words
 	return 0;
 }
