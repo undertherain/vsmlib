@@ -4,9 +4,15 @@
 #include <cmath>
 #include <list>
 #include <vector>
+#include <unordered_map>
 #include <algorithm>
 #include <stdexcept>
+#include <boost/tokenizer.hpp>
+#include <boost/filesystem.hpp>
 
+std::unordered_map<std::string,size_t> dic_words;
+std::vector<std::string> words;
+std::vector<size_t> frequencies;
 
 size_t get_cnt_lines(const std::string &name_file)
 {
@@ -149,14 +155,16 @@ public:
 	}
 	inline T cosine_distance(size_t u, size_t v) const
 	{
+		if ((cache_norm[u]==0) || (cache_norm[v]==0)) return 0;
 		return (dotproduct_rows(u,v))/(cache_norm[u]*cache_norm[v]);
 	}
 	
 	template<size_t cnt_rows>
 	std::list<Score<T>> get_most_similar_rows(size_t u)
 	{
+		if ((u<0)||(u>=dim_y)) {throw std::runtime_error("word index out of range in get similar vectors");}
 		T * scores = new T[dim_y];
-		size_t * positions = new size_t[dim_x];
+		size_t * positions = new size_t[dim_y];
 		for (size_t i=0; i<dim_y; i++)
 		{
 			positions[i]=i;
@@ -169,9 +177,10 @@ public:
 				scores[i]=0;
 			}
 		}
-		Comparator_pos<T> cmp(scores);
-		std::sort(positions, positions+dim_x,cmp);
+		std::sort(positions, positions+dim_y,Comparator_pos<T>(scores));
 		std::list<Score<T>> result;
+		size_t cnt = cnt_rows;
+		if (cnt>dim_y) cnt = dim_y;
 		for (size_t i = 0; i< cnt_rows; i++)
 		{
 			if (i>=dim_y) break;
@@ -184,13 +193,62 @@ public:
 		delete [] positions;
 		return result;		
 	}
+	
+	template<size_t cnt_rows>
+	std::list<Score<T>> get_most_similar_rows(std::string key)
+	{
+		//if key in 
+		//size_t key  = dic_words[key]<<"\n";
+		return get_most_similar_rows<cnt_rows>(dic_words[key]);		
+	}
+	void report_most_similar(std::string query)
+	{
+		auto most_similar= get_most_similar_rows<10>(query);
+		//std::cerr << "most similar rows to "<< i <<" are: \n";
+		for (auto i: most_similar)
+    	std::cout << words[i.id] <<" ["<<frequencies[i.id]<<"] - " <<i.score<<"\n";
+	}	
 };
 
-void load_word_ids()
+void load_word_ids(boost::filesystem::path dir_root)
 {
-	std::ifstream in("/storage/scratch/small_bin/ids");
+	std::ifstream in((dir_root / boost::filesystem::path("ids")).string());
 	if (!in.is_open()) {std::cerr<<"can not open file\n";}
+	std::string line;
+    boost::char_separator<char> sep("\t");
+	while( std::getline( in, line ) ) 
+	{
+    	boost::tokenizer<boost::char_separator<char> > tokens(line, sep);
+        auto beg=tokens.begin();
+        std::string key=*beg;
+        beg++;
+        std::string svalue=*beg;
+        size_t value = stoull (svalue);
+        dic_words.insert(std::pair<std::string,size_t>(key,value));
+        words[value]=key;
+    }
+    in.close();
 }
+void load_frequencies(boost::filesystem::path dir_root)
+{
+	std::ifstream in((dir_root / boost::filesystem::path("freq_per_id")).string());
+	if (!in.is_open()) {std::cerr<<"can not open file\n";}
+	std::string line;
+    boost::char_separator<char> sep("\t");
+	while( std::getline( in, line ) ) 
+	{
+    	boost::tokenizer<boost::char_separator<char> > tokens(line, sep);
+        auto beg=tokens.begin();
+        std::string svalue=*beg;
+        size_t id = stoull (svalue);
+        beg++;
+        svalue=*beg;
+        size_t value = stoull (svalue);
+        frequencies[id]=value;
+    }
+    in.close();
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -201,15 +259,19 @@ int main(int argc, char* argv[])
 	Sparse<float> m;
 	m.load(dir_root);
 	m.print();
-	int i = 1;
+    words.resize(m.dim_y);
+    frequencies.resize(m.dim_y);
+	load_word_ids(dir_root);
+	load_frequencies(dir_root);
+	int i = 0;
 	int j = 4;
+	
 	std::cerr << "norm of row "<< i << " = " << m.cache_norm[i] << "\n";
 	std::cerr << "dotproduct of rows "<< i <<" and " << j << " = " << m.dotproduct_rows(i,j)<<"\n";
 	std::cerr << "cosine distance between rows "<< i <<" and " << j << " = " << m.cosine_distance(i,j)<<"\n";
-	auto most_similar= m.get_most_similar_rows<10>(i);
-	std::cerr << "most similar rows to "<< i <<" are: \n";
-	for (auto i: most_similar)
-    	std::cout << i.id <<" - " <<i.score<<"\n";
-    //load dictionary of words
+	//auto most_similar= m.get_most_similar_rows<10>(i);
+	m.report_most_similar("fast");
+	
 	return 0;
+	
 }
