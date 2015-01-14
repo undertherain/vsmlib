@@ -14,12 +14,12 @@
 #include <cstdarg>
 
 typedef unsigned long Index;
+std::set<std::string> stopwords;
 
 #include "string_tools.hpp"
 #include "ternary_tree.hpp"
 TernaryTreeNode<Index> * tree=NULL;
 //TernaryTreeNode<Index> * tree_freq=NULL;
-
 
 Index cnt_words;
 Index cnt_words_processed;
@@ -59,10 +59,11 @@ void accumulate(Index first, Index second)
     accumulate(counters[first],second);
 }
 
-const char * separators=" .,:;!?()[]\t\"'";
+const char separators[]=" .,:;!?()[]\t\"'";
 
 void process_sentence_ids(std::string const & s)
 {
+    if (s.length()<2) return;
     boost::char_separator<char> sep(separators);
     boost::tokenizer<boost::char_separator<char> > tokens(s, sep);
     for (const auto& t : tokens) {
@@ -77,22 +78,20 @@ void process_sentence_ids(std::string const & s)
     }
 }
 
-
 void process_sentence(std::string const & s)
 {
  if (s.length()<2) return;
+// std::cerr<<" line: "<<s<<"\n";
  boost::char_separator<char> sep(separators);
- boost::tokenizer<boost::char_separator<char> > tokens(s, sep);
+ boost::tokenizer <boost::char_separator<char> > tokens(s, sep);
  std::string w_prev;
- for (const auto& t : tokens) {
+for (const auto& t : tokens) {
     std::string w_current=t;
     clean(w_current);
-    if (!is_word_valid(w_current)) continue;
-
+    if (!is_word_valid(w_current))  continue;
     cnt_words_processed++;
     if (current_max<get_id(tree,w_current.c_str()))
          current_max=get_id(tree,w_current.c_str());
-
         //clean(str_current);
        // if (counters.find( w_prev ) != counters.end())
 //            accumulate(counters[w_prev],w_current);
@@ -110,7 +109,7 @@ void process_sentence(std::string const & s)
 //            accumulate(counters[w_current],std::string("-")+w_prev);
           //std::cout << w_prev<<" " << t << std::endl;
     w_prev=w_current;
-}
+    }
 }
 
 
@@ -123,7 +122,7 @@ public:
     DirReader(std::string _dir):dir(_dir),initial(_dir)
     {
         file_in.open(dir->path().string());
-        std::cerr<<"processing \t"<<dir->path().string()<<'\n';
+        std::cerr<<"processing \t"<<dir->path().string()<<" ... ";
         //reset();
     }
     void reset()
@@ -131,11 +130,13 @@ public:
         dir=initial;
         if (file_in.is_open()) file_in.close();
         file_in.open(dir->path().string());
-        std::cerr<<"processing \t"<<dir->path().string()<<'\n';
+        std::cerr<<"processing \t"<<dir->path().string()<<" ... ";
     }
     bool getline(std::string & line)
     {
         boost::filesystem::recursive_directory_iterator end;
+        do
+        {
         if (!file_in.eof())
         {
             std::getline(file_in, line);
@@ -146,17 +147,21 @@ public:
             if (dir==end)
             {
                 file_in.close();
+                std::cerr<<"done \n";
                 return false;
             }
             else 
             {
-                std::cerr<<"processing \t"<<dir->path().string()<<'\n';
+                std::cerr<<"done \nprocessing \t"<<dir->path().string()<<" ... ";
                 file_in.close();
                 file_in.open(dir->path().string());
-                std::getline(file_in, line);
-                return true;
+                if (!file_in.is_open()) {continue; }
+                //std::getline(file_in, line);
+                //return true;
             }
         }
+        }
+        while(1);
     }
 };
 

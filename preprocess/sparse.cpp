@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <boost/tokenizer.hpp>
 #include <boost/filesystem.hpp>
+#include "string_tools.hpp"
 
 std::unordered_map<std::string,size_t> dic_words;
 std::vector<std::string> words;
@@ -204,9 +205,9 @@ public:
 	void report_most_similar(std::string query)
 	{
 		auto most_similar= get_most_similar_rows<10>(query);
-		//std::cerr << "most similar rows to "<< i <<" are: \n";
+		std::cout << "\nmost similar rows to *"<< query <<"* ["<<frequencies[dic_words[query]]<<"] are: \n";
 		for (auto i: most_similar)
-    	std::cout << words[i.id] <<" ["<<frequencies[i.id]<<"] - " <<i.score<<"\n";
+    	std::cout << "\t" << words[i.id] <<" ["<<frequencies[i.id]<<"] - " <<i.score<<"\n";
 	}	
 };
 
@@ -249,13 +250,26 @@ void load_frequencies(boost::filesystem::path dir_root)
     in.close();
 }
 
+std::list<std::string> load_words()
+{
+	std::ifstream d_file("words_of_interest.txt");
+    std::string line;
+    std::list<std::string> result;
+    while( std::getline( d_file, line ) ) 
+    {
+        trim3(line);
+        result.push_back(line);
+    }
+    return result;
+}
+
 
 int main(int argc, char* argv[])
 {
 	std::string dir_root="/storage/scratch/small_bin/";
 	if (argc>1)
 		dir_root = std::string(argv[1]);
-	std::cerr<<"opening "<<dir_root<<"\n";
+	std::cout<<"opening "<<dir_root<<"\n";
 	Sparse<float> m;
 	m.load(dir_root);
 	m.print();
@@ -263,15 +277,17 @@ int main(int argc, char* argv[])
     frequencies.resize(m.dim_y);
 	load_word_ids(dir_root);
 	load_frequencies(dir_root);
-	int i = 0;
-	int j = 4;
+	//int i = 0;
+	//int j = 4;
 	
-	std::cerr << "norm of row "<< i << " = " << m.cache_norm[i] << "\n";
-	std::cerr << "dotproduct of rows "<< i <<" and " << j << " = " << m.dotproduct_rows(i,j)<<"\n";
-	std::cerr << "cosine distance between rows "<< i <<" and " << j << " = " << m.cosine_distance(i,j)<<"\n";
+	//std::cerr << "norm of row "<< i << " = " << m.cache_norm[i] << "\n";
+	//std::cerr << "dotproduct of rows "<< i <<" and " << j << " = " << m.dotproduct_rows(i,j)<<"\n";
+	//std::cerr << "cosine distance between rows "<< i <<" and " << j << " = " << m.cosine_distance(i,j)<<"\n";
 	//auto most_similar= m.get_most_similar_rows<10>(i);
-	m.report_most_similar("fast");
-	
+	auto wordlist=load_words();
+	for (auto i: wordlist)
+		m.report_most_similar(i);
+		
 	return 0;
 	
 }

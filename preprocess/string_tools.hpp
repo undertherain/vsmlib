@@ -1,4 +1,4 @@
-std::set<std::string> stopwords;
+#include <set>
 
 inline void trim3(std::string & str)
 {
@@ -16,10 +16,6 @@ inline void clean(std::string & str)
       trim3(str);
       std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 }
-//void trim_c(char ** str)
-//{
-//	
-//}
 
 inline bool is_word_valid(std::string const & w)
 {

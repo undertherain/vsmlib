@@ -1,4 +1,5 @@
-char  buffer[255];
+#define MAX_STR_SIZE  500
+char  buffer[MAX_STR_SIZE];
 //unsigned long long cnt_words;
 //std::ofstream file;
 
@@ -47,6 +48,7 @@ Index set_id_and_increment(TernaryTreeNode<Index> * node, const char * str)
 //    while (depth<strlen(str)-1)
     while (!is_done)
     {
+        if (depth>=MAX_STR_SIZE) {std::cerr<<"string too long in tree, aborting \n"; return -1;}
         char c=str[depth];
         //std::cerr<<"depth = "<<depth<<"\tnode.c = "<<node->c<<"\tc = "<<c<<"\n";
         if (c==node->c)
