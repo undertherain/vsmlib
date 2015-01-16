@@ -1,4 +1,4 @@
-#define MAX_STR_SIZE  500
+#define MAX_STR_SIZE  1500
 char  buffer[MAX_STR_SIZE];
 //unsigned long long cnt_words;
 //std::ofstream file;

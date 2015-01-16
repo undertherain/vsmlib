@@ -166,12 +166,13 @@ public:
 		if ((u<0)||(u>=dim_y)) {throw std::runtime_error("word index out of range in get similar vectors");}
 		T * scores = new T[dim_y];
 		size_t * positions = new size_t[dim_y];
+		#pragma omp parallel for
 		for (size_t i=0; i<dim_y; i++)
 		{
 			positions[i]=i;
 			if (i!=u)
 			{
-				scores[i]=cosine_distance(u,i);
+				scores[i]=cosine_distance(u,i) * log(frequencies[i]);
 			}
 			else
 			{

@@ -14,7 +14,6 @@
 #include <cstdarg>
 
 typedef unsigned long Index;
-std::set<std::string> stopwords;
 
 #include "string_tools.hpp"
 #include "ternary_tree.hpp"
@@ -119,11 +118,13 @@ class DirReader
     boost::filesystem::recursive_directory_iterator dir,initial;
     std::ifstream file_in;
 public:
-    DirReader(std::string _dir):dir(_dir),initial(_dir)
+    DirReader(std::string _dir):dir(_dir,boost::filesystem::symlink_option::recurse),initial(_dir,boost::filesystem::symlink_option::recurse)
     {
         file_in.open(dir->path().string());
         std::cerr<<"processing \t"<<dir->path().string()<<" ... ";
         //reset();
+        //if (is_symlink(dir->symlink_status())) std::cerr<<"we are in simplink\n";
+        //exit(1);
     }
     void reset()
     {
@@ -137,9 +138,20 @@ public:
         boost::filesystem::recursive_directory_iterator end;
         do
         {
+        if (is_symlink(dir->symlink_status())) 
+        {
+            file_in.close();
+            dir++;
+            std::cerr<<"we are in simlink - moving forward\nprocessing \t"<<dir->path().string()<<" ... ";
+            file_in.open(dir->path().string());
+            continue;
+        }
         if (!file_in.eof())
         {
             std::getline(file_in, line);
+            //std::cerr<<line<<"\n";
+            if (!is_line_valid(line)) continue;
+            //std::cerr<<line<<"is valid!\n";
             return true;
         } else 
         {
@@ -235,7 +247,7 @@ for (const auto& first : counters)
     }
 }
 file.close();
-//dump_crs(path_out.string());
+dump_crs(path_out.string());
 dump_crs_bin(path_out.string());
 return 0;
 }

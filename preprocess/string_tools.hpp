@@ -1,5 +1,6 @@
 #include <set>
-
+std::set<std::string> stopwords;
+  
 inline void trim3(std::string & str)
 {
   str.erase(str.begin(), find_if(str.begin(), str.end(), [](char& ch)->bool { return !isspace(ch); }));
@@ -19,11 +20,20 @@ inline void clean(std::string & str)
 
 inline bool is_word_valid(std::string const & w)
 {
-	if (w.length()<3) return false;
+  if (w.length()<3) return false;
+  if (w.length()>20) return false;
 	if (!std::isalpha(w[0])) return false;
-	if (!std::isalpha(w[1])) return false;
+  if (!std::isalpha(w[1])) return false;
+  if (!std::isalpha(w[2])) return false;
 	if(stopwords.find(w) != stopwords.end()) return false;
 	return true;
+}
+
+inline bool is_line_valid(std::string const & w)
+{
+  if (w.length()==0) return false;
+  if ((w[0])=='<') return false;
+  return true;
 }
 
 bool hasEnding (std::string const &fullString, std::string const &ending)

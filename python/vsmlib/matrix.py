@@ -51,10 +51,17 @@ def print_stats(m):
 
 
 def load_matrix_csr(path,dic_words_ids,zero_negatives=False):
-    data = np.loadtxt(open(os.path.join(path,"bigrams.data")),dtype=np.float32)
+    data = np.fromfile(open(os.path.join(path,"bigrams.data.bin")),dtype=np.float32)
+    col_ind = np.fromfile(open(os.path.join(path,"bigrams.col_ind.bin")),dtype=np.int64)
+    row_ptr = np.fromfile(open(os.path.join(path,"bigrams.row_ptr.bin")),dtype=np.int64)
+    print ("shape of data = {}".format(data.shape))
+    print ("shape of col_ind = {}".format(col_ind.shape))
+    print ("shape of row_ptr = {}".format(row_ptr.shape))
+    dim = row_ptr.shape[0]-1
+#    data = np.loadtxt(open(os.path.join(path,"bigrams.data")),dtype=np.float32)
+    #col_ind = np.loadtxt(open(os.path.join(path,"bigrams.col_ind")),dtype=int)
+    #row_ptr = np.loadtxt(open(os.path.join(path,"bigrams.row_ptr")),dtype=int)
     if zero_negatives:
         data[data<0]=0
-    col_ind = np.loadtxt(open(os.path.join(path,"bigrams.col_ind")),dtype=int)
-    row_ptr = np.loadtxt(open(os.path.join(path,"bigrams.row_ptr")),dtype=int)
-    cooccurrence=scipy.sparse.csr_matrix((data,col_ind,row_ptr),shape=(len(dic_words_ids),len(dic_words_ids)),dtype=np.float32)
+    cooccurrence=scipy.sparse.csr_matrix((data,col_ind,row_ptr),shape=(dim,dim),dtype=np.float32)
     return cooccurrence

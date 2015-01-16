@@ -38,7 +38,8 @@ void write_vector_to_file(std::string name,std::vector<Index> const &  values)
 {
     std::ofstream file(name);
     for (Index i=0;i<values.size();i++)
-        file<<i<<"\t"<<values[i]<<"\n";
+//        file<<i<<"\t"<<values[i]<<"\n";
+        file<<values[i]<<"\n";
     file.close();
 }
 
