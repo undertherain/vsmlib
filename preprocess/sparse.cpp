@@ -236,17 +236,18 @@ void load_frequencies(boost::filesystem::path dir_root)
 	std::ifstream in((dir_root / boost::filesystem::path("freq_per_id")).string());
 	if (!in.is_open()) {std::cerr<<"can not open file\n";}
 	std::string line;
-    boost::char_separator<char> sep("\t");
+    //boost::char_separator<char> sep("\t");
+    size_t id = 0;
 	while( std::getline( in, line ) ) 
 	{
-    	boost::tokenizer<boost::char_separator<char> > tokens(line, sep);
-        auto beg=tokens.begin();
-        std::string svalue=*beg;
-        size_t id = stoull (svalue);
-        beg++;
-        svalue=*beg;
-        size_t value = stoull (svalue);
-        frequencies[id]=value;
+    //	boost::tokenizer<boost::char_separator<char> > tokens(line, sep);
+      //  auto beg=tokens.begin();
+        //std::string svalue=*beg;
+        //size_t id = stoull (svalue);
+        //beg++;
+        //svalue=*beg;
+        size_t value = stoull (line);
+        frequencies[id++]=value;
     }
     in.close();
 }
