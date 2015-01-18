@@ -17,7 +17,8 @@ typedef unsigned long Index;
 
 #include "string_tools.hpp"
 #include "ternary_tree.hpp"
-TernaryTreeNode<Index> * tree=NULL;
+//TernaryTreeNode<Index> * tree=NULL;
+TernaryTree tree;
 //TernaryTreeNode<Index> * tree_freq=NULL;
 
 Index cnt_words;
@@ -70,7 +71,7 @@ void process_sentence_ids(std::string const & s)
         clean(str);
         if (!is_word_valid(str)) continue;
         cnt_words++;
-        Index i=set_id_and_increment(tree,str.c_str());
+        Index i=tree.set_id_and_increment(str.c_str());
         if (freq_per_id.size()<i+1) freq_per_id.push_back(0);
         freq_per_id[i]++;
         //increment<Index>(tree_freq,str.c_str());
@@ -89,15 +90,15 @@ for (const auto& t : tokens) {
     clean(w_current);
     if (!is_word_valid(w_current))  continue;
     cnt_words_processed++;
-    if (current_max<get_id(tree,w_current.c_str()))
-         current_max=get_id(tree,w_current.c_str());
+    if (current_max<tree.get_id(w_current.c_str()))
+         current_max=tree.get_id(w_current.c_str());
         //clean(str_current);
        // if (counters.find( w_prev ) != counters.end())
 //            accumulate(counters[w_prev],w_current);
     if (w_prev.length()>1)
     {
             //if get_id(tree,w_prev.c_str())
-        accumulate(get_id(tree,w_prev.c_str()),get_id(tree,w_current.c_str()));
+        accumulate(tree.get_id(w_prev.c_str()),tree.get_id(w_current.c_str()));
             //std::cerr<<w_prev<<"\t"<<w_current<<'\n';
     }
         //std::cerr<<"w_prev = "<<w_prev<<" , w_current = "<<w_current<<"\n";
@@ -186,8 +187,8 @@ int main(int argc, char * argv[])
 }
 load_stopwords();
 
-tree = new TernaryTreeNode<unsigned long>();
-tree->c='m';
+//tree = new TernaryTreeNode<unsigned long>();
+//tree->c='m';
 
 boost::filesystem::path path_out(argv[2]);
 write_values_to_file((path_out / boost::filesystem::path("cnt_bigrams")).string(),"cnt_words","cnt_unique_words","cnt_bigrams");
@@ -199,17 +200,9 @@ while (dr.getline(line) )
 {
     process_sentence_ids(line);
 }
-std::ofstream file;
-file.open ((path_out / boost::filesystem::path("ids")).string());
-    //if(!file)  throw  std::runtime_error("can not open output file "+str_path+" , check the path");
-dump_ids<Index>(file,tree,0);
-file.close();
 
-std::string str_path=(path_out / boost::filesystem::path("frequencies")).string();
-file.open (str_path);
-if(!file)  throw  std::runtime_error("can not open output file "+str_path+" , check the path");
-dump_frequency<Index>(file,tree,0);
-file.close();
+tree.dump_ids((path_out / boost::filesystem::path("ids")).string());
+tree.dump_frequency((path_out / boost::filesystem::path("frequencies")).string());
 
 write_value_to_file((path_out / boost::filesystem::path("cnt_unique_words")).string(),id_global);
 write_value_to_file((path_out / boost::filesystem::path("cnt_words")).string(),cnt_words);
@@ -230,8 +223,8 @@ while (dr.getline(line) )
 }
 
 std::cerr<<"dumping results to disk\n";
-
-str_path=(path_out / boost::filesystem::path("bigrams_list")).string();
+std::ofstream file;
+std::string str_path=(path_out / boost::filesystem::path("bigrams_list")).string();
 file.open (str_path);
 if(!file) throw  std::runtime_error("can not open output file "+str_path+" , check the path");
 //Index cnt_bigrams=0;
