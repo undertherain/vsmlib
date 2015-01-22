@@ -25,7 +25,8 @@ size_t get_filesize(const std::string & name_file)
     std::ifstream in(name_file, std::ifstream::ate | std::ifstream::binary);
     if (!in.is_open())
     {
-    	throw std::runtime_error ("get_filesize() can not open file");
+    	std::string message="get_filesize() can not open file ";
+    	throw std::runtime_error (message+name_file);
     }
     return in.tellg(); 
 }
@@ -172,7 +173,7 @@ public:
 			positions[i]=i;
 			if (i!=u)
 			{
-				scores[i]=cosine_distance(u,i) * log(frequencies[i]);
+				scores[i]=cosine_distance(u,i) * log(0.1+frequencies[i]);
 			}
 			else
 			{
@@ -252,20 +253,6 @@ void load_frequencies(boost::filesystem::path dir_root)
     in.close();
 }
 
-std::list<std::string> load_words()
-{
-	std::ifstream d_file("words_of_interest.txt");
-    std::string line;
-    std::list<std::string> result;
-    while( std::getline( d_file, line ) ) 
-    {
-        trim3(line);
-        result.push_back(line);
-    }
-    return result;
-}
-
-
 int main(int argc, char* argv[])
 {
 	std::string dir_root="/storage/scratch/small_bin/";
@@ -286,10 +273,9 @@ int main(int argc, char* argv[])
 	//std::cerr << "dotproduct of rows "<< i <<" and " << j << " = " << m.dotproduct_rows(i,j)<<"\n";
 	//std::cerr << "cosine distance between rows "<< i <<" and " << j << " = " << m.cosine_distance(i,j)<<"\n";
 	//auto most_similar= m.get_most_similar_rows<10>(i);
-	auto wordlist=load_words();
+	auto wordlist=load_words("words_of_interest.txt");
 	for (auto i: wordlist)
 		m.report_most_similar(i);
 		
 	return 0;
-	
 }

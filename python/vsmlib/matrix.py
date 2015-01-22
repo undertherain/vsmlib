@@ -1,6 +1,7 @@
 import numpy as np
 import scipy
 import os
+import time
 
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
@@ -13,7 +14,7 @@ def countof_fmt(num, suffix=''):
     for unit in ['','K','M','G','T','P','E','Z']:
         if abs(num) < 1000.0:
             return "%3.1f%s%s" % (num, unit, suffix)
-        num /= 1024.0
+        num /= 1000.0
     return "%.1f%s%s" % (num, 'Y', suffix)
 
 def hello():
@@ -41,7 +42,6 @@ def get_sparsity(x):
     return sparsity
 
 def print_stats(m):
-    print ("Matrix loaded")
     print ("Matrix dimentions : {} ({} unique words in the corpus )".format(m.shape,countof_fmt(m.shape[0])))
     size_float=64
     print ("Would take {} if stored in dense format".format(sizeof_fmt(size_float*m.shape[0]*m.shape[0])))
@@ -50,18 +50,23 @@ def print_stats(m):
 
 
 
-def load_matrix_csr(path,dic_words_ids,zero_negatives=False):
-    data = np.fromfile(open(os.path.join(path,"bigrams.data.bin")),dtype=np.float32)
-    col_ind = np.fromfile(open(os.path.join(path,"bigrams.col_ind.bin")),dtype=np.int64)
-    row_ptr = np.fromfile(open(os.path.join(path,"bigrams.row_ptr.bin")),dtype=np.int64)
-    print ("shape of data = {}".format(data.shape))
-    print ("shape of col_ind = {}".format(col_ind.shape))
-    print ("shape of row_ptr = {}".format(row_ptr.shape))
-    dim = row_ptr.shape[0]-1
+def load_matrix_csr(path,zero_negatives=False,verbose=False):
+	t_start=time.time()
+	data = np.fromfile(open(os.path.join(path,"bigrams.data.bin")),dtype=np.float32)
+	col_ind = np.fromfile(open(os.path.join(path,"bigrams.col_ind.bin")),dtype=np.int64)
+	row_ptr = np.fromfile(open(os.path.join(path,"bigrams.row_ptr.bin")),dtype=np.int64)
+	print ("shape of data = {}".format(data.shape))
+	print ("shape of col_ind = {}".format(col_ind.shape))
+	print ("shape of row_ptr = {}".format(row_ptr.shape))
+	dim = row_ptr.shape[0]-1
 #    data = np.loadtxt(open(os.path.join(path,"bigrams.data")),dtype=np.float32)
     #col_ind = np.loadtxt(open(os.path.join(path,"bigrams.col_ind")),dtype=int)
     #row_ptr = np.loadtxt(open(os.path.join(path,"bigrams.row_ptr")),dtype=int)
-    if zero_negatives:
-        data[data<0]=0
-    cooccurrence=scipy.sparse.csr_matrix((data,col_ind,row_ptr),shape=(dim,dim),dtype=np.float32)
-    return cooccurrence
+	if zero_negatives:
+		data[data<0]=0
+	cooccurrence=scipy.sparse.csr_matrix((data,col_ind,row_ptr),shape=(dim,dim),dtype=np.float32)
+	t_end=time.time()
+	if verbose:
+		print ("Matrix loaded in {0:0.2f} sec".format(t_end-t_start))
+		print_stats(cooccurrence)
+	return cooccurrence

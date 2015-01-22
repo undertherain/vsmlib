@@ -34,12 +34,17 @@ void append_values_to_file(std::string name, Types ... args)
     file.close();
 }
 
-void write_vector_to_file(std::string name,std::vector<Index> const &  values)
+template <typename T>
+void write_vector_to_file(std::string name,std::vector<T> const &  values)
 {
     std::ofstream file(name);
-    for (Index i=0;i<values.size();i++)
-//        file<<i<<"\t"<<values[i]<<"\n";
-        file<<values[i]<<"\n";
+    for (size_t i=0;i<values.size();i++)
+//      file<<i<<"\t"<<values[i]<<"\n";
+    {
+        T v=values[i];
+        file.write( reinterpret_cast<const char*>(&v),sizeof(T));
+    }
+     //   file<<values[i]<<"\n";
     file.close();
 }
 
@@ -58,7 +63,7 @@ void dump_crs(std::string path_out)
     {
         for (const auto& second : first.second) 
         {
-            double v=log2((static_cast<double>(second.second)*cnt_words)/(freq_per_id[first.first]*freq_per_id[second.first]));
+            double v=log2((static_cast<double>(second.second)*vocab.cnt_words)/(freq_per_id[first.first]*freq_per_id[second.first]));
             file<<v<<"\n";
         }
     }
@@ -87,7 +92,7 @@ void dump_crs(std::string path_out)
             id_last=first.first;
             row_ptr+=first.second.size();
         }
-        for (Index k=id_last;k<id_global;k++)
+        for (size_t k=id_last;k<vocab.cnt_words;k++)
            file<<row_ptr<<"\n";
 
        file.close();
@@ -105,7 +110,7 @@ void dump_crs_bin(std::string path_out)
     {
         for (const auto& second : first.second) 
         {
-            float v=log2((static_cast<double>(second.second)*cnt_words)/(freq_per_id[first.first]*freq_per_id[second.first]));
+            float v=log2((static_cast<double>(second.second)*vocab.cnt_words_processed)/(freq_per_id[first.first]*freq_per_id[second.first]));
             //file<<v<<"\n";
             file.write( reinterpret_cast<const char*>(&v),sizeof(v));
         }
@@ -136,8 +141,27 @@ void dump_crs_bin(std::string path_out)
             id_last=first.first;
             row_ptr+=first.second.size();
         }
-        for (Index k=id_last;k<id_global;k++)
+        for (size_t k=id_last;k<vocab.cnt_words;k++)
            file.write( reinterpret_cast<const char*>(&row_ptr),sizeof(row_ptr));
 
        file.close();
    }
+
+void write_cooccurrence_text(std::string name_file)
+{
+std::ofstream file;
+file.open (name_file);
+if(!file) throw  std::runtime_error("can not open output file "+name_file+" , check the path");
+for (const auto& first : counters) 
+{
+    for (const auto& second : first.second) 
+    {
+      //if (t.second>0)
+       // file<<first.first<<"\t"<<second.first<<"\t"<<second.second<<"\n";
+        double v=log2((static_cast<double>(second.second)*vocab.cnt_words_processed)/(freq_per_id[first.first]*freq_per_id[second.first]));
+        file<<first.first<<"\t"<<second.first<<"\t"<<v<<"\n";
+    }
+}
+file.close();
+
+}

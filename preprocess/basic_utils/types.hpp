@@ -5,7 +5,7 @@
 
 //typedef unsigned long Index;
 //typedef int64_t Index;
-typedef unsigned long long Index;
+//typedef unsigned long long Index;
 typedef unsigned char byte;
 
 

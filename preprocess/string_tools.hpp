@@ -1,5 +1,9 @@
 #include <set>
-std::set<std::string> stopwords;
+#include <list>
+#include <algorithm>
+#include <fstream>
+
+
   
 inline void trim3(std::string & str)
 {
@@ -18,16 +22,7 @@ inline void clean(std::string & str)
       std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 }
 
-inline bool is_word_valid(std::string const & w)
-{
-  if (w.length()<3) return false;
-  if (w.length()>20) return false;
-	if (!std::isalpha(w[0])) return false;
-  if (!std::isalpha(w[1])) return false;
-  if (!std::isalpha(w[2])) return false;
-	if(stopwords.find(w) != stopwords.end()) return false;
-	return true;
-}
+
 
 inline bool is_line_valid(std::string const & w)
 {
@@ -45,14 +40,15 @@ bool hasEnding (std::string const &fullString, std::string const &ending)
     }
 }
 
-
-void load_stopwords()
+std::list<std::string> load_words(std::string name_file)
 {
-  std::ifstream d_file("stopwords.txt");
+  std::ifstream d_file(name_file);
     std::string line;
-    while(std::getline( d_file, line ) ) 
+    std::list<std::string> result;
+    while( std::getline( d_file, line ) ) 
     {
         trim3(line);
-        stopwords.insert( line );
+        result.push_back(line);
     }
+    return result;
 }

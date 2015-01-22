@@ -2,7 +2,10 @@
 #define GENERIC_BUFFER
 
 #include <iostream>
+typedef int64_t Index;
+
 #include "types.hpp"
+
 
 template <typename T>
 class GenericBuffer
