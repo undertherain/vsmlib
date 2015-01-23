@@ -1,7 +1,9 @@
 CC = gcc
 CXX = g++
 #Using -Ofast instead of -O3 might result in faster code, but is supported only by newer GCC versions
-CFLAGS = -lm -pthread -O3 -march=native -Wall -funroll-loops -Wno-unused-result -std=c++14 -ggdb3 -g3 -fdiagnostics-color=auto 
+LIBS = -lboost_filesystem -lboost_system -lm -pthread
+
+CFLAGS =  $(LIBS) -O3 -march=native -Wall -funroll-loops -Wno-unused-result -std=c++14 -ggdb3 -g3 -fdiagnostics-color=auto 
 CXXFLAGS = $(CFLAGS) -std=c++14 
 
 all: word2vec word2phrase distance word-analogy compute-accuracy

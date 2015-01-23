@@ -13,7 +13,9 @@ using boost::property_tree::ptree;
 
 unsigned long long cnt_words;
 
-#include "string_tools.hpp"
+//#include "string_tools.hpp"
+#include "vocabulary.hpp"
+Vocabulary vocab;
 
 
 
@@ -26,7 +28,7 @@ void traverse(const ptree & pt)
 			cnt_words++;
 			std::string w=iter->second.data();
 			clean(w);
-			if (is_word_valid(w))
+			if (vocab.is_word_valid(w))
 			myfile << w <<" ";
 		}
 		traverse(iter->second);
@@ -67,7 +69,7 @@ int main(int argc, char * argv[])
       std::cerr << "usage: " << argv[0] << " path_to_BNC output_file\n";
       return 0;
   }
-	load_stopwords();
+	//load_stopwords();
   myfile.open (argv[2]);
 // 	process_file_boost("/mnt/storage/Corpora/BNC/H/HY/HYG.xml");
 	recursive_process_dir(argv[1]);

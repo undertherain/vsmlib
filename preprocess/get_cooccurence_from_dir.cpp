@@ -7,19 +7,14 @@
 #include <exception>
 #include <cstring>
 #include <boost/tokenizer.hpp>
-#include <boost/filesystem.hpp>
 #include <map>
 #include <set>
 #include <unordered_map>
 #include <cstdarg>
 
 typedef int64_t Index;
-const char separators[]=" .,:;!?()[]-\t\"'";
 
-#include "string_tools.hpp"
-#include "ternary_tree.hpp"
 #include "basic_utils/utils.hpp"
-#include "basic_utils/stream_reader.hpp"
 #include "vocabulary.hpp"
 
 //Index cnt_words;
@@ -113,7 +108,7 @@ boost::filesystem::path path_out(argv[2]);
 std::cerr<<"assigning ids\n";
 vocab.read_from_dir(str_path_in);
 //cnt_unique_words=vocab.cnt_words;
-vocab.reduce();
+//vocab.reduce();
 
 freq_per_id.resize(vocab.cnt_words);
 
