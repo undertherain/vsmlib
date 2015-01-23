@@ -57,8 +57,8 @@ public:
 		char * word;
     	while ((word=dr.get_word())!=NULL )
     	{
-    		std::cerr<<"just read: "<<word<<"\n";
     		tree.set_id_and_increment(word);	
+        	cnt_words_processed++;
     	}
     	cnt_words=tree.id_global;
 	}

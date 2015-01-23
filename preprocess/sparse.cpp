@@ -10,10 +10,11 @@
 #include <boost/tokenizer.hpp>
 #include <boost/filesystem.hpp>
 #include "string_tools.hpp"
+#include <cassert>
 
 std::unordered_map<std::string,size_t> dic_words;
 std::vector<std::string> words;
-std::vector<size_t> frequencies;
+int64_t * frequencies;
 
 size_t get_cnt_lines(const std::string &name_file)
 {
@@ -122,7 +123,7 @@ public:
 	{
 		cnt_nnz=load_from_raw(path+"bigrams.data.bin",data);
 		cnt_nnz=load_from_raw(path+"bigrams.col_ind.bin",col_ind);
-		dim_x = load_from_raw(path+"bigrams.row_ptr.bin",row_ptr)-1;
+		dim_x = load_from_raw(path+"bigrams.row_ptr.bin",row_ptr);
 		dim_y = dim_x;
 		prefetch_norm();
 	}
@@ -209,7 +210,7 @@ public:
 		auto most_similar= get_most_similar_rows<10>(query);
 		std::cout << "\nmost similar rows to *"<< query <<"* ["<<frequencies[dic_words[query]]<<"] are: \n";
 		for (auto i: most_similar)
-    	std::cout << "\t" << words[i.id] <<" ["<<frequencies[i.id]<<"] - " <<i.score<<"\n";
+    	std::cout << "\t" <<i.id<<" - " <<words[i.id] <<" ["<<frequencies[i.id]<<"] - " <<i.score<<"\n";
 	}	
 };
 
@@ -232,12 +233,15 @@ void load_word_ids(boost::filesystem::path dir_root)
     }
     in.close();
 }
-void load_frequencies(boost::filesystem::path dir_root)
+size_t load_frequencies(boost::filesystem::path dir_root)
 {
+	std::cerr<<"loading frequencies";
+	 auto cnt_freq =  load_from_raw((dir_root / boost::filesystem::path("freq_per_id")).string(),frequencies);
+	 return  cnt_freq;
+/*
 	std::ifstream in((dir_root / boost::filesystem::path("freq_per_id")).string());
 	if (!in.is_open()) {std::cerr<<"can not open file\n";}
 	std::string line;
-    //boost::char_separator<char> sep("\t");
     size_t id = 0;
 	while( std::getline( in, line ) ) 
 	{
@@ -251,6 +255,7 @@ void load_frequencies(boost::filesystem::path dir_root)
         frequencies[id++]=value;
     }
     in.close();
+    */
 }
 
 int main(int argc, char* argv[])
@@ -262,10 +267,13 @@ int main(int argc, char* argv[])
 	Sparse<float> m;
 	m.load(dir_root);
 	m.print();
-    words.resize(m.dim_y);
-    frequencies.resize(m.dim_y);
+    words.resize(m.dim_y+1);
+    //frequencies.resize(m.dim_y);
+	//std::cerr<<"loading word ids\n";
 	load_word_ids(dir_root);
-	load_frequencies(dir_root);
+	//std::cerr<<"done\n";
+	auto cnt_f = load_frequencies(dir_root);
+	std::cerr<<"loaded " <<cnt_f<<" frequencies\n";
 	//int i = 0;
 	//int j = 4;
 	

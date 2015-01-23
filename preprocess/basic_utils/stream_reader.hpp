@@ -62,7 +62,10 @@ public:
     {
         for (size_t i=0;i<15;i++)
             if (c==separators[i]) return true;
-        if (c=='\n') return true;
+        if (c==13) return true;
+        if (c==10) return true;
+        if (c<'a') return true;
+        if (c>'z') return true;
         return false;
     }
     char * get_word()
