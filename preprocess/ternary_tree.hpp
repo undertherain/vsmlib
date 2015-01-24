@@ -2,7 +2,6 @@
 #include <fstream>
 #include <stdexcept>
 
-
 char  buffer[MAX_STR_SIZE];
 //unsigned long long cnt_words;
 //std::ofstream file;

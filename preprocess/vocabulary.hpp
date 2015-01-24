@@ -1,31 +1,14 @@
 #include <iostream>
 #include <set>
-#include <boost/tokenizer.hpp>
-//#include "string_tools.hpp"
+//#include <boost/tokenizer.hpp>
 #include "basic_utils/stream_reader.hpp"
 #include "basic_utils/utils.hpp"
 #include "ternary_tree.hpp"
-
-
 
 class Vocabulary
 {
 	std::set<std::string> stopwords;
 	TernaryTree tree;
-	void process_sentence_ids(std::string const & s)
-	{
-	    /*if (s.length()<2) return;
-	    boost::char_separator<char> sep(separators);
-	    boost::tokenizer<boost::char_separator<char> > tokens(s, sep);
-	    for (const auto& t : tokens) {
-        	std::string str = t;
-        	clean(str);
-        	if (!is_word_valid(str)) continue;
-        	cnt_words_processed++;
-        	tree.set_id_and_increment(str.c_str());
-    	}
-    	*/
-	}	
 public:
 	size_t cnt_words;
 	size_t cnt_words_processed;
@@ -49,11 +32,6 @@ public:
 	void read_from_dir(std::string dir)
 	{
 		DirReader dr(dir);
-		//std::string line;
-		//while (dr.getline(line) )
-		//{
-		    //process_sentence_ids(line);
-		//}
 		char * word;
     	while ((word=dr.get_word())!=NULL )
     	{
@@ -87,6 +65,4 @@ public:
     {
     	tree.dump_ids(name_file);	
     }
-
-
 };

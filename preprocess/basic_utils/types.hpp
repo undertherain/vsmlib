@@ -8,7 +8,7 @@
 //typedef unsigned long long Index;
 typedef unsigned char byte;
 
-
+/*
 struct RangeLight
 {
 	Index a,b;
@@ -33,4 +33,5 @@ public:
 	}
 } ;
 
+*/
 #endif

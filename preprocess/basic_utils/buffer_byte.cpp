@@ -56,7 +56,7 @@ byte & BufferByte::operator[](const Index idx) const
 //global utils---------------------
 Index LoadBytesFromFile(byte ** buffer,std::string nameFileIn)
 {
-    Index sizeBuf;
+    size_t sizeBuf;
     FILE *fileIn;
     fileIn=fopen(nameFileIn.c_str(), "rb");
     if (!fileIn)
