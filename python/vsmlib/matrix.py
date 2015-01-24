@@ -17,8 +17,6 @@ def countof_fmt(num, suffix=''):
         num /= 1000.0
     return "%.1f%s%s" % (num, 'Y', suffix)
 
-def hello():
-    print ("Hello 2!")
 
 def load_int_from_file(name):
     return int(open(os.path.join(dir_root,name)).read())

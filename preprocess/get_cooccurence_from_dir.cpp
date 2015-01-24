@@ -16,6 +16,7 @@
 typedef int64_t Index;
 
 #include "basic_utils/utils.hpp"
+//#include "basic_utils/stream_reader.hpp"
 #include "vocabulary.hpp"
 
 //Index cnt_words;
@@ -73,6 +74,7 @@ for (const auto& t : tokens) {
     //std::cerr<<"current word= "<<w_current<<"\n";
     clean(w_current);
     if (!vocab.is_word_valid(w_current))  continue;
+    //std::cerr<<"is valid!\n";
     Index id_current=vocab.get_id(w_current.c_str());
     if (id_current<0) continue;
     //std::cerr<<"passed\n";
@@ -102,7 +104,7 @@ int main(int argc, char * argv[])
  {
   std::cerr << "usage: " << argv[0] << " corpus_dir output_dir \n";
   return 0;
-}
+    }
 std::string str_path_in (argv[1]);
 boost::filesystem::path path_out(argv[2]);
 ///write_values_to_file((path_out / boost::filesystem::path("cnt_bigrams")).string(),"cnt_words","cnt_unique_words","cnt_bigrams");
@@ -112,7 +114,7 @@ vocab.read_from_dir(str_path_in);
 vocab.reduce();
 
 freq_per_id.resize(vocab.cnt_words);
-
+std::fill (freq_per_id.begin(),freq_per_id.end(),0);   
 std::cerr<<"dumping ids and frequencies\n";
 
 vocab.dump_ids((path_out / boost::filesystem::path("ids")).string());
@@ -120,6 +122,7 @@ vocab.dump_frequency((path_out / boost::filesystem::path("frequencies")).string(
 
 write_value_to_file((path_out / boost::filesystem::path("cnt_unique_words")).string(),vocab.cnt_words);
 write_value_to_file((path_out / boost::filesystem::path("cnt_words")).string(),vocab.cnt_words_processed);
+
 //return 0;
 
 std::cerr<<"extracting bigrams\n";

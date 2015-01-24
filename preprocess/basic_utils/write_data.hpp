@@ -63,7 +63,7 @@ void dump_crs(std::string path_out)
     {
         for (const auto& second : first.second) 
         {
-            double v=log2((static_cast<double>(second.second)*vocab.cnt_words)/(freq_per_id[first.first]*freq_per_id[second.first]));
+            double v=log2((static_cast<double>(second.second)*vocab.cnt_words_processed)/(freq_per_id[first.first]*freq_per_id[second.first]));
             file<<v<<"\n";
         }
     }

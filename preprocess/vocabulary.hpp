@@ -1,10 +1,10 @@
 #include <iostream>
 #include <set>
-#include "ternary_tree.hpp"
 #include <boost/tokenizer.hpp>
-#include "string_tools.hpp"
+//#include "string_tools.hpp"
 #include "basic_utils/stream_reader.hpp"
 #include "basic_utils/utils.hpp"
+#include "ternary_tree.hpp"
 
 
 
@@ -57,8 +57,11 @@ public:
 		char * word;
     	while ((word=dr.get_word())!=NULL )
     	{
+    		if (is_word_valid(std::string(word)))
+    		{
     		tree.set_id_and_increment(word);	
         	cnt_words_processed++;
+        	}
     	}
     	cnt_words=tree.id_global;
 	}

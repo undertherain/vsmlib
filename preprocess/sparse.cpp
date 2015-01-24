@@ -100,7 +100,7 @@ public:
 	void print()
 	{
 		std::cout<<dim_x<<" x " <<dim_y << " sparse matrix\n";
-		std::cout<<" with " <<cnt_nnz<< " nonzero elements\n";
+		std::cout<<" words_of_interesth " <<cnt_nnz<< " nonzero elements\n";
 		std::cout<<" [";
 		for (size_t i = 0; i<10; i++)
 			std::cout<<std::fixed << std::setprecision(4) << data[i]<<" ";
@@ -109,6 +109,7 @@ public:
 	}
 	void prefetch_norm()
 	{
+		std::cerr<<"prefetching norm \n";
 		size_t i;
 		cache_norm = new T[dim_y];
 		for (i = 0; i < dim_y; i++)
@@ -118,13 +119,18 @@ public:
 				norm+=data[x]*data[x];
 			cache_norm[i] = sqrt(norm);
 		}
+		std::cerr<<"done \n";
 	}
 	void load(std::string path)
 	{
+		std::cerr<<"loading bigrams \n";
 		cnt_nnz=load_from_raw(path+"bigrams.data.bin",data);
+		std::cerr<<"loading col_ind \n";
 		cnt_nnz=load_from_raw(path+"bigrams.col_ind.bin",col_ind);
+		std::cerr<<"loading row_ptr \n";
 		dim_x = load_from_raw(path+"bigrams.row_ptr.bin",row_ptr);
 		dim_y = dim_x;
+		std::cerr<<"dim y = "<<dim_y<<"\n";
 		prefetch_norm();
 	}
 	inline T dotproduct_rows(size_t u, size_t v) const
@@ -201,8 +207,11 @@ public:
 	template<size_t cnt_rows>
 	std::list<Score<T>> get_most_similar_rows(std::string key)
 	{
-		//if key in 
-		//size_t key  = dic_words[key]<<"\n";
+		if (dic_words.count(key)==0) 
+		{
+			std::list<Score<T>> empty;
+			return empty;
+		}
 		return get_most_similar_rows<cnt_rows>(dic_words[key]);		
 	}
 	void report_most_similar(std::string query)

@@ -1,4 +1,3 @@
-#define MAX_STR_SIZE  1500
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
