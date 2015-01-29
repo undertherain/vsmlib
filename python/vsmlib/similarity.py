@@ -30,7 +30,6 @@ def cmp_vectors(r1,r2):
         if math.isnan(c): return 0
         return 1-c
 
-
 def cmp_rows(id1,id2,m):
     if sparse.issparse(m):
         r1=m[id1]#.todense()
@@ -39,7 +38,6 @@ def cmp_rows(id1,id2,m):
         r1=m[id1,:]
         r2=m[id2,:]
     return cmp_vectors(r1,r2)
-
     
 def cmp_words(w1,w2,m):
     id1=get_id(w1);

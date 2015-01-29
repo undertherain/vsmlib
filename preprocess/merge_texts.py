@@ -19,7 +19,7 @@ def is_line_valid(l):
 
 def clean(l):
 	#return l.lower().rstrip('\'\"-,.:;!?') 
-	return re.sub('([a-z]+)[?:!.,;]*',r'\1',l.lower())
+	return re.sub('([a-z]+)[?:!.,;]*',r'\1',l)
 
 #files = glob.glob(name_dir+"/*")
 files=[]
@@ -34,8 +34,13 @@ for name_file in files:
 		for line in f:
 			if is_line_valid(line):
 				#line=clean(line)
-				line = clean(line)
+				tokens = line.lower().split()
+				for t in tokens:
+					t = t.strip('\'\"-,.:;!?()')
+					f_out.write(t)	
+					f_out.write(" ")	
+				#line = clean(line)	
 				#print (line)
-				f_out.write(line)
+	f_out.write("\n")	
 
 f_out.close()
