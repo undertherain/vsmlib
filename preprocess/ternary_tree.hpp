@@ -172,6 +172,7 @@ TernaryTreeNode<Index> * TernaryTree::get_node(const char * str)
 Index TernaryTree::get_id(const char * str)
 {
     auto node=tree;
+    if (node==0) return -1;
     unsigned int depth=0;
     //std::cerr<<"fetching id for "<<str<<"\n";
     bool is_done=false;
@@ -355,7 +356,7 @@ bool trim(TernaryTreeNode<Index> * * pnode,unsigned int depth)
         else
         {
             node->id=-1;
-            node->data=-0;
+            node->data=0;
         }
 
     }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <list>
+#define MAX_STR_SIZE 100
 #include "../ternary_tree.hpp"
 
 //std::list<std::string> lst_test = {"apple","banana","kiwi","potato","tomato","pear","orange"};
@@ -38,5 +39,8 @@ int main()
 	tree.dump_ids("_ids_reduced");
 	tree.dump_dot("reduced.gv");
 
+	str="nonexisant";
+	id = tree.get_id(str.c_str());
+	std::cout<<"\nnonexistant id after reduce = " <<id<<"\n";
 
 }

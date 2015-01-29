@@ -98,59 +98,79 @@ for (const auto& t : tokens) {
     }
 }
 
-int main(int argc, char * argv[])
+void load_bigrams(std::string str_path_in)
 {
- if (argc<3)
- {
-  std::cerr << "usage: " << argv[0] << " corpus_dir output_dir \n";
-  return 0;
-    }
-std::string str_path_in (argv[1]);
-boost::filesystem::path path_out(argv[2]);
-///write_values_to_file((path_out / boost::filesystem::path("cnt_bigrams")).string(),"cnt_words","cnt_unique_words","cnt_bigrams");
-
-std::cerr<<"assigning ids\n";
-vocab.read_from_dir(str_path_in);
-vocab.reduce();
-
-freq_per_id.resize(vocab.cnt_words);
-std::fill (freq_per_id.begin(),freq_per_id.end(),0);   
-std::cerr<<"dumping ids and frequencies\n";
-
-vocab.dump_ids((path_out / boost::filesystem::path("ids")).string());
-vocab.dump_frequency((path_out / boost::filesystem::path("frequencies")).string());
-
-write_value_to_file((path_out / boost::filesystem::path("cnt_unique_words")).string(),vocab.cnt_words);
-write_value_to_file((path_out / boost::filesystem::path("cnt_words")).string(),vocab.cnt_words_processed);
-
-//return 0;
-
-std::cerr<<"extracting bigrams\n";
-
-//Index cnt_words_last_dump=0;
-        append_values_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("cnt_bigrams")).string(),0,0,0);
-std::string line;
-
-
-DirReader dr(str_path_in);
-
-while (dr.getline(line) )
-{
-    process_sentence(line);
-  //  if (cnt_words_processed-cnt_words_last_dump>50000)
-//    {
-        //append_values_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("cnt_bigrams")).string(),cnt_words_processed,current_max+1,cnt_bigrams);
-        //cnt_words_last_dump=cnt_words_processed;
+    DirReader dr(str_path_in);
+    boost::circular_buffer<int64_t> cb(2); //- size of n-grams
+//    std::string line;
+    //while (dr.getline(line) )
+    //{
+        //process_sentence(line);
     //}
+    char * word;
+    while ((word=dr.get_word())!=NULL )
+    {
+        if (vocab.is_word_valid(std::string(word)))
+        {
+            Index id_current = vocab.get_id(word);
+            if (id_current>=0)
+            {
+                freq_per_id[id_current]++;
+                cnt_words_processed++;
+                cb.push_back(id_current);
+                auto i = cb.begin();
+                auto first = *i;
+                //std::cerr<<cb.size()<<"\n";
+                for (size_t j=1;j<cb.size();j++)
+                {
+                   // std::cerr<<first<<"\t"<<cb[j]<<"\n";
+                    accumulate(first,cb[j]);
+                }
+                //std::cerr<<*i<<"\t";
+                //i++;
+                //std::cerr<<*i<<"\n";
+            }
+        }
+    }
 }
 
-std::cerr<<"dumping results to disk\n";
+int main(int argc, char * argv[])
+{
+    if (argc<3)
+    {
+        std::cerr << "usage: " << argv[0] << " corpus_dir output_dir \n";
+        return 0;
+    }
+    std::string str_path_in (argv[1]);
+    boost::filesystem::path path_out(argv[2]);
+///write_values_to_file((path_out / boost::filesystem::path("cnt_bigrams")).string(),"cnt_words","cnt_unique_words","cnt_bigrams");
 
-write_vector_to_file((path_out / boost::filesystem::path("freq_per_id")).string(),freq_per_id);
-dump_crs_bin(path_out.string());
-dump_crs(path_out.string());
-//write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
+    std::cerr<<"assigning ids\n";
+    vocab.read_from_dir(str_path_in);
+    vocab.reduce();
 
+    freq_per_id.resize(vocab.cnt_words);
+    std::fill (freq_per_id.begin(),freq_per_id.end(),0);   
+    std::cerr<<"dumping ids and frequencies\n";
 
-return 0;
+    vocab.dump_ids((path_out / boost::filesystem::path("ids")).string());
+    vocab.dump_frequency((path_out / boost::filesystem::path("frequencies")).string());
+
+    write_value_to_file((path_out / boost::filesystem::path("cnt_unique_words")).string(),vocab.cnt_words);
+    write_value_to_file((path_out / boost::filesystem::path("cnt_words")).string(),vocab.cnt_words_processed);
+
+    std::cerr<<"extracting bigrams\n";
+
+    //Index cnt_words_last_dump=0;
+    //append_values_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("cnt_bigrams")).string(),0,0,0);
+    load_bigrams(str_path_in);
+
+    std::cerr<<"dumping results to disk\n";
+
+    write_vector_to_file((path_out / boost::filesystem::path("freq_per_id")).string(),freq_per_id);
+    dump_crs_bin(path_out.string());
+    //dump_crs(path_out.string());
+    //write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
+
+    return 0;
 }
