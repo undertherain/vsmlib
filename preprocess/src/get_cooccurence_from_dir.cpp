@@ -14,16 +14,14 @@
 #include <cstdarg>
 
 typedef int64_t Index;
+std::string provenance;
 
 #include "basic_utils/utils.hpp"
 //#include "basic_utils/stream_reader.hpp"
 #include "vocabulary.hpp"
 
-//Index cnt_words;
-//Index cnt_unique_words;
 Index cnt_words_processed;
 Index cnt_bigrams;
-//Index current_max;
 typedef std::map<Index,Index> Accumulator;
 std::map<Index,Accumulator> counters;
 std::vector<Index> freq_per_id;
@@ -57,9 +55,6 @@ void accumulate(Index first, Index second)
         counters.insert(std::make_pair(first,Accumulator()));
     accumulate(counters[first],second);
 }
-
-
-
 
 void process_sentence(std::string const & s)
 {
@@ -144,10 +139,20 @@ int main(int argc, char * argv[])
     std::string str_path_in (argv[1]);
     boost::filesystem::path path_out(argv[2]);
 ///write_values_to_file((path_out / boost::filesystem::path("cnt_bigrams")).string(),"cnt_words","cnt_unique_words","cnt_bigrams");
+    provenance = "cooccurrence matrix collected from ";
+    provenance = provenance + str_path_in + "\n";
 
     std::cerr<<"assigning ids\n";
     vocab.read_from_dir(str_path_in);
-    vocab.reduce();
+
+    provenance = provenance + "words in corpus : "+ FormatHelper::ConvertToStr(vocab.cnt_words_processed)+"\n";
+    provenance = provenance + "unique words : "+ FormatHelper::ConvertToStr(vocab.cnt_words)+"\n";
+
+    int64_t threshold=5;
+    vocab.reduce(threshold);
+    provenance=provenance+"reduced words with frequency less than "+FormatHelper::ConvertToStr(threshold)+"\n";
+    //provenance = provenance + "words in corpus : "+ FormatHelper::ConvertToStr(vocab.cnt_words_processed)+"\n";
+    provenance = provenance + "unique words : "+ FormatHelper::ConvertToStr(vocab.cnt_words)+"\n";
 
     freq_per_id.resize(vocab.cnt_words);
     std::fill (freq_per_id.begin(),freq_per_id.end(),0);   
@@ -169,6 +174,7 @@ int main(int argc, char * argv[])
 
     write_vector_to_file((path_out / boost::filesystem::path("freq_per_id")).string(),freq_per_id);
     dump_crs_bin(path_out.string());
+    write_value_to_file((path_out / boost::filesystem::path("provenance.txt")).string(),provenance);
     //dump_crs(path_out.string());
     //write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
 

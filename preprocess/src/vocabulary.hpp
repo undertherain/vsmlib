@@ -47,11 +47,11 @@ public:
 	{
 		return tree.get_id(str);
 	}
-	void reduce()
+	void reduce(int64_t threshold=5)
 	{
 		size_t cnt_nodes=tree.count_nodes();
 		std::cerr<<"3-tree node count = "<<cnt_nodes<<"\twill take "<<FormatHelper::SizeToHumanStr(cnt_nodes*sizeof(TernaryTreeNode<Index>))<<"\ntrimming the tree...\n";
-		trim(&(tree.tree),0);
+		trim(&(tree.tree),threshold,0);
 		cnt_nodes=tree.count_nodes();
 		std::cerr<<"reduced node count = "<<cnt_nodes<<"\twill take "<<FormatHelper::SizeToHumanStr(cnt_nodes*sizeof(TernaryTreeNode<Index>))<<"\n";
 		tree.reassign_ids();

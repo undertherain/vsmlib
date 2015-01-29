@@ -1,4 +1,5 @@
-void write_value_to_file(std::string name,Index value)
+template<typename Type> 
+void write_value_to_file(std::string name,Type value)
 {
     std::ofstream file(name);
     file<<value;

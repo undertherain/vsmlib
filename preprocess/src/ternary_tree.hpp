@@ -322,25 +322,24 @@ void visit_recursively(TernaryTreeNode<Index> * node,unsigned int depth, Action 
 }
 
 
-bool trim(TernaryTreeNode<Index> * * pnode,unsigned int depth)
+bool trim(TernaryTreeNode<Index> * * pnode, int64_t threshold, unsigned int depth)
 {
     auto node = * pnode;
-    int64_t threshold=3;
     if (node==NULL) return true;
 
     buffer[depth]=node->c;  
 
     int cnt_kids=3;
-    if (trim(&(node->left),depth))
+    if (trim(&(node->left),threshold,depth))
     {
         cnt_kids--;
     }
-    if (trim(&(node->down),depth+1))
+    if (trim(&(node->down),threshold,depth+1))
     {
         cnt_kids--;
     }
 
-    if (trim(&(node->right),depth))
+    if (trim(&(node->right),threshold,depth))
     {
         cnt_kids--;
     }
