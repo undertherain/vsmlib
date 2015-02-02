@@ -8,10 +8,82 @@
 #include <cstring>
 #include <boost/tokenizer.hpp>
 #include <boost/circular_buffer.hpp>
+#include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 #include <map>
 #include <set>
 #include <unordered_map>
 #include <cstdarg>
+
+namespace program_options = boost::program_options;
+
+
+struct Options
+{
+    std::vector<std::string> namesFilesQry;
+    std::string mode;
+    int64_t size_window;
+    uint64_t min_frequency;
+    boost::filesystem::path path_in;
+    //std::string path_out;
+    boost::filesystem::path path_out;
+    bool verbose;
+    Options():verbose(false)
+    {}
+};
+
+Options ProcessOptions(const int argc, char * const argv[])
+{
+    program_options::options_description optionsDescription("options");
+    Options options;
+    options.size_window=2;
+
+    program_options::positional_options_description pos;
+    pos.add("source_dir", 1);
+    pos.add("destination_dir", 2);
+
+    optionsDescription.add_options()
+        ("help,h", "produce help message")
+        ("source_dir", program_options::value<boost::filesystem::path>(&options.path_in)->required(), "source dir")
+        ("destination_dir", program_options::value< boost::filesystem::path > (&options.path_out)->required(), "destination dir")
+        ("window_size", program_options::value<int64_t>(&(options.size_window)), "window size")
+        ("minimal_frequency", program_options::value<uint64_t>(&(options.min_frequency))->default_value(10), "mimimal word frequency")
+        //("mode", program_options::value<std::string>(&(options.mode))->default_value("multi"), "execution mode")
+        ;
+    program_options::variables_map optionsMap;
+
+    try
+    {
+        program_options::store(program_options::command_line_parser(argc, argv).options(optionsDescription).positional(pos).run(), optionsMap);
+        program_options::notify(optionsMap);
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "command line error: " << e.what() << std::endl;
+        std::cout << optionsDescription << std::endl;
+        exit(-1);
+    }
+
+    if (optionsMap.count("help"))
+    {
+        std::cout << "Usage: "<<argv[0]<<" [options] <source dir> <destination dir> \n";
+        std::cout << optionsDescription << std::endl;
+        exit(0);
+    }
+
+    if (optionsMap.count("reference-file"))
+    {
+
+    }
+//  {
+//      std::cout << "reference file: ";
+//      std::cout << options.nameFileRef << "\n";
+//      std::cout << options.namesFilesQry[1]<<std::endl;
+//  }
+
+    return options;
+}
+
 
 typedef int64_t Index;
 std::string provenance;
@@ -50,6 +122,7 @@ void accumulate(Accumulator & ac,Index w)
 
 void accumulate(Index first, Index second)
 {
+    if ((first<0)||(second<0)) return;
     //if (second.length()<2) return;
     if (counters.find( first ) == counters.end())
         counters.insert(std::make_pair(first,Accumulator()));
@@ -95,13 +168,10 @@ for (const auto& t : tokens) {
 
 void load_bigrams(std::string str_path_in)
 {
+    size_t size_window=3;
     DirReader dr(str_path_in);
-    boost::circular_buffer<int64_t> cb(2); //- size of n-grams
-//    std::string line;
-    //while (dr.getline(line) )
-    //{
-        //process_sentence(line);
-    //}
+    boost::circular_buffer<int64_t> cb(size_window); //- size of n-grams
+    for (uint64_t i =0 ; i<size_window; i++) cb.push_back(-1);
     char * word;
     while ((word=dr.get_word())!=NULL )
     {
@@ -115,30 +185,41 @@ void load_bigrams(std::string str_path_in)
                 cb.push_back(id_current);
                 auto i = cb.begin();
                 auto first = *i;
-                //std::cerr<<cb.size()<<"\n";
                 for (size_t j=1;j<cb.size();j++)
                 {
                    // std::cerr<<first<<"\t"<<cb[j]<<"\n";
                     accumulate(first,cb[j]);
+                    accumulate(cb[j],first);
                 }
-                //std::cerr<<*i<<"\t";
-                //i++;
-                //std::cerr<<*i<<"\n";
             }
         }
     }
+    //the rest of the list
+    for (uint64_t i =0 ; i<size_window; i++) 
+    {
+        cb.push_back(-1);
+        auto it = cb.begin();
+        auto first = *it;
+        for (size_t j=1;j<cb.size();j++)
+        {
+            accumulate(first,cb[j]);
+            accumulate(cb[j],first);
+        }
+    }
+
 }
 
+struct window_params
+{
+    uint64_t size_window;
+    bool symmetric;
+};
 int main(int argc, char * argv[])
 {
-    if (argc<3)
-    {
-        std::cerr << "usage: " << argv[0] << " corpus_dir output_dir \n";
-        return 0;
-    }
-    std::string str_path_in (argv[1]);
-    boost::filesystem::path path_out(argv[2]);
-///write_values_to_file((path_out / boost::filesystem::path("cnt_bigrams")).string(),"cnt_words","cnt_unique_words","cnt_bigrams");
+    Options options = ProcessOptions(argc,argv);
+    auto str_path_in = options.path_in.string();
+    auto path_out=options.path_out;
+
     provenance = "cooccurrence matrix collected from ";
     provenance = provenance + str_path_in + "\n";
 
@@ -148,9 +229,9 @@ int main(int argc, char * argv[])
     provenance = provenance + "words in corpus : "+ FormatHelper::ConvertToStr(vocab.cnt_words_processed)+"\n";
     provenance = provenance + "unique words : "+ FormatHelper::ConvertToStr(vocab.cnt_words)+"\n";
 
-    int64_t threshold=5;
-    vocab.reduce(threshold);
-    provenance=provenance+"reduced words with frequency less than "+FormatHelper::ConvertToStr(threshold)+"\n";
+    
+    vocab.reduce(options.min_frequency);
+    provenance=provenance+"reduced words with frequency less than "+FormatHelper::ConvertToStr(options.min_frequency)+"\n";
     //provenance = provenance + "words in corpus : "+ FormatHelper::ConvertToStr(vocab.cnt_words_processed)+"\n";
     provenance = provenance + "unique words : "+ FormatHelper::ConvertToStr(vocab.cnt_words)+"\n";
 
@@ -176,7 +257,7 @@ int main(int argc, char * argv[])
     dump_crs_bin(path_out.string());
     write_value_to_file((path_out / boost::filesystem::path("provenance.txt")).string(),provenance);
     //dump_crs(path_out.string());
-    //write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
+ //   write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
 
     return 0;
 }

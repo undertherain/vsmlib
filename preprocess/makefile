@@ -1,5 +1,5 @@
 .Phony: clean
-LIBS = -lboost_filesystem -lboost_system
+LIBS = -lboost_filesystem -lboost_system -lboost_program_options
 
 CXXFLAGS = -Wall -std=c++14 -O3 -ggdb3 -g3 -fdiagnostics-color=auto -fopenmp
 
