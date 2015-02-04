@@ -1,4 +1,4 @@
-from vsmlib.vocabulary import Vocabulary_cooccurrence,Vocabulary_simple
+from vsmlib.vocabulary import Vocabulary_cooccurrence,Vocabulary_simple,Vocabulary
 import vsmlib.matrix
 import numpy as np
 import scipy
@@ -13,6 +13,11 @@ import os
 class Model(object):
     provenance=""
     name = ""
+    def load_from_dir(path):
+        #try if there is vector.bin
+        #if 
+        pass
+
     def get_x_label(self,i):
         return self.vocabulary.get_word_by_id(i)
     def get_most_informative_columns(self,rows,width):
@@ -115,8 +120,11 @@ class Model_explicit(Model):
         self.vocabulary.load(path)
         self.name+=os.path.basename(os.path.normpath(path))
         self.matrix = vsmlib.matrix.load_matrix_csr(path,zero_negatives=positive,verbose=True)
-        with open (os.path.join(path,"provenance.txt"), "r") as myfile:
-            self.provenance = myfile.read()
+        try:
+            with open (os.path.join(path,"provenance.txt"), "r") as myfile:
+                self.provenance = myfile.read()
+        except:
+            print("warning: provenance not found")
     def normalize(self):
         normalize(self.matrix)
 
@@ -158,3 +166,38 @@ class Model_svd_scipy(Model_numbered):
         self.vocabulary = original.vocabulary
         self.provenance = original.provenance+"\napplied scipy.linal.svd, {} singular vectors, sigma in the power of {}".format(cnt_singular_vectors,power)
 
+
+class Model_w2v(Model_numbered):
+    def load_word(f):
+        result=b''
+        w=b''
+        while w!=b' ':
+            w = f.read(1)
+            result=result+w
+        return result[:-1]
+    def load_from_file(self,filename):
+        self.vocabulary = Vocabulary()
+        f=  open(filename,"rb")
+        header = f.readline().split()
+        cnt_rows=int(header[0])
+        size_row=int(header[1])
+        self.name += "w2v_{}".format(size_row)
+        self.matrix = np.zeros((cnt_rows,size_row),dtype=np.float32)
+        print ("cnt rows = {}, size row = {}".format(cnt_rows,size_row))
+        for i in range(cnt_rows):
+            word = Model_w2v.load_word(f).decode('ascii',errors="ignore").strip()
+            #print (word)
+            self.vocabulary.dic_words_ids[word]=i;
+            self.vocabulary.lst_words.append(word)
+            s_row = f.read(size_row*4)
+            row = np.fromstring(s_row, dtype=np.float32)
+            #row = row / np.linalg.norm(row)
+            self.matrix[i]=row
+        f.close()
+    def load_from_dir(self,path):
+        self.load_from_file(os.path.join(path,"vectors.bin"))
+        try:
+            with open (os.path.join(path,"provenance.txt"), "r") as myfile:
+                self.provenance = myfile.read() 
+        except:
+            print("provenance not found")
