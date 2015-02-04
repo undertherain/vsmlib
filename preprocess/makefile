@@ -18,4 +18,4 @@ bin/sparse: src/sparse.cpp
 	g++  $^ $(CXXFLAGS) -o $@ $(LIBS)
 
 clean:
-	rm *.o
+	rm -f obj/*.o

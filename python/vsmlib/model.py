@@ -3,6 +3,7 @@ import vsmlib.matrix
 import numpy as np
 import scipy
 from scipy import sparse
+from scipy.spatial.distance import cosine
 import scipy.sparse.linalg
 import math
 import matplotlib as mpl
@@ -11,6 +12,7 @@ import os
 
 class Model(object):
     provenance=""
+    name = ""
     def get_x_label(self,i):
         return self.vocabulary.get_word_by_id(i)
     def get_most_informative_columns(self,rows,width):
@@ -102,11 +104,12 @@ class Model(object):
     
 class Model_explicit(Model):
     def __init__(self):
-        pass
-    def load(self,path):
+        self.name+="explicit_"
+    def load(self,path,positive=False):
         self.vocabulary = Vocabulary_cooccurrence()
         self.vocabulary.load(path)
-        self.matrix = vsmlib.matrix.load_matrix_csr(path,zero_negatives=False,verbose=True)
+        self.name+=os.path.basename(os.path.normpath(path))
+        self.matrix = vsmlib.matrix.load_matrix_csr(path,zero_negatives=positive,verbose=True)
         with open (os.path.join(path,"provenance.txt"), "r") as myfile:
             self.provenance = myfile.read()
 
@@ -140,10 +143,11 @@ class Model_numbered(Model_dense):
             plt.bar(range(0,len(row)), row, color = "black", linewidth  = 0, alpha = 1/len(wl))   
 
 class Model_svd_scipy(Model_numbered):
-    def __init__(self,original,cnt_singular_vectors):
+    def __init__(self,original,cnt_singular_vectors,power):
         ut, s_ev, vt = scipy.sparse.linalg.svds(original.matrix,k=cnt_singular_vectors,which='LM') # LM SM LA SA BE
-        self.matrix = np.dot(ut,np.diag(s_ev))
         self.sigma = s_ev
+        sigma_p=np.power(s_ev, power)
+        self.matrix =  np.dot(ut,np.diag(sigma_p))    
         self.vocabulary = original.vocabulary
-        self.provenance = original.provenance+"\napplied scipy.linal.svd, {} singular vectors".format(cnt_singular_vectors)
+        self.provenance = original.provenance+"\napplied scipy.linal.svd, {} singular vectors, sigma in the power of {}".format(cnt_singular_vectors,power)
 

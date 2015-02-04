@@ -17,12 +17,11 @@
 
 namespace program_options = boost::program_options;
 
-
 struct Options
 {
     std::vector<std::string> namesFilesQry;
     std::string mode;
-    int64_t size_window;
+    uint64_t size_window;
     uint64_t min_frequency;
     boost::filesystem::path path_in;
     //std::string path_out;
@@ -36,8 +35,6 @@ Options ProcessOptions(const int argc, char * const argv[])
 {
     program_options::options_description optionsDescription("options");
     Options options;
-    options.size_window=2;
-
     program_options::positional_options_description pos;
     pos.add("source_dir", 1);
     pos.add("destination_dir", 2);
@@ -46,7 +43,7 @@ Options ProcessOptions(const int argc, char * const argv[])
         ("help,h", "produce help message")
         ("source_dir", program_options::value<boost::filesystem::path>(&options.path_in)->required(), "source dir")
         ("destination_dir", program_options::value< boost::filesystem::path > (&options.path_out)->required(), "destination dir")
-        ("window_size", program_options::value<int64_t>(&(options.size_window)), "window size")
+        ("window_size", program_options::value<uint64_t>(&(options.size_window))->default_value(2), "window size")
         ("minimal_frequency", program_options::value<uint64_t>(&(options.min_frequency))->default_value(10), "mimimal word frequency")
         //("mode", program_options::value<std::string>(&(options.mode))->default_value("multi"), "execution mode")
         ;
@@ -166,10 +163,10 @@ for (const auto& t : tokens) {
     }
 }
 
-void load_bigrams(std::string str_path_in)
+void load_bigrams(std::string str_path_in,const Options & options)
 {
-    size_t size_window=3;
     DirReader dr(str_path_in);
+    auto size_window = options.size_window;
     boost::circular_buffer<int64_t> cb(size_window); //- size of n-grams
     for (uint64_t i =0 ; i<size_window; i++) cb.push_back(-1);
     char * word;
@@ -220,7 +217,7 @@ int main(int argc, char * argv[])
     auto str_path_in = options.path_in.string();
     auto path_out=options.path_out;
 
-    provenance = "cooccurrence matrix collected from ";
+    provenance = "source corpus : ";
     provenance = provenance + str_path_in + "\n";
 
     std::cerr<<"assigning ids\n";
@@ -231,7 +228,7 @@ int main(int argc, char * argv[])
 
     
     vocab.reduce(options.min_frequency);
-    provenance=provenance+"reduced words with frequency less than "+FormatHelper::ConvertToStr(options.min_frequency)+"\n";
+    provenance=provenance+"minimal frequency: "+FormatHelper::ConvertToStr(options.min_frequency)+"\n";
     //provenance = provenance + "words in corpus : "+ FormatHelper::ConvertToStr(vocab.cnt_words_processed)+"\n";
     provenance = provenance + "unique words : "+ FormatHelper::ConvertToStr(vocab.cnt_words)+"\n";
 
@@ -249,7 +246,9 @@ int main(int argc, char * argv[])
 
     //Index cnt_words_last_dump=0;
     //append_values_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("cnt_bigrams")).string(),0,0,0);
-    load_bigrams(str_path_in);
+    provenance+="windows size : "+FormatHelper::ConvertToStr(options.size_window);
+    provenance+="\nfrequency weightening : PMI";
+    load_bigrams(str_path_in,options);
 
     std::cerr<<"dumping results to disk\n";
 
