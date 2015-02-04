@@ -101,7 +101,12 @@ class Model(object):
         id2=self.vocabulary.get_id(w2)
         if (id1<0) or (id2<0): return 0;
         return self.cmp_rows(id1,id2)
-    
+
+def normalize(m):
+    for i in (range(m.shape[0]-1)):
+        norm = np.linalg.norm(m.data[m.indptr[i]:m.indptr[i+1]])
+        m.data[m.indptr[i]:m.indptr[i+1]]/=norm
+
 class Model_explicit(Model):
     def __init__(self):
         self.name+="explicit_"
@@ -112,6 +117,8 @@ class Model_explicit(Model):
         self.matrix = vsmlib.matrix.load_matrix_csr(path,zero_negatives=positive,verbose=True)
         with open (os.path.join(path,"provenance.txt"), "r") as myfile:
             self.provenance = myfile.read()
+    def normalize(self):
+        normalize(self.matrix)
 
 class Model_dense(Model):
     def save_to_dir(self,path):

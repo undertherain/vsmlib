@@ -63,6 +63,8 @@ def load_matrix_csr(path,zero_negatives=False,verbose=False):
 	if zero_negatives:
 		data[data<0]=0
 	cooccurrence=scipy.sparse.csr_matrix((data,col_ind,row_ptr),shape=(dim,dim),dtype=np.float32)
+    if zero_negatives:
+        cooccurrence.eleminate_zeros()
 	t_end=time.time()
 	if verbose:
 		print ("Matrix loaded in {0:0.2f} sec".format(t_end-t_start))
