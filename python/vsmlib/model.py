@@ -115,18 +115,26 @@ def normalize(m):
 class Model_explicit(Model):
     def __init__(self):
         self.name+="explicit_"
-    def load(self,path,positive=False):
+    def load(self,path):
         self.vocabulary = Vocabulary_cooccurrence()
         self.vocabulary.load(path)
         self.name+=os.path.basename(os.path.normpath(path))
-        self.matrix = vsmlib.matrix.load_matrix_csr(path,zero_negatives=positive,verbose=True)
+        self.matrix = vsmlib.matrix.load_matrix_csr(path,verbose=True)
         try:
             with open (os.path.join(path,"provenance.txt"), "r") as myfile:
                 self.provenance = myfile.read()
         except:
             print("warning: provenance not found")
+    def clip_negatives(self):
+        self.matrix.data.clip(0,out=self.matrix.data)
+        self.matrix.eliminate_zeros()
+        self.name+="_pos"
+        self.provenance+="\ntransform : clip negative"
     def normalize(self):
         normalize(self.matrix)
+        self.name+="_normalized"
+        self.provenance+="\ntransform : normalize"
+
 
 class Model_dense(Model):
     def save_to_dir(self,path):
@@ -201,3 +209,20 @@ class Model_w2v(Model_numbered):
                 self.provenance = myfile.read() 
         except:
             print("provenance not found")
+
+def load_from_dir(path):
+    if os.path.isfile(os.path.join(path,"bigrams.data.bin")):
+        print ("this is sparse explicit")
+        m =  vsmlib.Model_explicit()
+        m.load(path)
+        return m
+    if os.path.isfile(os.path.join(path,"vectors.bin")):
+        print ("this is w2v")
+        m =  vsmlib.Model_w2v()
+        m.load_from_dir(path)
+        return m
+    if os.path.isfile(os.path.join(path,"vectors.npy")):
+        m =  vsmlib.Model_numbered()
+        m.load_from_dir(path)
+        return m
+        print ("this is dense ")
