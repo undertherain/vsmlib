@@ -27,7 +27,6 @@ Index cnt_bigrams;
 typedef std::map<Index,Index> Accumulator;
 std::map<Index,Accumulator> counters;
 std::vector<Index> freq_per_id;
-std::vector<Index> ids_new;
 Vocabulary vocab;
 #include "basic_utils/write_data.hpp"
 
@@ -123,6 +122,8 @@ int main(int argc, char * argv[])
     freq_per_id.resize(vocab.cnt_words);
     std::fill (freq_per_id.begin(),freq_per_id.end(),0);   
     vocab.populate_frequency(freq_per_id);
+    vocab.reassign_ids(freq_per_id);
+    vocab.populate_frequency(freq_per_id);
     std::cerr<<"dumping ids and frequencies\n";
 
     vocab.dump_ids((path_out / boost::filesystem::path("ids")).string());
@@ -146,7 +147,7 @@ int main(int argc, char * argv[])
     dump_crs_bin(path_out.string());
     write_value_to_file((path_out / boost::filesystem::path("provenance.txt")).string(),provenance);
 //  dump_crs(path_out.string());
-//  write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
+    write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
 
     return 0;
 }

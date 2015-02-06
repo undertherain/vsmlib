@@ -37,8 +37,8 @@ public:
     	{
     		if (is_word_valid(std::string(word)))
     		{
-    		tree.set_id_and_increment(word);	
-        	cnt_words_processed++;
+	    		tree.set_id_and_increment(word);	
+        		cnt_words_processed++;
         	}
     	}
     	cnt_words=tree.id_global;
@@ -68,5 +68,28 @@ public:
     void populate_frequency(std::vector<Index> & lst_frequency )const
     {
     	tree.populate_frequency(lst_frequency);	
+    }
+    void reassign_ids(std::vector<Index> const & lst_frequency)
+    {
+		std::vector<Index> ids_new;
+    	for (size_t i=0;i<cnt_words;i++)
+        	ids_new.push_back(i);
+	    struct by_freq{ 
+	    	std::vector<Index> const & lst_frequency;
+	    	by_freq(std::vector<Index> const & _lst_frequency):lst_frequency(_lst_frequency){}
+        	bool operator()(Index a, Index b) 
+        	{ 
+	            return lst_frequency[a] > lst_frequency[b];
+        	}
+    	};
+    	std::sort(ids_new.begin(),ids_new.end(),by_freq(lst_frequency));
+    	std::vector<Index> ids_new2;
+		ids_new2.resize(cnt_words);
+		for (size_t i=0;i<cnt_words;i++)
+		{
+        //	std::cerr<<i<<"\t"<<ids_new[i]<<"\t"<<lst_frequency[ids_new[i]]<<"\n";
+        	ids_new2[ids_new[i]]=i;
+        }
+        tree.reassign_ids_new(ids_new2);
     }
 };

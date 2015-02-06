@@ -12,14 +12,22 @@ class DirReader
 public:
     DirReader(std::string _dir):dir(_dir,boost::filesystem::symlink_option::recurse),initial(_dir,boost::filesystem::symlink_option::recurse)
     {
-        file_in.open(dir->path().string());
-        std::cerr<<"processing \t"<<dir->path().string()<<" ... \n";
-        //reset();
+        //file_in.open(dir->path().string());
+        //std::cerr<<"processing \t"<<dir->path().string()<<" ... \n";
+        reset();
     }
     void reset()
     {
        // pos_line=0;
         dir=initial;
+        boost::filesystem::recursive_directory_iterator end;
+        while (!(boost::filesystem::is_regular_file(dir->status())))
+        {
+            dir++;
+            if (dir==end)
+                return;
+        }   
+
         if (file_in.is_open()) file_in.close();
         file_in.open(dir->path().string());
         std::cerr<<"processing \t"<<dir->path().string()<<" ... \n";

@@ -41,6 +41,7 @@ public:
     void dump_ids(const std::string & name_file) const;
     void dump_dot(const std::string & name_file) const;
     void reassign_ids();
+    void reassign_ids_new(std::vector<Index> const  & lst_new_ids);
     void populate_frequency(std::vector<Index> & lst_frequency ) const;
     size_t count_nodes() const; 
 };
@@ -219,6 +220,21 @@ public:
     }
 };
 
+class ActionReassignIdsFreq: public Action {
+public:
+    std::vector<Index> const & lst_new_ids;
+    ActionReassignIdsFreq(std::vector<Index> const & _lst_new_ids):lst_new_ids(_lst_new_ids){}
+    void operator()(TernaryTreeNode<Index>* node,unsigned int depth)
+    {
+        if (node->data>0) 
+            if (node->id>=0) 
+        {
+           //   std::cerr<<"replaceing "<<node->id<<" with "<<lst_new_ids[node->id]<<"\n";
+            node->id=lst_new_ids[node->id];
+        }
+    }
+};
+
 class ActionFile: public Action
 {
 protected:
@@ -372,7 +388,7 @@ public:
     void operator()(TernaryTreeNode<Index>* node,unsigned int depth)
     {
         if (node->id>=0)
-        lst_frequency[pos++]=node->data;
+        lst_frequency[node->id]=node->data;
     }
 };
 
@@ -405,6 +421,12 @@ void TernaryTree::reassign_ids()
     ActionReassignIds a;
     visit_recursively(tree,0,a);
     id_global=a.current_id;
+}
+
+void TernaryTree::reassign_ids_new(std::vector<Index> const  & lst_new_ids)
+{
+    ActionReassignIdsFreq a(lst_new_ids);
+    visit_recursively(tree,0,a);
 }
 
 size_t TernaryTree::count_nodes() const
