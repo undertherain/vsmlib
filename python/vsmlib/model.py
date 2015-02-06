@@ -27,6 +27,7 @@ class Model(object):
             row = rows[i]/np.linalg.norm(rows[i])
             for j in range(len(row)):
                 scores[j]+=row[j]
+        scores=abs(scores)
         tops = np.argsort(scores)
         return list(reversed(tops[-width:]))        
     def filter_rows(self,ids_of_interest):
@@ -149,12 +150,18 @@ class Model_dense(Model):
         for  i in range(len(self.vocabulary.lst_words)):
             text_file.write("{}\t{}\n".format(self.vocabulary.lst_words[i],i))
         text_file.close()
-
     def load_from_dir(self,path):
 #        self.matrix = np.fromfile(open(os.path.join(path,"vectors.bin")),dtype=np.float32)
         self.matrix = np.load(os.path.join(path,"vectors.npy"))
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
+        self.name+=os.path.basename(os.path.normpath(path))
+    def normalize(self):
+        nrm= np.linalg.norm(self.matrix, axis=1)
+        self.matrix/=nrm[:, np.newaxis]
+        self.name+="_normalized"
+        self.provenance+="\ntransform : normalized"
+
 
 class Model_numbered(Model_dense):
     def get_x_label(self,i):
