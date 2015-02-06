@@ -1,9 +1,9 @@
-#include <set>
 #include <list>
-#include <algorithm>
 #include <fstream>
 
+#if !defined(MAX_STR_SIZE)
 #define MAX_STR_SIZE  1500
+#endif
 const char separators[]=" .,:;!?()[]-\t\"'";
 
 
