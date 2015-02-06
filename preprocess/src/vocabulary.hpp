@@ -65,4 +65,8 @@ public:
     {
     	tree.dump_ids(name_file);	
     }
+    void populate_frequency(std::vector<Index> & lst_frequency )const
+    {
+    	tree.populate_frequency(lst_frequency);	
+    }
 };

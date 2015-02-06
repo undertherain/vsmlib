@@ -41,6 +41,7 @@ public:
     void dump_ids(const std::string & name_file) const;
     void dump_dot(const std::string & name_file) const;
     void reassign_ids();
+    void populate_frequency(std::vector<Index> & lst_frequency ) const;
     size_t count_nodes() const; 
 };
 
@@ -360,6 +361,25 @@ bool trim(TernaryTreeNode<Index> * * pnode, int64_t threshold, unsigned int dept
 
     }
     return false;
+}
+
+class ActionPopulateFrequency: public Action
+{
+public:
+    size_t pos;
+    std::vector<Index> & lst_frequency;
+    ActionPopulateFrequency(std::vector<Index> & _lst_frequency):pos(0), lst_frequency(_lst_frequency){}
+    void operator()(TernaryTreeNode<Index>* node,unsigned int depth)
+    {
+        if (node->id>=0)
+        lst_frequency[pos++]=node->data;
+    }
+};
+
+void TernaryTree::populate_frequency(std::vector<Index> & lst_frequency ) const
+{
+    ActionPopulateFrequency a(lst_frequency);
+    visit_recursively(tree,0,a);
 }
 
 void TernaryTree::dump_frequency(const std::string & name_file) const
