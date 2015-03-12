@@ -180,7 +180,7 @@ class Model_svd_scipy(Model_numbered):
         self.matrix =  np.dot(ut,np.diag(sigma_p))    
         self.vocabulary = original.vocabulary
         self.provenance = original.provenance+"\napplied scipy.linal.svd, {} singular vectors, sigma in the power of {}".format(cnt_singular_vectors,power)
-
+        self.name = original.name+"_svd_{}_C{}".format(cnt_singular_vectors,power)
 
 class Model_w2v(Model_numbered):
     def load_word(f):
@@ -233,3 +233,4 @@ def load_from_dir(path):
         m.load_from_dir(path)
         return m
         print ("this is dense ")
+    print("Ahtung!! can not load anything!")

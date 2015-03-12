@@ -35,19 +35,25 @@ class Vocabulary_simple(Vocabulary):
         f=open(os.path.join(self.dir_root,filename), encoding='utf-8', errors='replace')
         lines=f.readlines()
         for line in lines:
-            tokens=line.split()
+            tokens=line.split("\t")
             rdic[tokens[0]]=np.int64(tokens[-1])
         f.close()
         return rdic
     def load_list_from_file(self,filename,n):
-        rlst=[""]*n
-        #rlst=[]
+        postfix=0;
+        #rlst=[""]*n
+        #rdic={}
+        rlst=[]
         f=open(os.path.join(self.dir_root,filename), encoding='utf-8', errors='replace')
         lines=f.readlines()
         for line in lines:
-            tokens=line.split()
-            rlst[int(tokens[1])]=tokens[0]
-         #   rlst.append(tokens[0])
+            tokens=line.split("\t")
+        #    if tokens[0] in rdic:
+                #rdic[tokens[0]+str(postfix)+tokens[1]]=np.int64(tokens[-1])    
+                #postfix+=1
+            #else:
+                #rdic[tokens[0]]=np.int64(tokens[-1])
+            rlst.append(tokens[0])
         f.close()
         return rlst
     def load(self,path,verbose=False):
@@ -70,47 +76,10 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
             print ("Vocabulary loaded in {0:0.2f} seconds".format(t_end-t_start))
             print ("{} words ({}) in vocabulary".format(cnt_words,countof_fmt(cnt_words)))
 
-#dic_words_ids=None
-#lst_words=[]
-#dir_root=""
-
-#def get_id(w):
-    #try:
-        #return dic_words_ids[w]
-    #except :
-        #return -1
-    
-#def get_word_by_id(i):
-    #return(lst_words[i])
 
 #def get_frequency(i):
     #if i<0: return 0
     #return(l_frequencies[i])
-
-#def load_dic_from_file(filename):
-    #rdic={}
-    #f=open(os.path.join(dir_root,filename), encoding='utf-8', errors='replace')
-    #lines=f.readlines()
-    #for line in lines:
-        #tokens=line.split()
-        #rdic[tokens[0]]=np.int64(tokens[-1])
-    #f.close()
-    #return rdic
-
-#def load(path,verbose=False):
-	#t_start=time.time()
-	#global dir_root,dic_words_ids,l_frequencies,lst_words
-	#dir_root=path
-	#dic_words_ids = load_dic_from_file("ids")
-	#l_frequencies = np.fromfile(open(os.path.join(dir_root,"freq_per_id")),dtype=np.uint64)
-	#lst_words=[]
-	#lst_words=lst_words+([i[0] for i in sorted(dic_words_ids.items(), key=lambda x: x[1])])
-	#t_end=time.time()
-	#assert len(lst_words)==len(dic_words_ids)
-	#if verbose:
-		#cnt_words=len(lst_words)
-		#print ("Vocabulary loaded in {0:0.2f} seconds".format(t_end-t_start))
-		#print ("{} words ({}) in vocabulary".format(cnt_words,countof_fmt(cnt_words)))
 
 #def report_rare():
 	#for f in range(6):
