@@ -9,6 +9,7 @@ import math
 import matplotlib as mpl
 from matplotlib import pyplot as plt
 import os 
+import gzip
 
 class Model(object):
     provenance=""
@@ -170,8 +171,9 @@ class Model_numbered(Model_dense):
         for i in wl:
             row = self.get_row(i)
             row = row / np.linalg.norm(row)
-            plt.bar(range(0,len(row)), row, color = "black", linewidth  = 0, alpha = 1/len(wl))   
-
+            plt.bar(range(0,len(row)), row, color = "black", linewidth  = 0, alpha = 1/len(wl),  label=i)   
+            plt.legend()
+           
 class Model_svd_scipy(Model_numbered):
     def __init__(self,original,cnt_singular_vectors,power):
         ut, s_ev, vt = scipy.sparse.linalg.svds(original.matrix,k=cnt_singular_vectors,which='LM') # LM SM LA SA BE
@@ -217,6 +219,32 @@ class Model_w2v(Model_numbered):
         except:
             print("provenance not found")
 
+class Model_glove(Model_numbered):
+    def __init__(self):
+        self.name="glove"
+    def load_from_file(self,path):
+        i=0;
+        matr = None
+        self.vocabulary = vsmlib.Vocabulary()
+        rows=[]
+        with gzip.open(path) as f:
+            for line in f:
+                tokens  = line.split()
+                word = tokens[0].decode()
+                self.vocabulary.dic_words_ids[word]=i;
+                self.vocabulary.lst_words.append(word)
+                str_vec=tokens[1:]
+                #print (str_vec)
+                row = np.zeros(len(str_vec),dtype=np.float32)
+                for j in range(len(str_vec)) :
+                    row[j]=float(str_vec[j])
+                rows.append(row)
+                i+=1
+        self.matrix=np.zeros((len(rows),len(rows[0])),dtype=np.float32)
+        self.name+="_{}".format(len(rows[0]))
+        for i in (range(len(rows))):
+            self.matrix[i]=rows[i]
+
 def load_from_dir(path):
     if os.path.isfile(os.path.join(path,"bigrams.data.bin")):
         print ("this is sparse explicit")
@@ -231,6 +259,15 @@ def load_from_dir(path):
     if os.path.isfile(os.path.join(path,"vectors.npy")):
         m =  vsmlib.Model_numbered()
         m.load_from_dir(path)
-        return m
         print ("this is dense ")
+        return m
+    files = os.listdir(path)
+    for f in files:
+        if f.endswith(".gz"):
+            m=Model_glove()
+            m.load_from_file(os.path.join(path,f))
+        print ("this is Glove")
+        return m
+
+
     print("Ahtung!! can not load anything!")
