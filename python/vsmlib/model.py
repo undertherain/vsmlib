@@ -193,6 +193,7 @@ class Model_svd_scipy(Model_numbered):
         self.name = original.name+"_svd_{}_C{}".format(cnt_singular_vectors,power)
 
 class Model_w2v(Model_numbered):
+    @staticmethod
     def load_word(f):
         result=b''
         w=b''
