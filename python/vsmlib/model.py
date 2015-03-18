@@ -10,6 +10,7 @@ import matplotlib as mpl
 from matplotlib import pyplot as plt
 import os 
 import gzip
+import brewer2mpl
 
 class Model(object):
     provenance=""
@@ -167,11 +168,18 @@ class Model_dense(Model):
 class Model_numbered(Model_dense):
     def get_x_label(self,i):
         return i
-    def viz_wordlist(self,wl):
+    def viz_wordlist(self,wl,colored=False,show_legend=False):
+        colors = brewer2mpl.get_map('Set2', 'qualitative', 8).mpl_colors
+        cnt=0;
         for i in wl:
             row = self.get_row(i)
             row = row / np.linalg.norm(row)
-            plt.bar(range(0,len(row)), row, color = "black", linewidth  = 0, alpha = 1/len(wl),  label=i)   
+            if colored:
+                plt.bar(range(0,len(row)), row, color = colors[cnt], linewidth  = 0, alpha = 0.6,  label=i)   
+            else:
+                plt.bar(range(0,len(row)), row, color = "black", linewidth  = 0, alpha = 1/len(wl),  label=i)   
+            cnt+=1;
+        if show_legend:
             plt.legend()
            
 class Model_svd_scipy(Model_numbered):

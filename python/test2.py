@@ -26,6 +26,7 @@ from matplotlib import pyplot as plt
 #print (similarity.frequencies["fast"])
 
 m=vsmlib.model.load_from_dir("/mnt/work/nlp_scratch/total_w3_POS_svd400_C0.1")
-wordlist = ["horse","dog","cat","rabbi","cow","lion","elephant","donkey","goat","kangaroo","sheep","wolf"]
+#wordlist = ["horse","dog","cat","rabbi","cow","lion","elephant","donkey","goat","kangaroo","sheep","wolf"]
+wordlist = ["fast","quick","slow"]
 m.viz_wordlist(wordlist)
 plt.show()

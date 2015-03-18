@@ -56,7 +56,7 @@ def draw_features(mm,words_of_interest,num_features=20):
     rows,cols,xlabels=mm.filter_submatrix(words_of_interest,num_features)
     ax=plt.subplot()
     plot_heat(ax,cols,xlabels,words_of_interest)
-
+    
 def plotvectors(m):
     a=m.matrix[:1000].T
     #my_cm = mpl.cm.get_cmap('RdBu')
