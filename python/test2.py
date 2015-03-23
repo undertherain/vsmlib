@@ -25,8 +25,8 @@ from matplotlib import pyplot as plt
 #similarity.prefetch_frequencies_all()
 #print (similarity.frequencies["fast"])
 
-#m=vsmlib.model.load_from_dir("/mnt/work/nlp_scratch/total_w3_POS_svd400_C0.1")
-m=vsmlib.model.load_from_dir("/storage/scratch/_w2v")
+m=vsmlib.model.load_from_dir("/mnt/work/nlp_scratch/total_w3_POS_svd400_C0.1")
+#m=vsmlib.model.load_from_dir("/storage/scratch/_w2v")
 #wordlist = ["horse","dog","cat","rabbi","cow","lion","elephant","donkey","goat","kangaroo","sheep","wolf"]
 wordlist = ["fast","quick","slow"]
 m.viz_wordlist(wordlist,colored=True,show_legend=True)
