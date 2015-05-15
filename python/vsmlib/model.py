@@ -87,7 +87,9 @@ class Model(object):
         return results
     def get_row(self,w):
         i = self.vocabulary.get_id(w)
-        if i<0: return None
+        if i<0: 
+            raise Exception('word do not exist', w)
+            #return None
         row = self.matrix[i]
         return row
     def cmp_vectors(self,r1,r2):
@@ -109,6 +111,12 @@ class Model(object):
         id2=self.vocabulary.get_id(w2)
         if (id1<0) or (id2<0): return 0;
         return self.cmp_rows(id1,id2)
+    def load_provenance(self,path):
+        try:
+            with open (os.path.join(path,"provenance.txt"), "r") as myfile:
+                self.provenance = myfile.read() 
+        except:
+            print("provenance not found")
 
 def normalize(m):
     for i in (range(m.shape[0]-1)):
@@ -222,11 +230,7 @@ class Model_w2v(Model_numbered):
         f.close()
     def load_from_dir(self,path):
         self.load_from_file(os.path.join(path,"vectors.bin"))
-        try:
-            with open (os.path.join(path,"provenance.txt"), "r") as myfile:
-                self.provenance = myfile.read() 
-        except:
-            print("provenance not found")
+        load_provenance()
 
 class Model_glove(Model_numbered):
     def __init__(self):
@@ -239,7 +243,7 @@ class Model_glove(Model_numbered):
         with gzip.open(path) as f:
             for line in f:
                 tokens  = line.split()
-                word = tokens[0].decode()
+                word = tokens[0].decode('ascii',errors="ignore")
                 self.vocabulary.dic_words_ids[word]=i;
                 self.vocabulary.lst_words.append(word)
                 str_vec=tokens[1:]
@@ -275,6 +279,7 @@ def load_from_dir(path):
         if f.endswith(".gz"):
             m=Model_glove()
             m.load_from_file(os.path.join(path,f))
+            m.load_provenance(path)
         print ("this is Glove")
         return m
 
