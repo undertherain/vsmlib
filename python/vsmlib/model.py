@@ -281,7 +281,7 @@ def load_from_dir(path):
             m.load_from_file(os.path.join(path,f))
             m.load_provenance(path)
         print ("this is Glove")
-        return m
+    return m
 
 
     print("Ahtung!! can not load anything!")

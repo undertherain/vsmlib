@@ -65,3 +65,44 @@ def plotvectors(m):
     mapped_datau8 = (255 * my_cm(normed_data)).astype('uint8')
     im = PIL.Image.fromarray(np.uint8(mapped_datau8))
     return im
+
+def wordlist_to_rows(m,wordlist):
+    rows = m.get_row(wordlist[0])
+    for i in wordlist[1:]:
+        try:
+            rows =np.vstack([rows,m.get_row(i)])
+        except:
+            pass
+    xmax =np.amax(abs(rows))
+    return rows/xmax
+
+def rows_to_img_array(a):
+    height_img = 300
+    width_column=2
+    my_cm = mpl.cm.get_cmap('Greys')
+    img = np.zeros(shape=(height_img,a.shape[1]*width_column))
+    for row in a:
+        for i in range(len(row)):
+            sign=-1
+            if row[i]<0: sign =1
+            height=int(row[i]*height_img/2)
+            for h in range(abs(height)):
+                for iw in range(width_column):
+                    img[height_img/2+sign*h,i*width_column+iw]+=1/a.shape[0]
+    mapped_datau8 = (255 * my_cm(img)).astype('uint8')
+    im = PIL.Image.fromarray(np.uint8(mapped_datau8))
+    return im
+
+def std_to_img(row):
+    height_img = 100
+    width_column=2
+    my_cm = mpl.cm.get_cmap('Greys')
+    img = np.zeros(shape=(height_img,row.shape[0]*width_column))
+    for i in range(len(row)):
+        height=int(row[i]*height_img)
+        for h in range(1,abs(height)):
+            for iw in range(width_column):
+                img[height_img-1-h,i*width_column+iw]=0.5
+    mapped_datau8 = (255 * my_cm(img)).astype('uint8')
+    im = PIL.Image.fromarray(np.uint8(mapped_datau8))
+    return im
