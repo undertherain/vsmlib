@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #import nltk
 #from nltk.collocations import *
 #from nltk.corpus import stopwords
@@ -13,13 +15,14 @@ import random
 import numpy as np
 
 dir_root ="/storage/scratch/SVD"
-dir_root ="/mnt/work/nlp_scratch/SVD/"
+#dir_root ="/mnt/work/nlp_scratch/SVD/"
 dir_root ="/home/blackbird/data/scratch"
 sources = []
+#sources.append("explicit_BNC_w3_pos_svd_400_C0.1")
 sources.append("SVD/explicit_BNC_w5_pos_svd_1000_C0.1")
 #sources.append("SVD/explicit_BNC_w3_pos_svd_400_C0.1")
 #sources.append("glove/glove_300")
-#sources.append("glove/glove.6b.wiki_giga")
+sources.append("glove/glove.6b.wiki_giga")
 
 def output_img(wordlist,name):
 	rows=wordlist_to_rows(m,wordlist)
@@ -50,10 +53,14 @@ file_out.write(htext)
 
 #write all animals and verbs:
 for name_file_dataset in glob.glob("../../data/clusters_manual/*.txt"):
-	wordlist = [s.strip() for s in open(name_file_dataset).readlines()]
-	file_out.write(name_file_dataset+" : ")
-	file_out.write(str(wordlist))
+	f_in=open(name_file_dataset)
+	wordlist = [s.strip() for s in f_in.readlines()]
+	f_in.close()
+	file_out.write("<strong>"+os.path.basename(name_file_dataset)+"</strong> ")
+	file_out.write(" ["+str(len(wordlist))+"]")
 	file_out.write("<br />")
+	file_out.write(str(wordlist))
+	file_out.write("<br /><br />")
 
 
 
@@ -70,7 +77,10 @@ for source in sources:
 	file_out.write("</pre><br />")
 
 	for name_file_dataset in glob.glob("../../data/clusters_manual/*.txt"):
-		wordlist_to_rowslist = [s.strip() for s in open(name_file_dataset).readlines()]
+		f_in=open(name_file_dataset)
+		wordlist = [s.strip() for s in f_in.readlines()]
+		f_in.close()
+		print(name_file_dataset,len(wordlist))
 		output_img(wordlist,os.path.basename(name_file_dataset))
 
 #	wordlist = [s.strip() for s in open("../../data/animals.txt").readlines()]
