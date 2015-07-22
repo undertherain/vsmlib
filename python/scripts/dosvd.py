@@ -11,12 +11,12 @@ import vsmlib
 
 #dir_root="/mnt/work/nlp_scratch/"
 dir_root="/storage/scratch/"
-positive = True
+positive = True  #positive point-wise mutual information nullified
 
 source ="test"
 dir_source = os.path.join(dir_root,source)
 name = os.path.basename(os.path.normpath(dir_source))
-cnt_vectors=4
+cnt_vectors=4 # number of dimensions
 m = vsmlib.Model_explicit()
 m.load(dir_source)
 for c in [0.1,0.3,0.6,1]:
