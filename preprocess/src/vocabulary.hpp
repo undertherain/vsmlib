@@ -17,7 +17,7 @@ public:
     size_t cnt_words;
     size_t cnt_words_processed;
     Vocabulary();
-    inline bool is_word_valid(std::string const & w);
+    bool is_word_valid(std::string const & w);
     void read_from_dir(std::string dir);
     void dump_frequency(const std::string & name_file) const;
     void dump_ids(const std::string & name_file) const;

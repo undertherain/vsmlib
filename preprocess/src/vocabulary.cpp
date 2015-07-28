@@ -25,26 +25,23 @@ Vocabulary::Vocabulary():cnt_words(0),cnt_words_processed(0){
 	}
 }
 
-inline bool Vocabulary::is_word_valid(std::string const & w)
+bool Vocabulary::is_word_valid(std::string const & w)
 {
-	std::cerr<<"input: " <<w<<"\n";
-		//std::wstring_convert<std::codecvt_utf8_utf32<wchar_t>,wchar_t> convert;
-		//std::wstring ws = convert.from_bytes(w);   
-	std::wstring_convert<deletable_facet<std::codecvt<char16_t, char, std::mbstate_t>>, char16_t> conv16;
-	std::u16string str16 = conv16.from_bytes(w.c_str());
-	static const std::locale loc("en_US.utf8");
-		//size_t len= ws.length();
-  		//std::wcout<<ws<<"\n";
-		//std::cerr<<"length = "<<len<<"\n";
-  		//if (len<3) return false;
-  		//if (len>20) return false;
-  		//std::cerr<<sizeof(ws[0])<<ws[0];
-
-	if (!std::iswalpha(str16[0])) return false;
-  		//if (!std::isalpha(w[1],loc)) return false;
-  		//if (!std::isalpha(w[2],loc)) return false;
-		//if(stopwords.find(w) != stopwords.end()) return false;
-	//std::cerr<<"\t is good!\n";
+//	std::cerr<<"input: " <<w<<"\n";
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conv;
+    std::wstring ws = conv.from_bytes(w.c_str());//const std::locale loc("en_US.utf8");
+	//size_t len= ws.length();
+  	//std::wcout<<ws<<"\n";
+	//std::cerr<<"length = "<<len<<"\n";
+  	//std::cerr<<"size char: "<<sizeof(ws[0])<<'\n';
+	//if (len<3) return false;
+  	//if (len>20) return false;
+  	std::locale loc("en_US.UTF8");
+	if (!std::isalpha(ws[0],loc)) return false;
+  	if (!std::isalpha(ws[1],loc)) return false;
+  	if (!std::isalpha(ws[2],loc)) return false;
+	if(stopwords.find(w) != stopwords.end()) return false;
+//	std::cerr<<"\t is good!\n";
 
 	return true;
 }
