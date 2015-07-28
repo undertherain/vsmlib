@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <cstdarg>
 #include "options.hpp"
+#include "basic_utils/stream_reader.hpp"
 
 typedef int64_t Index;
 std::string provenance;

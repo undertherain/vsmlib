@@ -23,7 +23,7 @@ class MidpointNormalize(Normalize):
 def plot_heat(ax,m,xlabels,ylabels):
     #norm = Normalize(-10,10,False)
     norm = MidpointNormalize(midpoint=0)
-    ax.set_aspect('equal')
+    #ax.set_aspect('equal')
     plt.xticks(rotation=90)    
     ax.set_xticks(np.arange(m.shape[1])+0.5, minor=False)
     ax.set_yticks(np.arange(m.shape[0])+0.5, minor=False)
@@ -38,7 +38,8 @@ def plot_heat(ax,m,xlabels,ylabels):
 #    heatmap = plt.pcolor(np.array(m), cmap=mpl.cm.RdBu, edgecolors="black")    
     #im = ax.imshow(np.array(m), norm=norm, cmap=plt.cm.seismic, interpolation='none')
 #fig.colorbar(im)
-    cb=plt.colorbar(heatmap,orientation='horizontal',shrink=1,aspect=40)
+    #cb=plt.colorbar(heatmap,orientation='horizontal',shrink=1,aspect=40)
+    cb=plt.colorbar()
     #cb.fraction=0.1
     
 def draw_features_and_similarity(mm,words_of_interest):
@@ -76,7 +77,7 @@ def wordlist_to_rows(m,wordlist):
     xmax =np.amax(abs(rows))
     return rows/xmax
 
-def rows_to_img_array(a):
+def rows_to_img_array(a,max_y=0.8):
     height_img = 300
     width_column=2
     my_cm = mpl.cm.get_cmap('Greys')
@@ -85,10 +86,32 @@ def rows_to_img_array(a):
         for i in range(len(row)):
             sign=-1
             if row[i]<0: sign =1
-            height=int(row[i]*height_img/2)
-            for h in range(abs(height)):
+            height=abs(int((row[i]/max_y)*height_img/2))
+            if height>height_img/2: height=int(height_img/2)
+            for h in range(height):
                 for iw in range(width_column):
                     img[height_img/2+sign*h,i*width_column+iw]+=1/a.shape[0]
+    mapped_datau8 = (255 * my_cm(img)).astype('uint8')
+    im = PIL.Image.fromarray(np.uint8(mapped_datau8))
+    return im
+
+def rows_to_img_tips(a,max_y=0.8):
+    height_img = 300
+    width_column=3
+    my_cm = mpl.cm.get_cmap('Blues')
+    img = np.zeros(shape=(height_img,a.shape[1]*width_column))
+    for row in a:
+        for i in range(len(row)):
+            sign=-1
+            if row[i]<0: sign =1
+            height=abs(int((row[i]/max_y)*height_img/2))
+            if height>height_img/2-1: height=int(height_img/2)-1
+            for iw in range(width_column-1):
+                img[height_img/2+sign*height,i*width_column+iw]+=1
+                img[height_img/2+sign*height-sign,i*width_column+iw]+=1
+                img[height_img/2+sign*height-sign*2,i*width_column+iw]+=0.5
+                img[height_img/2+sign*height-sign*3,i*width_column+iw]+=0.1
+    img=img/np.max(img)
     mapped_datau8 = (255 * my_cm(img)).astype('uint8')
     im = PIL.Image.fromarray(np.uint8(mapped_datau8))
     return im

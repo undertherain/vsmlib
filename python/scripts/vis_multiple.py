@@ -11,10 +11,11 @@ sys.path.append("..")
 import vsmlib
 from vsmlib import testhelper 
 from vsmlib.visualize import draw_features,draw_features_and_similarity,plotvectors,wordlist_to_rows,rows_to_img_array,std_to_img
+import vsmlib.visualize
 import random
 import numpy as np
 
-dir_root ="/storage/scratch/SVD"
+#dir_root ="/storage/scratch/SVD"
 #dir_root ="/mnt/work/nlp_scratch/SVD/"
 dir_root ="/home/blackbird/data/scratch"
 sources = []
@@ -26,7 +27,8 @@ sources.append("glove/glove.6b.wiki_giga")
 
 def output_img(wordlist,name):
 	rows=wordlist_to_rows(m,wordlist)
-	im = rows_to_img_array(rows)
+#	im = rows_to_img_array(rows)
+	im = vsmlib.visualize.rows_to_img_tips(rows)
 	name_image=name+"_"+m.name+".png"
 	im.save(os.path.join("pics",name_image))
 	file_out.write(name+":<br />")
@@ -47,7 +49,9 @@ def output_img(wordlist,name):
 
 file_out = open('plots.html','w')
 htext = """<html>
-<head></head>
+<head>
+ <link rel="stylesheet" type="text/css" href="mystyle.css">
+</head>
 <body>"""
 file_out.write(htext)
 
@@ -69,7 +73,7 @@ for source in sources:
 	print ("opening "+source+" ...")
 	m = vsmlib.model.load_from_dir(dir_source)
 	print ("normalizing ...")
-	m.normalize()
+	#m.normalize()
 	print ("done\n")
 	file_out.write("<hr /><pre>")
 	file_out.write("model: " +m.name)
