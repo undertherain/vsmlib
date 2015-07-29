@@ -41,9 +41,9 @@ class Vocabulary_simple(Vocabulary):
         return rdic
     def load_list_from_file(self,filename,n):
         postfix=0;
-        #rlst=[""]*n
+        rlst=[""]*n
         #rdic={}
-        rlst=[]
+        #rlst=[]
         f=open(os.path.join(self.dir_root,filename), encoding='utf-8', errors='replace')
         lines=f.readlines()
         for line in lines:
@@ -53,7 +53,8 @@ class Vocabulary_simple(Vocabulary):
                 #postfix+=1
             #else:
                 #rdic[tokens[0]]=np.int64(tokens[-1])
-            rlst.append(tokens[0])
+            #rlst.append(tokens[0])
+            rlst[np.int64(tokens[-1])]=tokens[0]
         f.close()
         return rlst
     def load(self,path,verbose=False):

@@ -23,7 +23,7 @@ class MidpointNormalize(Normalize):
 def plot_heat(ax,m,xlabels,ylabels):
     #norm = Normalize(-10,10,False)
     norm = MidpointNormalize(midpoint=0)
-    #ax.set_aspect('equal')
+    ax.set_aspect('equal')
     plt.xticks(rotation=90)    
     ax.set_xticks(np.arange(m.shape[1])+0.5, minor=False)
     ax.set_yticks(np.arange(m.shape[0])+0.5, minor=False)
@@ -38,8 +38,8 @@ def plot_heat(ax,m,xlabels,ylabels):
 #    heatmap = plt.pcolor(np.array(m), cmap=mpl.cm.RdBu, edgecolors="black")    
     #im = ax.imshow(np.array(m), norm=norm, cmap=plt.cm.seismic, interpolation='none')
 #fig.colorbar(im)
-    #cb=plt.colorbar(heatmap,orientation='horizontal',shrink=1,aspect=40)
-    cb=plt.colorbar()
+    cb=plt.colorbar(heatmap,orientation='horizontal',shrink=1,aspect=40)
+    #cb=plt.colorbar()
     #cb.fraction=0.1
     
 def draw_features_and_similarity(mm,words_of_interest):
