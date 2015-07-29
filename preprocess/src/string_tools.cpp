@@ -1,5 +1,7 @@
 #include <fstream>
 #include <algorithm>
+#include <locale>
+#include <codecvt>
 #include "string_tools.hpp"
 
 //#if !defined(MAX_STR_SIZE)
@@ -8,18 +10,24 @@
 //const char separators[]=" .,:;!?()[]-\t\"'";
 
   
-inline void trim3(std::string & str)
+std::string wstring_to_utf8 (const std::wstring& str)
 {
-  str.erase(str.begin(), find_if(str.begin(), str.end(), [](char& ch)->bool { return !isspace(ch); }));
-  str.erase(find_if(str.rbegin(), str.rend(), [](char& ch)->bool { return !isspace(ch); }).base(), str.end());
-  for (unsigned int i=0;i<str.length();i++)
-  {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+    return myconv.to_bytes(str);
+}
+
+inline void trim3(std::wstring & str)
+{
+  //str.erase(str.begin(), find_if(str.begin(), str.end(), [](char& ch)->bool { return !isspace(ch); }));
+  //str.erase(find_if(str.rbegin(), str.rend(), [](char& ch)->bool { return !isspace(ch); }).base(), str.end());
+  //for (unsigned int i=0;i<str.length();i++)
+  //{
   //	if (!isalpha(str[i])) str[i]='_';
-  }
+  //}
    //return str;
 }  
 
-inline void clean(std::string & str)
+inline void clean(std::wstring & str)
 {
       trim3(str);
       std::transform(str.begin(), str.end(), str.begin(), ::tolower);
@@ -43,12 +51,13 @@ bool hasEnding (std::string const &fullString, std::string const &ending)
     }
 }
 
-std::list<std::string> load_words(std::string name_file)
+std::list<std::wstring> load_words(std::string name_file)
 {
-  std::ifstream d_file(name_file);
-    std::string line;
-    std::list<std::string> result;
-    while( std::getline( d_file, line ) ) 
+  std::wifstream d_file(name_file);
+  d_file.imbue(std::locale("en_US.UTF8"));
+  std::wstring line;
+  std::list<std::wstring> result;
+  while( std::getline( d_file, line ) ) 
     {
         trim3(line);
         result.push_back(line);

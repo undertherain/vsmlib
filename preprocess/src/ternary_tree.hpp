@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <vector>
 
+#include "string_tools.hpp"
+
 #if !defined(MAX_STR_SIZE)
 #define MAX_STR_SIZE 1000
 #endif
@@ -14,7 +16,7 @@ template <typename T>
 class TernaryTreeNode
 {
 public:
-    char c;
+    wchar_t c;
     TernaryTreeNode * left;
     TernaryTreeNode * down;
     TernaryTreeNode * right;
@@ -35,9 +37,9 @@ public:
 //        tree->c='m';
     }
 //Index get_value(const TernaryTreeNode<Index> * node, const char * str) ;
-    Index get_id(const char * str);
-    Index set_id_and_increment(const char * str);
-    TernaryTreeNode<Index> * get_node(const char * str);
+    Index get_id(const wchar_t * str);
+    Index set_id_and_increment(const wchar_t * str);
+    TernaryTreeNode<Index> * get_node(const wchar_t * str);
     void dump_frequency(const std::string & name_file) const;
     void dump_ids(const std::string & name_file) const;
     void dump_dot(const std::string & name_file) const;

@@ -1,3 +1,4 @@
+#pragma once
 #include <list>
 //#include <fstream>
 
@@ -7,8 +8,9 @@
 
 const char separators[]=" .,:;!?()[]-\t\"'";
   
-inline void trim3(std::string & str);
+std::string wstring_to_utf8 (const std::wstring& str);
+inline void trim3(std::wstring & str);
 inline void clean(std::string & str);
 bool is_line_valid(std::string const & w);
 bool hasEnding (std::string const &fullString, std::string const &ending);
-std::list<std::string> load_words(std::string name_file);
+std::list<std::wstring> load_words(std::string name_file);

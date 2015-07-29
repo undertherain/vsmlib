@@ -3,7 +3,7 @@
 #include "stream_reader.hpp"
 
 
-DirReader::DirReader(std::string _dir):dir(_dir,boost::filesystem::symlink_option::recurse),initial(_dir,boost::filesystem::symlink_option::recurse)
+DirReader::DirReader(std::string _dir):dir(_dir,boost::filesystem::symlink_option::recurse),initial(_dir,boost::filesystem::symlink_option::recurse),locale(std::locale("en_US.UTF8"))
 {
         //file_in.open(dir->path().string());
         //std::cerr<<"processing \t"<<dir->path().string()<<" ... \n";
@@ -23,6 +23,7 @@ void DirReader::reset()
 
     if (file_in.is_open()) file_in.close();
     file_in.open(dir->path().string());
+    file_in.imbue(locale);
     std::cerr<<"processing \t"<<dir->path().string()<<" ... \n";
 }
 
@@ -61,7 +62,7 @@ int DirReader::check_eof_and_advance()
     return 1;
 }
 
-bool DirReader::is_separator(char c)
+bool DirReader::is_separator(wchar_t c)
 {
     for (size_t i=0;i<15;i++)
         if (c==separators[i]) return true;
@@ -71,13 +72,14 @@ bool DirReader::is_separator(char c)
        // if (c>'z') return true;
     return false;
 }
-char * DirReader::get_word()
+wchar_t * DirReader::get_word()
 {
     boost::filesystem::recursive_directory_iterator end;
     size_t pos_buf=0;
-    char ch;
+    wchar_t ch;
     do 
     {
+        //std::cerr<<"we are in dat loop \n";
         if (file_in.eof()) 
         {
             if (pos_buf>2) 
@@ -94,15 +96,22 @@ char * DirReader::get_word()
             file_in.close();
             std::cerr<<"processing \t"<<dir->path().string()<<" ... \n";
             file_in.open(dir->path().string());
+            file_in.imbue(locale);
             pos_buf=0;
         }
         file_in.read(&ch,1);
-        if (file_in.eof()) continue;
-        ch = tolower(ch);
+        if (file_in.eof()) 
+            {
+                //std::cerr<<"we are EOF\n";
+                continue;
+            }
+        //std::cerr<<"just read "<<ch<<"\n";
+        ch = tolower(ch,locale);
         if (is_separator(ch)) 
         {
+            //std::cerr<<"this is separator\n";
             buffer[pos_buf]=0;
-            if (pos_buf<2)
+            if (pos_buf<1)
             {
                 pos_buf=0;
                 continue;
@@ -118,7 +127,7 @@ char * DirReader::get_word()
     return NULL;
 }
 
-
+/*
 bool DirReader::getline(std::string & line)
 {
     do
@@ -133,3 +142,4 @@ bool DirReader::getline(std::string & line)
     }
     while(1);
 }
+*/

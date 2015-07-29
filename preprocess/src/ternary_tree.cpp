@@ -1,28 +1,31 @@
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
+//#include <codecvt>
+#include <locale>
 #include "ternary_tree.hpp"
 
 //#define MAX_STR_SIZE  1500
-char  buffer[MAX_STR_SIZE];
+wchar_t  buffer[MAX_STR_SIZE];
 
 
-Index TernaryTree::set_id_and_increment(const char * str)
+Index TernaryTree::set_id_and_increment(const wchar_t * str)
 {
     if (tree==NULL)
     { 
         //std::cerr<<"creating new head\n";
         tree = new TernaryTreeNode<Index>();
         tree->c=str[0];
+        //tree->data=id_global++;
     } 
     auto node=tree;
     unsigned int depth=0;
     bool is_done=false;
-    if ((strlen(str)==1)&&(node->c==str[0])) is_done=true;
+    if ((wcslen(str)==1)&&(node->c==str[0])) is_done=true;
     while (!is_done)
     {
         if (depth>=MAX_STR_SIZE) {std::cerr<<"string too long in tree, aborting \n"; return -1;}
-        char c=str[depth];
+        wchar_t c=str[depth];
 //        std::cerr<<"depth = "<<depth<<"\tnode.c = "<<node->c<<"\tc = "<<c<<"\n";
         if (c==node->c)
         {
@@ -62,14 +65,14 @@ Index TernaryTree::set_id_and_increment(const char * str)
             //continue;
         }
         //if (depth>=strlen(str)) is_done=true;
-        if ((depth>=strlen(str)-1)&&(node->c==c)) is_done=true;
+        if ((depth>=wcslen(str)-1)&&(node->c==c)) is_done=true;
     }
     if (!node->data) node->id=id_global++;
     node->data++;
     return node->id;
 }
 
-TernaryTreeNode<Index> * TernaryTree::get_node(const char * str)
+TernaryTreeNode<Index> * TernaryTree::get_node(const wchar_t * str)
 {
     auto node=tree;
     unsigned int depth=0;
@@ -77,7 +80,7 @@ TernaryTreeNode<Index> * TernaryTree::get_node(const char * str)
     bool is_done=false;
     while (!is_done)
     {
-        char c=str[depth];
+        wchar_t c=str[depth];
         if (c==node->c)
         {
             if (node->down==NULL) return NULL;
@@ -96,24 +99,24 @@ TernaryTreeNode<Index> * TernaryTree::get_node(const char * str)
         }
         c=str[depth];
         //std::cerr<<"depth = "<<depth<<" node.c = "<<node->c<<"\n";
-        if ((depth>=strlen(str)-1)&&(node->c==c)) is_done=true;
+        if ((depth>=wcslen(str)-1)&&(node->c==c)) is_done=true;
     }
     return node;
 }
 
 
-Index TernaryTree::get_id(const char * str)
+Index TernaryTree::get_id(const wchar_t * str)
 {
     auto node=tree;
-    if (node==0) return -1;
+    if (node==NULL) return -1;
     unsigned int depth=0;
-    //std::cerr<<"fetching id for "<<str<<"\n";
     bool is_done=false;
     while (!is_done)
     {
-        char c=str[depth];
+        wchar_t c=str[depth];
         if (c==node->c)
         {
+            if (depth>=wcslen(str)-1) return node->id;
             if (node->down==NULL) return -1;
             node=node->down;
             depth++;
@@ -130,7 +133,7 @@ Index TernaryTree::get_id(const char * str)
         }
         c=str[depth];
         //std::cerr<<"depth = "<<depth<<" node.c = "<<node->c<<"\n";
-        if ((depth>=strlen(str)-1)&&(node->c==c)) is_done=true;
+        if ((depth>=wcslen(str)-1)&&(node->c==c)) is_done=true;
     }
     //std::cerr<<"found at depth "<<depth<<" id = "<<node->id-1<<"\n";
     return node->id;
@@ -181,14 +184,14 @@ ActionFile::~ActionFile()
 void ActionFileWriteFrequency::operator()(TernaryTreeNode<Index>* node,unsigned int depth)
     {
     if (node->data)
-        file<<std::string(buffer,buffer+depth+1)<<"\t"<<node->data<<"\n";
+        file<<wstring_to_utf8(std::wstring(buffer,buffer+depth+1))<<"\t"<<node->data<<"\n";
     }
 
 
 void ActionFileWriteId::operator()(TernaryTreeNode<Index>* node,unsigned int depth)
     {
     if (node->data)
-        file<<std::string(buffer,buffer+depth+1)<<"\t"<<node->id<<"\n";
+        file<<wstring_to_utf8(std::wstring(buffer,buffer+depth+1))<<"\t"<<node->id<<"\n";
     }
 
 void ActionCountNodes::operator()(TernaryTreeNode<Index>* node,unsigned int depth)
@@ -208,25 +211,25 @@ ActionFileWriteDot::~ActionFileWriteDot()
     
 void ActionFileWriteDot::operator()(TernaryTreeNode<Index>* node,unsigned int depth)
     {
-    std::string label(buffer,buffer+depth+1);
-    file<<label<<" [label="<<node->c<<"];\n";
+    std::wstring label(buffer,buffer+depth+1);
+    file<<wstring_to_utf8(label)<<" [label="<<node->c<<"];\n";
     if (node->left!=NULL)
     {
-        std::string label2=label;
+        std::wstring label2=label;
         label2[label2.length()-1]=node->left->c;
-        file<<label<<"\t->\t"<<label2<<"  [color=blue];\n";
+        file<<wstring_to_utf8(label)<<"\t->\t"<<wstring_to_utf8(label2)<<"  [color=blue];\n";
     }
     if (node->down!=NULL)
     {
-        std::string label2=label;
+        std::wstring label2=label;
         label2=label2+node->down->c;
-        file<<label<<"\t->\t"<<label2<<" [style=dotted];\n";
+        file<<wstring_to_utf8(label)<<"\t->\t"<<wstring_to_utf8(label2)<<" [style=dotted];\n";
     }
     if (node->right!=NULL)
     {
-        std::string label2=label;
+        std::wstring label2=label;
         label2[label2.length()-1]=node->right->c;
-        file<<label<<"\t->\t"<<label2<<"[color=red] ;\n";
+        file<<wstring_to_utf8(label)<<"\t->\t"<<wstring_to_utf8(label2)<<"[color=red] ;\n";
     }
         
     }

@@ -2,46 +2,31 @@
 #include <string>  
 #include <locale>
 #include <boost/locale/encoding_utf.hpp>
-#include <codecvt>
+//#include <codecvt>
 #include <set>
 //#include <boost/tokenizer.hpp>
 #include "basic_utils/stream_reader.hpp"
 #include "basic_utils/utils.hpp"
-//#include "ternary_tree.hpp"
 #include "vocabulary.hpp"
 
-template<class Facet>
-struct deletable_facet : Facet
-{
-    template<class ...Args>
-	deletable_facet(Args&& ...args) : Facet(std::forward<Args>(args)...) {}
-	~deletable_facet() {}
-};
 
-Vocabulary::Vocabulary():cnt_words(0),cnt_words_processed(0){
+Vocabulary::Vocabulary():cnt_words(0),cnt_words_processed(0),locale(std::locale("en_US.UTF8")){
 	for (auto s : load_words("stopwords.txt"))
 	{
 		stopwords.insert(s);	
 	}
 }
 
-bool Vocabulary::is_word_valid(std::string const & w)
+bool Vocabulary::is_word_valid(std::wstring const & w)
 {
-//	std::cerr<<"input: " <<w<<"\n";
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conv;
-    std::wstring ws = conv.from_bytes(w.c_str());//const std::locale loc("en_US.utf8");
-	//size_t len= ws.length();
-  	//std::wcout<<ws<<"\n";
-	//std::cerr<<"length = "<<len<<"\n";
-  	//std::cerr<<"size char: "<<sizeof(ws[0])<<'\n';
-	//if (len<3) return false;
-  	//if (len>20) return false;
-  	std::locale loc("en_US.UTF8");
-	if (!std::isalpha(ws[0],loc)) return false;
-  	if (!std::isalpha(ws[1],loc)) return false;
-  	if (!std::isalpha(ws[2],loc)) return false;
+//	std::cerr<<"input: " <<wstring_to_utf8(w)<<"\n";
+	size_t len= w.length();
+	if (len<2) return false;
+  	if (len>20) return false;
+	if (!std::isalpha(w[0],locale)) return false;
+  	if (!std::isalpha(w[1],locale)) return false;
 	if(stopwords.find(w) != stopwords.end()) return false;
-//	std::cerr<<"\t is good!\n";
+	//std::cerr<<"\t is good!\n";
 
 	return true;
 }
@@ -49,10 +34,10 @@ bool Vocabulary::is_word_valid(std::string const & w)
 void Vocabulary::read_from_dir(std::string dir)
 {
 	DirReader dr(dir);
-	char * word;
+	wchar_t * word;
 	while ((word=dr.get_word())!=NULL )
 	{
-		if (is_word_valid(std::string(word)))
+		if (is_word_valid(std::wstring(word)))
 		{
 			tree.set_id_and_increment(word);	
 			cnt_words_processed++;
@@ -60,7 +45,7 @@ void Vocabulary::read_from_dir(std::string dir)
 	}
 	cnt_words=tree.id_global;
 }
-int64_t Vocabulary::get_id(const char * str)
+int64_t Vocabulary::get_id(const wchar_t * str)
 {
 	return tree.get_id(str);
 }

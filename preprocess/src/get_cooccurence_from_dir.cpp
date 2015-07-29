@@ -57,10 +57,10 @@ void load_bigrams(std::string str_path_in,const Options & options)
     auto size_window = options.size_window;
     boost::circular_buffer<int64_t> cb(size_window); //- size of n-grams
     for (uint64_t i =0 ; i<size_window; i++) cb.push_back(-1);
-    char * word;
+    wchar_t * word;
     while ((word=dr.get_word())!=NULL )
     {
-        if (vocab.is_word_valid(std::string(word)))
+        if (vocab.is_word_valid(std::wstring(word)))
         {
             Index id_current = vocab.get_id(word);
             if (id_current>=0)
@@ -122,6 +122,7 @@ int main(int argc, char * argv[])
 
     freq_per_id.resize(vocab.cnt_words);
     std::fill (freq_per_id.begin(),freq_per_id.end(),0);   
+    std::cerr<<"populating frequencies\n";
     vocab.populate_frequency(freq_per_id);
     vocab.reassign_ids(freq_per_id);
     vocab.populate_frequency(freq_per_id);

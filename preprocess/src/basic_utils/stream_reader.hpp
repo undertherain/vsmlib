@@ -5,15 +5,16 @@
 class DirReader
    {
     boost::filesystem::recursive_directory_iterator dir,initial;
-    std::ifstream file_in;
-    char buffer[MAX_STR_SIZE];
+    std::wifstream file_in;
+    wchar_t buffer[MAX_STR_SIZE];
     std::string line_current;
+    const std::locale locale;
 public:
     DirReader(std::string _dir);
     void reset();
     bool check_simlink_and_advance();
     int check_eof_and_advance();
-    bool is_separator(char c);
-    char * get_word();
-    bool getline(std::string & line);
+    bool is_separator(wchar_t c);
+    wchar_t * get_word();
+    //bool getline(std::string & line);
 };
