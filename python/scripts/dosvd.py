@@ -1,37 +1,30 @@
-#import nltk
-#from nltk.collocations import *
-#from nltk.corpus import stopwords
-#import fnmatch
 import os
 import sys
 import glob
 sys.path.append("..")
 import vsmlib
 	
+cnt_dimensions = 500
 
-#dir_root="/mnt/work/nlp_scratch/"
-dir_root="/storage/scratch/"
-positive = True  #positive point-wise mutual information nullified
+argv = sys.argv
+if len(argv) < 2:
+	print ("direcrory name required")
+	exit()
+dir_source = argv[1]
 
-source ="test"
-dir_source = os.path.join(dir_root,source)
-name = os.path.basename(os.path.normpath(dir_source))
-cnt_vectors=4 # number of dimensions
+def do_svd_and_save(m):
+	lst_pow_sigma=[0.3,0.6,1]
+	for c in lst_pow_sigma:
+		m_svd = vsmlib.Model_svd_scipy(m,cnt_dimensions,c)
+		dir_dest=(os.path.join(dir_source,"../!converted/",m_svd.name))
+		print (dir_dest)
+		m_svd.save_to_dir(dir_dest)
+
 m = vsmlib.Model_explicit()
 m.load(dir_source)
-for c in [0.1,0.3,0.6,1]:
-	if positive: 
-		newname=name + "_TMP"
-	else:
-		newname = name
+do_svd_and_save(m)
 
-#	newname = newname+"_svd{}_C{}".format(cnt_vectors,c)
-	m_svd = vsmlib.Model_svd_scipy(m,cnt_vectors,c)
-	dir_dest=(os.path.join(dir_source,"../totest/",m_svd.name))
-	print (dir_dest)
-	m_svd.save_to_dir(dir_dest)
+print ("doing positive PMI")
+m.clip_negatives()
 
-#m2 = vsmlib.model.Model_numbered()
-#m2.load_from_dir("/storage/scratch/BNC_svd300")
-#draw_features_and_similarity(m2,True) 
-#print (m_svd_scipy.provenance)
+do_svd_and_save(m)
