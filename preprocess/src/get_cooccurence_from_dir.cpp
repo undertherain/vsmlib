@@ -103,7 +103,10 @@ int main(int argc, char * argv[])
     Options options = ProcessOptions(argc,argv);
     auto str_path_in = options.path_in.string();
     auto path_out=options.path_out;
-
+    if (boost::filesystem::create_directory(path_out))
+    {
+        std::cerr << "creating target directory\n";
+    }
     provenance = "source corpus : ";
     provenance = provenance + str_path_in + "\n";
 
