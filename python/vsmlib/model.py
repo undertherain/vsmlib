@@ -131,11 +131,7 @@ class Model_explicit(Model):
         self.vocabulary.load(path)
         self.name+=os.path.basename(os.path.normpath(path))
         self.matrix = vsmlib.matrix.load_matrix_csr(path,verbose=True)
-        try:
-            with open (os.path.join(path,"provenance.txt"), "r") as myfile:
-                self.provenance = myfile.read()
-        except:
-            print("warning: provenance not found")
+        self.load_provenance(path)
     def clip_negatives(self):
         self.matrix.data.clip(0,out=self.matrix.data)
         self.matrix.eliminate_zeros()
@@ -166,6 +162,7 @@ class Model_dense(Model):
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
         self.name+=os.path.basename(os.path.normpath(path))
+        self.load_provenance(path)
     def normalize(self):
         nrm= np.linalg.norm(self.matrix, axis=1)
         self.matrix/=nrm[:, np.newaxis]
