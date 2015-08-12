@@ -61,7 +61,8 @@ class Vocabulary_simple(Vocabulary):
         self.dir_root=path
         self.dic_words_ids = self.load_dic_from_file("ids")
         self.lst_words=self.load_list_from_file("ids",len(self.dic_words_ids))
-
+        if os.path.isfile(os.path.join(path,"freq_per_id")):
+            self.l_frequencies = np.fromfile(open(os.path.join(self.dir_root,"freq_per_id")),dtype=np.uint64)
 class Vocabulary_cooccurrence(Vocabulary_simple):
     def get_frequency(i):
         if i<0: return 0
@@ -69,7 +70,6 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
     def load(self,path,verbose=False):
         t_start=time.time()
         Vocabulary_simple.load(self,path)
-        l_frequencies = np.fromfile(open(os.path.join(self.dir_root,"freq_per_id")),dtype=np.uint64)
         t_end=time.time()
         #assert len(self.lst_words)==len(self.dic_words_ids)
         if verbose:

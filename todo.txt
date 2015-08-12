@@ -1,3 +1,6 @@
 convert numbers to special tokens
 
 render in parallel coordinates!!!
+
+zone of pain
+scale vs exploratory-ness

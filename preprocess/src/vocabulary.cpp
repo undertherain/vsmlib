@@ -23,9 +23,9 @@ bool Vocabulary::is_word_valid(std::wstring const & w)
 	size_t len= w.length();
 	if (len<2) return false;
   	if (len>20) return false;
-	if (!std::isalpha(w[0],locale)) return false;
-  	if (!std::isalpha(w[1],locale)) return false;
-	if(stopwords.find(w) != stopwords.end()) return false;
+	//if (!std::isalpha(w[0],locale)) return false;
+  	//if (!std::isalpha(w[1],locale)) return false;
+	//if(stopwords.find(w) != stopwords.end()) return false;
 	//std::cerr<<"\t is good!\n";
 
 	return true;
@@ -37,6 +37,8 @@ void Vocabulary::read_from_dir(std::string dir)
 	wchar_t * word;
 	while ((word=dr.get_word())!=NULL )
 	{
+		//clean word here?
+		word=clean_ptr(word);
 		if (is_word_valid(std::wstring(word)))
 		{
 			tree.set_id_and_increment(word);	
