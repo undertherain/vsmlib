@@ -2,7 +2,6 @@
 #include <boost/filesystem.hpp>
 #include "stream_reader.hpp"
 
-
 DirReader::DirReader(std::string _dir):dir(_dir,boost::filesystem::symlink_option::recurse),initial(_dir,boost::filesystem::symlink_option::recurse),locale(std::locale("en_US.UTF8"))
 {
         //file_in.open(dir->path().string());
@@ -72,8 +71,14 @@ bool DirReader::is_separator(wchar_t c)
        // if (c>'z') return true;
     return false;
 }
-wchar_t * DirReader::get_word()
+wchar_t * DirReader::get_word_raw()
 {
+    if (!myqueue.empty())
+    {
+        wcscpy(buffer,myqueue.front().c_str());
+        myqueue.pop();
+        return buffer;
+    }
     boost::filesystem::recursive_directory_iterator end;
     size_t pos_buf=0;
     wchar_t ch;
@@ -82,7 +87,7 @@ wchar_t * DirReader::get_word()
         //std::cerr<<"we are in dat loop \n";
         if (file_in.eof()) 
         {
-            if (pos_buf>2) 
+            if (pos_buf>1) 
             {
                 buffer[pos_buf=0];
                 return buffer;
@@ -116,6 +121,10 @@ wchar_t * DirReader::get_word()
                 pos_buf=0;
                 continue;
             }
+            if (ch==L'.')
+            {
+                myqueue.push(std::wstring(L"."));
+            }
             return buffer;
         }
         buffer[pos_buf++]=ch;
@@ -127,6 +136,11 @@ wchar_t * DirReader::get_word()
     return NULL;
 }
 
+wchar_t * DirReader::get_word()
+{
+    wchar_t * ptr = clean_ptr(get_word_raw());
+    return ptr;
+}
 /*
 bool DirReader::getline(std::string & line)
 {

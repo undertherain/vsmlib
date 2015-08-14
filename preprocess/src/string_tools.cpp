@@ -35,8 +35,10 @@ inline void clean(std::wstring & str)
 
 wchar_t * clean_ptr(wchar_t * str)
 {
+  if (str==NULL) return NULL;
   static const std::locale locale("en_US.UTF8");
   unsigned int length = wcslen(str);
+  if ((length==1) && (*str==L'.')) return str;
   wchar_t * new_ptr = str;
   while ((!std::isalpha(new_ptr[0],locale)) && (new_ptr<str+length)) new_ptr++;
   wchar_t * end_ptr=str+length;

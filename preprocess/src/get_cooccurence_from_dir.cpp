@@ -26,8 +26,9 @@ std::string provenance;
 Index cnt_words_processed;
 Index cnt_bigrams;
 typedef std::map<Index,Index> Accumulator;
-std::map<Index,Accumulator> counters;
+//std::map<Index,Accumulator> counters;
 std::vector<Index> freq_per_id;
+std::vector<Accumulator> counters;
 Vocabulary vocab;
 #include "basic_utils/write_data.hpp"
 
@@ -46,8 +47,8 @@ void accumulate(Index first, Index second)
 {
     if ((first<0)||(second<0)) return;
     //if (second.length()<2) return;
-    if (counters.find( first ) == counters.end())
-        counters.insert(std::make_pair(first,Accumulator()));
+    //if (counters.find( first ) == counters.end())
+      //  counters.insert(std::make_pair(first,Accumulator()));
     accumulate(counters[first],second);
 }
 
@@ -62,8 +63,10 @@ void load_bigrams(std::string str_path_in,const Options & options)
     {
         if (vocab.is_word_valid(std::wstring(word)))
         {
+            //std::cerr<<wstring_to_utf8(std::wstring(word))<<"\n";
             Index id_current = vocab.get_id(word);
-            if (id_current>=0)
+            if (word[0]==L'.') id_current=-1;
+//            if (id_current>=0)
             {
                 //freq_per_id[id_current]++;
                 cnt_words_processed++;
@@ -72,7 +75,7 @@ void load_bigrams(std::string str_path_in,const Options & options)
                 auto first = *i;
                 for (size_t j=1;j<cb.size();j++)
                 {
-                   // std::cerr<<first<<"\t"<<cb[j]<<"\n";
+                    //std::cerr<<first<<"\t"<<cb[j]<<"\n";
                     accumulate(first,cb[j]);
                     accumulate(cb[j],first);
                 }
@@ -140,7 +143,7 @@ int main(int argc, char * argv[])
 
     //return 0;
     std::cerr<<"extracting bigrams\n";
-
+    counters.resize(vocab.cnt_words);
     //Index cnt_words_last_dump=0;
     //append_values_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("cnt_bigrams")).string(),0,0,0);
     provenance+="windows size : "+FormatHelper::ConvertToStr(options.size_window);
@@ -151,7 +154,7 @@ int main(int argc, char * argv[])
 
     dump_crs_bin(path_out.string());
     write_value_to_file((path_out / boost::filesystem::path("provenance.txt")).string(),provenance);
-//  dump_crs(path_out.string());
+    dump_crs(path_out.string());
     write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
 
     return 0;

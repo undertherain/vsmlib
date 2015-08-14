@@ -1,5 +1,6 @@
 #include <boost/filesystem.hpp>
 #include <fstream>
+#include <queue>
 #include "../string_tools.hpp"
 
 class DirReader
@@ -15,6 +16,8 @@ public:
     bool check_simlink_and_advance();
     int check_eof_and_advance();
     bool is_separator(wchar_t c);
+    wchar_t * get_word_raw();
     wchar_t * get_word();
+    std::queue<std::wstring> myqueue;
     //bool getline(std::string & line);
 };

@@ -1,7 +1,7 @@
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
-//#include <codecvt>
+#include <codecvt>
 #include <locale>
 #include "ternary_tree.hpp"
 
