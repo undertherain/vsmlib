@@ -13,7 +13,7 @@ if len(argv) < 2:
 dir_source = argv[1]
 
 def do_svd_and_save(m):
-	lst_pow_sigma=[0.3,0.6,1]
+	lst_pow_sigma=[0.6]
 	for c in lst_pow_sigma:
 		m_svd = vsmlib.Model_svd_scipy(m,cnt_dimensions,c)
 		dir_dest=(os.path.join(dir_source,"../!converted/",m_svd.name))

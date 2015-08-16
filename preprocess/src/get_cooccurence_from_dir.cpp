@@ -141,11 +141,8 @@ int main(int argc, char * argv[])
     write_value_to_file((path_out / boost::filesystem::path("cnt_words")).string(),vocab.cnt_words_processed);
     write_vector_to_file((path_out / boost::filesystem::path("freq_per_id")).string(),freq_per_id);
 
-    //return 0;
     std::cerr<<"extracting bigrams\n";
     counters.resize(vocab.cnt_words);
-    //Index cnt_words_last_dump=0;
-    //append_values_to_file((boost::filesystem::path(path_out) / boost::filesystem::path("cnt_bigrams")).string(),0,0,0);
     provenance+="windows size : "+FormatHelper::ConvertToStr(options.size_window);
     provenance+="\nfrequency weightening : PMI";
     load_bigrams(str_path_in,options);
@@ -154,8 +151,7 @@ int main(int argc, char * argv[])
 
     dump_crs_bin(path_out.string());
     write_value_to_file((path_out / boost::filesystem::path("provenance.txt")).string(),provenance);
-    dump_crs(path_out.string());
-    write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
-
+    //dump_crs(path_out.string());
+    //write_cooccurrence_text((path_out / boost::filesystem::path("bigrams_list")).string());
     return 0;
 }
