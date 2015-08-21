@@ -28,6 +28,11 @@ class Vocabulary(object):
             return -1
     def get_word_by_id(self,i):
         return(self.lst_words[i])
+    def get_frequency(self,i):
+        if type(i)==str:
+            i=self.get_id(i)
+        if i<0: return 0
+        return(self.l_frequencies[i])
 
 class Vocabulary_simple(Vocabulary):
     def load_dic_from_file(self,filename):
@@ -64,9 +69,6 @@ class Vocabulary_simple(Vocabulary):
         if os.path.isfile(os.path.join(path,"freq_per_id")):
             self.l_frequencies = np.fromfile(open(os.path.join(self.dir_root,"freq_per_id")),dtype=np.uint64)
 class Vocabulary_cooccurrence(Vocabulary_simple):
-    def get_frequency(i):
-        if i<0: return 0
-        return(l_frequencies[i])
     def load(self,path,verbose=False):
         t_start=time.time()
         Vocabulary_simple.load(self,path)
@@ -78,9 +80,6 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
             print ("{} words ({}) in vocabulary".format(cnt_words,countof_fmt(cnt_words)))
 
 
-#def get_frequency(i):
-    #if i<0: return 0
-    #return(l_frequencies[i])
 
 #def report_rare():
 	#for f in range(6):

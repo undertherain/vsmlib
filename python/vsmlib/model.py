@@ -152,10 +152,11 @@ class Model_dense(Model):
         text_file = open(os.path.join(path,"provenance.txt"), "w")
         text_file.write(self.provenance)
         text_file.close()
-        text_file = open(os.path.join(path,"ids"), "w")
+        text_file = open(os.path.join(path,"ids"), "w") #todo: move this to vocabulary
         for  i in range(len(self.vocabulary.lst_words)):
             text_file.write("{}\t{}\n".format(self.vocabulary.lst_words[i],i))
         text_file.close()
+        self.vocabulary.l_frequencies.tofile(open(os.path.join(path,"freq_per_id"),"w"))
     def load_from_dir(self,path):
 #        self.matrix = np.fromfile(open(os.path.join(path,"vectors.bin")),dtype=np.float32)
         self.matrix = np.load(os.path.join(path,"vectors.npy"))
