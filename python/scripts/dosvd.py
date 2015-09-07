@@ -4,7 +4,7 @@ import glob
 sys.path.append("..")
 import vsmlib
 	
-cnt_dimensions = 500
+cnt_dimensions = 1000
 
 argv = sys.argv
 if len(argv) < 2:

@@ -11,6 +11,7 @@ from matplotlib import pyplot as plt
 import os 
 import gzip
 import brewer2mpl
+import tables
 
 class Model(object):
     provenance=""
@@ -144,11 +145,19 @@ class Model_explicit(Model):
 
 
 class Model_dense(Model):
+    def save_matr_to_hdf5(self,path):
+        f = tables.open_file(os.path.join(path,'vectors.h5p'), 'w')
+        atom = tables.Atom.from_dtype(self.matrix.dtype)
+        ds = f.create_carray(f.root, 'vectors', atom, self.matrix.shape)
+        ds[:] = self.matrix
+        ds.flush()
+        f.close()
     def save_to_dir(self,path):
         if not os.path.exists(path):
             os.makedirs(path)
         #self.matrix.tofile(os.path.join(path,"vectors.bin"))
         np.save(os.path.join(path,"vectors.npy"),self.matrix)
+        self.save_matr_to_hdf5(path)
         text_file = open(os.path.join(path,"provenance.txt"), "w")
         text_file.write(self.provenance)
         text_file.close()
