@@ -237,7 +237,7 @@ class Model_w2v(Model_numbered):
         f.close()
     def load_from_dir(self,path):
         self.load_from_file(os.path.join(path,"vectors.bin"))
-        load_provenance()
+        self.load_provenance(path)
 
 class Model_glove(Model_numbered):
     def __init__(self):
