@@ -68,6 +68,7 @@ class Vocabulary_simple(Vocabulary):
         self.lst_words=self.load_list_from_file("ids",len(self.dic_words_ids))
         if os.path.isfile(os.path.join(path,"freq_per_id")):
             self.l_frequencies = np.fromfile(open(os.path.join(self.dir_root,"freq_per_id")),dtype=np.uint64)
+
 class Vocabulary_cooccurrence(Vocabulary_simple):
     def load(self,path,verbose=False):
         t_start=time.time()
