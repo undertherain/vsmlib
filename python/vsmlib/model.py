@@ -222,7 +222,7 @@ class Model_w2v(Model_numbered):
         header = f.readline().split()
         cnt_rows=int(header[0])
         size_row=int(header[1])
-        self.name += "w2v_{}".format(size_row)
+        self.name += "_{}".format(size_row)
         self.matrix = np.zeros((cnt_rows,size_row),dtype=np.float32)
         print ("cnt rows = {}, size row = {}".format(cnt_rows,size_row))
         for i in range(cnt_rows):
@@ -236,6 +236,7 @@ class Model_w2v(Model_numbered):
             self.matrix[i]=row
         f.close()
     def load_from_dir(self,path):
+        self.name+="w2v_"+os.path.basename(os.path.normpath(path))
         self.load_from_file(os.path.join(path,"vectors.bin"))
         self.load_provenance(path)
 
@@ -245,6 +246,7 @@ class Model_glove(Model_numbered):
     def load_from_file(self,path):
         i=0;
         matr = None
+        self.name+="_"+os.path.basename(os.path.normpath(path))
         self.vocabulary = vsmlib.Vocabulary()
         rows=[]
         with gzip.open(path) as f:
