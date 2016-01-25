@@ -46,7 +46,7 @@ class Vocabulary_simple(Vocabulary):
         return rdic
     def load_list_from_file(self,filename,n):
         postfix=0;
-        rlst=[""]*n
+        self.lst_words=[""]*n
         #rdic={}
         #rlst=[]
         f=open(os.path.join(self.dir_root,filename), encoding='utf-8', errors='replace')
@@ -59,13 +59,22 @@ class Vocabulary_simple(Vocabulary):
             #else:
                 #rdic[tokens[0]]=np.int64(tokens[-1])
             #rlst.append(tokens[0])
-            rlst[np.int64(tokens[-1])]=tokens[0]
+            self.lst_words[np.int64(tokens[-1])]=tokens[0]
         f.close()
-        return rlst
+    def load_list_from_sorted_file(self,filename):
+        self.lst_words=[]
+        f=open(os.path.join(self.dir_root,filename), encoding='utf-8', errors='replace')
+        lines=f.readlines()
+        for line in lines:
+            token=line.strip()
+            self.lst_words.append(token)
+        f.close()
+
+
     def load(self,path,verbose=False):
         self.dir_root=path
         self.dic_words_ids = self.load_dic_from_file("ids")
-        self.lst_words=self.load_list_from_file("ids",len(self.dic_words_ids))
+        self.load_list_from_file("ids",len(self.dic_words_ids))
         if os.path.isfile(os.path.join(path,"freq_per_id")):
             self.l_frequencies = np.fromfile(open(os.path.join(self.dir_root,"freq_per_id")),dtype=np.uint64)
 

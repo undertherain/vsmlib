@@ -196,7 +196,20 @@ class Model_numbered(Model_dense):
             cnt+=1;
         if show_legend:
             plt.legend()
-           
+
+class Model_Levi(Model_dense):
+    def load_from_dir(self,path):
+        self.name="Levi_"+os.path.basename(os.path.normpath(path))
+        #m=vsmlib.model.Model_dense()
+        self.matrix=np.load(os.path.join(path,"sgns.contexts.npy"))
+        self.vocabulary= vsmlib.vocabulary.Vocabulary_simple()
+        self.vocabulary.dir_root=path
+        self.vocabulary.load_list_from_sorted_file("/home/blackbird/data/scratch/Anna/w2-1000.iter1/sgns.words.vocab")
+        self.vocabulary.dic_words_ids = {}
+        for i in range(len(self.vocabulary.lst_words)):
+            self.vocabulary.dic_words_ids[self.vocabulary.lst_words[i]]=i
+
+         
 class Model_svd_scipy(Model_numbered):
     def __init__(self,original,cnt_singular_vectors,power):
         ut, s_ev, vt = scipy.sparse.linalg.svds(original.matrix,k=cnt_singular_vectors,which='LM') # LM SM LA SA BE
@@ -243,10 +256,18 @@ class Model_w2v(Model_numbered):
 class Model_glove(Model_numbered):
     def __init__(self):
         self.name="glove"
+    def load_from_dir(self,path):
+        self.name="glove_"+os.path.basename(os.path.normpath(path))
+        files = os.listdir(path)
+        for f in files:
+            if f.endswith(".gz"):
+                print ("this is Glove")
+                self.load_from_file(os.path.join(path,f))
+
     def load_from_file(self,path):
         i=0;
         matr = None
-        self.name+="_"+os.path.basename(os.path.normpath(path))
+        #self.name+="_"+os.path.basename(os.path.normpath(path))
         self.vocabulary = vsmlib.Vocabulary()
         rows=[]
         with gzip.open(path) as f:
@@ -278,18 +299,21 @@ def load_from_dir(path):
         m =  vsmlib.Model_w2v()
         m.load_from_dir(path)
         return m
+    if os.path.isfile(os.path.join(path,"sgns.words.npy")):
+        m =  Model_Levi()
+        m.load_from_dir(path)
+        print ("this is Levi ")
+        return m
     if os.path.isfile(os.path.join(path,"vectors.npy")):
         m =  vsmlib.Model_numbered()
         m.load_from_dir(path)
         print ("this is dense ")
         return m
-    files = os.listdir(path)
-    for f in files:
-        if f.endswith(".gz"):
-            m=Model_glove()
-            m.load_from_file(os.path.join(path,f))
-            m.load_provenance(path)
-        print ("this is Glove")
+    #must be glove
+    m=Model_glove()
+    m.load_from_dir(path)
+    m.load_provenance(path)
+        
     return m
 
 
