@@ -127,6 +127,18 @@ def normalize(m):
 class Model_explicit(Model):
     def __init__(self):
         self.name+="explicit_"
+    def load_from_hdf5(self,path):
+        f = tables.open_file(os.path.join(path,'cooccurrence_csr.h5p'), 'r')
+        row_ptr = np.nan_to_num(f.root.row_ptr.read())
+        col_ind = np.nan_to_num(f.root.col_ind.read())
+        data = np.nan_to_num(f.root.data.read())
+        dim = row_ptr.shape[0]-1
+        self.matrix = scipy.sparse.csr_matrix((data,col_ind,row_ptr),shape=(dim,dim),dtype=np.float32) 
+        self.vocabulary = Vocabulary_cooccurrence()
+        self.vocabulary.load(path)
+        self.name+=os.path.basename(os.path.normpath(path))
+        self.load_provenance(path)
+            
     def load(self,path):
         self.vocabulary = Vocabulary_cooccurrence()
         self.vocabulary.load(path)
@@ -166,18 +178,30 @@ class Model_dense(Model):
             text_file.write("{}\t{}\n".format(self.vocabulary.lst_words[i],i))
         text_file.close()
         self.vocabulary.l_frequencies.tofile(open(os.path.join(path,"freq_per_id"),"w"))
+    def load_with_alpha(self,path,power=0.6):
+        f = tables.open_file(os.path.join(path,'vectors.h5p'), 'r')
+        left = np.nan_to_num(f.root.vectors.read())
+        sigma=f.root.sigma.read()
+        sigma=np.power(sigma, power)
+        self.matrix = np.dot(left,np.diag(sigma)) 
+        f.close()
+        self.vocabulary = Vocabulary_simple()
+        self.vocabulary.load(path)
+        self.name += os.path.basename(os.path.normpath(path))
+        self.load_provenance(path)
     def load_from_dir(self,path):
 #        self.matrix = np.fromfile(open(os.path.join(path,"vectors.bin")),dtype=np.float32)
         self.matrix = np.load(os.path.join(path,"vectors.npy"))
+ #       self.load_with_alpha(0.6)
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
-        self.name+=os.path.basename(os.path.normpath(path))
+        self.name += os.path.basename(os.path.normpath(path))
         self.load_provenance(path)
     def normalize(self):
-        nrm= np.linalg.norm(self.matrix, axis=1)
-        self.matrix/=nrm[:, np.newaxis]
-        self.name+="_normalized"
-        self.provenance+="\ntransform : normalized"
+        nrm = np.linalg.norm(self.matrix, axis=1)
+        self.matrix /= nrm[:, np.newaxis]
+        self.name += "_normalized"
+        self.provenance += "\ntransform : normalized"
 
 
 class Model_numbered(Model_dense):
