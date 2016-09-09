@@ -12,6 +12,18 @@ import os
 import gzip
 import brewer2mpl
 import tables
+import json
+import datetime
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 class Model(object):
     provenance=""
@@ -112,12 +124,22 @@ class Model(object):
         id2=self.vocabulary.get_id(w2)
         if (id1<0) or (id2<0): return 0;
         return self.cmp_rows(id1,id2)
+    def load_props(self,path):
+        try:
+            with open (os.path.join(path,"props.json"), "r") as myfile:
+                str_props = myfile.read() 
+                self.props=json.loads(str_props)
+        except:
+            print( bcolors.FAIL+"props.json not found"+ bcolors.ENDC)
+            self.props={}
+            #exit(-1)
     def load_provenance(self,path):
         try:
             with open (os.path.join(path,"provenance.txt"), "r") as myfile:
                 self.provenance = myfile.read() 
         except:
             print("provenance not found")
+        self.load_props(path)
 
 def normalize(m):
     for i in (range(m.shape[0]-1)):
@@ -128,23 +150,23 @@ class Model_explicit(Model):
     def __init__(self):
         self.name+="explicit_"
     def load_from_hdf5(self,path):
+        self.load_provenance(path)
         f = tables.open_file(os.path.join(path,'cooccurrence_csr.h5p'), 'r')
         row_ptr = np.nan_to_num(f.root.row_ptr.read())
         col_ind = np.nan_to_num(f.root.col_ind.read())
         data = np.nan_to_num(f.root.data.read())
         dim = row_ptr.shape[0]-1
         self.matrix = scipy.sparse.csr_matrix((data,col_ind,row_ptr),shape=(dim,dim),dtype=np.float32) 
+        f.close()
         self.vocabulary = Vocabulary_cooccurrence()
         self.vocabulary.load(path)
         self.name+=os.path.basename(os.path.normpath(path))
-        self.load_provenance(path)
-            
     def load(self,path):
+        self.load_provenance(path)
         self.vocabulary = Vocabulary_cooccurrence()
         self.vocabulary.load(path)
         self.name+=os.path.basename(os.path.normpath(path))
         self.matrix = vsmlib.matrix.load_matrix_csr(path,verbose=True)
-        self.load_provenance(path)
     def clip_negatives(self):
         self.matrix.data.clip(0,out=self.matrix.data)
         self.matrix.eliminate_zeros()
@@ -178,17 +200,24 @@ class Model_dense(Model):
             text_file.write("{}\t{}\n".format(self.vocabulary.lst_words[i],i))
         text_file.close()
         self.vocabulary.l_frequencies.tofile(open(os.path.join(path,"freq_per_id"),"w"))
-    def load_with_alpha(self,path,power=0.6):
+    def load_with_alpha(self,path,power=0.6,verbose=False):
+        self.load_provenance(path)
         f = tables.open_file(os.path.join(path,'vectors.h5p'), 'r')
-        left = np.nan_to_num(f.root.vectors.read())
+#        left = np.nan_to_num(f.root.vectors.read())
+        left = f.root.vectors.read()
         sigma=f.root.sigma.read()
+        if verbose==True:
+            print("loaded left singulat vectors and sigma")
         sigma=np.power(sigma, power)
         self.matrix = np.dot(left,np.diag(sigma)) 
+        if verbose==True:
+            print("computed the product")
+        self.props["pow_sigma"]=power
+        self.props["size_dimensions"]=self.matrix.shape[1]
         f.close()
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
-        self.name += os.path.basename(os.path.normpath(path))
-        self.load_provenance(path)
+        self.name += os.path.basename(os.path.normpath(path))+"_a"+str(power)
     def load_from_dir(self,path):
 #        self.matrix = np.fromfile(open(os.path.join(path,"vectors.bin")),dtype=np.float32)
         self.matrix = np.load(os.path.join(path,"vectors.npy"))
@@ -199,9 +228,11 @@ class Model_dense(Model):
         self.load_provenance(path)
     def normalize(self):
         nrm = np.linalg.norm(self.matrix, axis=1)
+        nrm[nrm==0]=1
         self.matrix /= nrm[:, np.newaxis]
         self.name += "_normalized"
         self.provenance += "\ntransform : normalized"
+        self.props["normalized"]=True;
 
 
 class Model_numbered(Model_dense):
@@ -263,7 +294,7 @@ class Model_w2v(Model_numbered):
         self.matrix = np.zeros((cnt_rows,size_row),dtype=np.float32)
         print ("cnt rows = {}, size row = {}".format(cnt_rows,size_row))
         for i in range(cnt_rows):
-            word = Model_w2v.load_word(f).decode('ascii',errors="ignore").strip()
+            word = Model_w2v.load_word(f).decode('UTF-8',errors="ignore").strip()
             #print (word)
             self.vocabulary.dic_words_ids[word]=i;
             self.vocabulary.lst_words.append(word)
@@ -297,7 +328,8 @@ class Model_glove(Model_numbered):
         with gzip.open(path) as f:
             for line in f:
                 tokens  = line.split()
-                word = tokens[0].decode('ascii',errors="ignore")
+#                word = tokens[0].decode('ascii',errors="ignore")
+                word = tokens[0].decode('UTF-8',errors="ignore")
                 self.vocabulary.dic_words_ids[word]=i;
                 self.vocabulary.lst_words.append(word)
                 str_vec=tokens[1:]
@@ -313,6 +345,11 @@ class Model_glove(Model_numbered):
             self.matrix[i]=rows[i]
 
 def load_from_dir(path):
+    if os.path.isfile(os.path.join(path,"cooccurrence_csr.h5p")):
+        print ("this is sparse explicit in hdf5")
+        m =  vsmlib.Model_explicit()
+        m.load_from_hdf5(path)
+        return m
     if os.path.isfile(os.path.join(path,"bigrams.data.bin")):
         print ("this is sparse explicit")
         m =  vsmlib.Model_explicit()

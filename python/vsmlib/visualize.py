@@ -78,7 +78,7 @@ def wordlist_to_rows(m,wordlist):
     return rows/xmax
 
 def rows_to_img_array(a,max_y=0.8):
-    height_img = 300
+    height_img = 600
     width_column=2
     my_cm = mpl.cm.get_cmap('Greys')
     img = np.zeros(shape=(height_img,a.shape[1]*width_column))
