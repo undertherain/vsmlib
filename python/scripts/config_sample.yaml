@@ -1,0 +1,14 @@
+#this value is curretnly ignores, the script will try to deduce format of embeddings automatically
+type_vectors: 
+
+#can specify multiple locations here
+path_vectors: [/work/alex/data/vectors/explicit/English/_factorized/explicit_combined2_m100_w8_pos_svd_d300,
+               ]
+#only makes sense for SVD embeddings
+alpha: 0.7
+
+#allowed values are 3CosAdd, 3CosAdd_avg, PairDistance, RegressionCos and RegressionCosF
+method: 3CosAdd_avg
+
+path_dataset: /work/alex/data/linguistic/datasets/analogies/my
+
