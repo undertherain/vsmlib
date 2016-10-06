@@ -253,7 +253,7 @@ def do_test_on_pair_regr_old(p_test,p_train,file_out):
 
     X_train,Y_train=gen_vec_single(p_train)
     #print(Y_train)
-    if options["name_method"].startswith("RegressionCos"):
+    if options["name_method"].startswith("LRCos"):
 #        model_regression = LogisticRegression(class_weight = 'balanced')
         #model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
         model_regression = LogisticRegression(class_weight = 'balanced', C = inverse_regularization_strength )
@@ -288,7 +288,7 @@ def do_test_on_pair_regr(p_test,p_train,file_out):
     cof=1-cof
 
     X_train,Y_train=gen_vec_single(p_train)
-    if options["name_method"]=="RegressionCosF":
+    if options["name_method"]=="LRCosF":
 #        model_regression = LogisticRegression(class_weight = 'balanced')
         #model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
         model_regression = LogisticRegression(class_weight = 'balanced', C = inverse_regularization_strength )
@@ -358,17 +358,18 @@ do_test_on_pairs=None
 
 def register_test_func():
     global do_test_on_pairs
-    if options["name_method"]=="3CosAdd_avg":
+    if options["name_method"]=="3CosAvg":
         do_test_on_pairs=do_test_on_pair_3CosAvg
-    if options["name_method"]=="3CosAdd":
+    elif options["name_method"]=="3CosAdd":
         do_test_on_pairs=do_test_on_pair_3CosAdd
-    if options["name_method"]=="PairDistance":
+    elif options["name_method"]=="PairDistance":
         do_test_on_pairs=do_test_on_pair_3CosAdd
-    if options["name_method"]=="RegressionCos" or options["name_method"]=="SVMCos":
+    elif options["name_method"]=="LRCos" or options["name_method"]=="SVMCos":
         do_test_on_pairs=do_test_on_pair_regr_old
-    if options["name_method"]=="RegressionCosF":
+    elif options["name_method"]=="LRCosF":
         do_test_on_pairs=do_test_on_pair_regr
-
+    else:
+        raise Exception("method name not recognized")
 
 def run_category_subsample(pairs,name_dataset,name_category="not yet"):
     name_file_out=os.path.join(".",dir_out,name_dataset,options["name_method"])
@@ -387,7 +388,7 @@ def run_category(pairs,name_dataset,name_category="not yet"):
     name_file_out=os.path.join(".",dir_out,name_dataset,options["name_method"])
     if options["name_method"]=="SVMCos":
         name_file_out+="_"+name_kernel
-    if options["name_method"].startswith("RegressionCos"):
+    if options["name_method"].startswith("LRCos"):
         name_file_out+="_C{}".format(inverse_regularization_strength)
     name_file_out+="/"+m.name+"/"+name_category
     print ("saving to", name_file_out)
@@ -538,9 +539,17 @@ def make_normalized_copy():
 def main():
     #chech args and print error if needed 
     global options    
-    print("here we go!")
+    #print("here we go!")
 #    ParseOptions()
-    with open("config_sample.yaml", 'r') as ymlfile:
+    if len(sys.argv) > 1:
+        path_config = sys.argv[1]
+    else:
+        path_config = "config_sample.yaml"
+        
+        #print ("config file name required")
+        #exit()
+    
+    with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
     print (cfg)
     dirs=cfg["path_vectors"]

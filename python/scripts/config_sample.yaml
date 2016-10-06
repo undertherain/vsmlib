@@ -7,8 +7,8 @@ path_vectors: [/work/alex/data/vectors/explicit/English/_factorized/explicit_com
 #only makes sense for SVD embeddings
 alpha: 0.7
 
-#allowed values are 3CosAdd, 3CosAdd_avg, PairDistance, RegressionCos and RegressionCosF
-method: 3CosAdd_avg
+#allowed values are 3CosAdd, 3CosAvg, PairDistance, LRCos and LRCosF
+method: 3CosAvg
 
 path_dataset: /work/alex/data/linguistic/datasets/analogies/my
 
