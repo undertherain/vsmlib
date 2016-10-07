@@ -1,8 +1,0 @@
-convert numbers to special tokens
-
-render in parallel coordinates
-
-zone of pain
-scale vs exploratory-ness
-
-try kohonen self-orgranized map on saprse vectors
