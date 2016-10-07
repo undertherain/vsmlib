@@ -1,30 +1,22 @@
-# README #
+# VSMlib #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+VSMlibs helps to perform a range of task within a framework of vector space models of computational linguistics.
 
-### What is this repository for? ###
+### What functionality is included ###
 
-* this is the toolkit for working with vector space models of semantics
-* the last one
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* loading several popular formats of word embeddings and providing unified access to word-vectors
+* perfroming simple tasks like estimating word similarity
+* visualising embeddings
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-Boost
-* Database configuration
-* How to run tests
-* Deployment instructions
+* just clone the repo, no packaging is there yet
+* Python 3.5 or later is required
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* Oh, you are welcome to participate
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Issue tracker is the way to go
