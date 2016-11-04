@@ -243,12 +243,12 @@ def process_prediction(
         # file_out.write (s)
         extr = ""
         if len(p_train) > 0:
-            extr = "as {} to {}".format(p_train[0], p_train[1])
-            set_exclude = set([p_train[0]]) | set(p_train[1])
+            extr = "as {} is to {}".format(p_train[0], p_train[1])
+            set_exclude = set([p_train[0]]) | set(p_train[1] ) |  set(p_test_one[0])
         else:
             set_exclude = {}
-        file_out.write("Q:\t{} {}\n".format(p_test_one[0], extr))
-        file_out.write("Exp A:\t{}\n".format(",".join(p_test_one[1])))
+        file_out.write("Q: What is to \t{} {}\n".format(p_test_one[0], extr))
+        file_out.write("Expected answer:\t{}\n".format(",".join(p_test_one[1])))
         cnt_reported = 0
         for i in ids_max[:10]:
             if i == id_question:
