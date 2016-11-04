@@ -158,11 +158,13 @@ def do_test_on_pair_3CosAdd(pairs_test, pairs_train, file_out):
     for p_test in pairs_test:
         for p_train in pairs_train:
             cnt_total += 1
-            quad = p_test + p_train
+            #quad = p_test + p_train
+            quad = p_train + p_test
             if is_quad_missing(quad):
                 # cnt_missing+=1;
                 # file_out.write("{}\t{}\t{}\t{}\t{}\n".format(quad[0],quad[1],quad[2],quad[3],"MISSSING"))
                 continue
+#            print ("doing {} - {} + {}".format(quad[1][0],quad[0],quad[2]))
             vec_a = m.get_row(quad[0])
             vec_a_prime = m.get_row(quad[1][0])
             vec_b = m.get_row(quad[2])
@@ -212,6 +214,7 @@ def process_prediction(
         p_train=[]):
     ids_max = np.argsort(scores)[::-1]
     id_question = m.vocabulary.get_id(p_test_one[0])
+ #   print ("p_test=",p_test_one)
     # for i in ids_max[:2]:
     #     if i == id_question: continue
     #     ans=m.vocabulary.get_word_by_id(i)
@@ -400,11 +403,14 @@ def do_test_on_pair_3CosAvg(p_test, p_train, file_out):
     vecs_a = []
     vecs_a_prime = []
     for p in p_train:
-        vecs_a.append(m.get_row(p[0]))
+        vecs_a_prime_local=[]
         for t in p[1]:
-            # print(t)
             if m.vocabulary.get_id(t) >= 0:
-                vecs_a_prime.append(m.get_row(t))
+                vecs_a_prime_local.append(m.get_row(t))
+            break
+        if len(vecs_a_prime_local)>0:
+            vecs_a.append(m.get_row(p[0]))
+            vecs_a_prime.append(np.vstack(vecs_a_prime_local).mean(axis=0))
     if len(vecs_a_prime) == 0:
         for p_test_one in p_test:
             file_out.write(
@@ -420,11 +426,7 @@ def do_test_on_pair_3CosAvg(p_test, p_train, file_out):
     for p_test_one in p_test:
         cnt_total += 1
         if is_pair_missing(p_test_one):
-            file_out.write(
-                "{}\t{}\t{}\n".format(
-                    p_test_one[0],
-                    p_test_one[1],
-                    "MISSING"))
+            #   file_out.write("{}\t{}\t{}\n".format( p_test_one[0], p_test_one[1], "MISSING"))
             continue
         vec_b = m.get_row(p_test_one[0])
         vec_b_prime = vec_a_prime - vec_a + vec_b
@@ -608,7 +610,7 @@ def run_all(name_dataset):
         print("using ", options["name_method"])
     dir_tests = os.path.join(options["dir_root_dataset"], name_dataset)
     if not os.path.exists(dir_tests):
-        raise Exception("test dir does not exist")
+        raise Exception("test dataset dir does not exist")
     for root, dirnames, filenames in os.walk(dir_tests):
         for filename in fnmatch.filter(sorted(filenames), '*'):
             print(filename)

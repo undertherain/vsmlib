@@ -2,13 +2,13 @@
 type_vectors: 
 
 #can specify multiple locations here
-path_vectors: [/work/alex/data/vectors/explicit/English/_factorized/explicit_combined2_m100_w8_pos_svd_d300,
+path_vectors: [/work/alex/data/vectors/explicit/Japanese/_factorized/explicit_BCCWJ_raw_m100_w2_svd_d1000,
                ]
 #only makes sense for SVD embeddings
 alpha: 0.7
 
 #allowed values are 3CosAdd, 3CosAvg, PairDistance, LRCos and LRCosF
-method: 3CosAvg
+method: 3CosAdd
 
-path_dataset: /work/alex/data/linguistic/datasets/analogies/my
+path_dataset: /work/alex/data/linguistic/datasets/analogies/Japanese
 
