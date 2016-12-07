@@ -107,10 +107,10 @@ def rows_to_img_tips(a,max_y=0.8):
             height=abs(int((row[i]/max_y)*height_img/2))
             if height>height_img/2-1: height=int(height_img/2)-1
             for iw in range(width_column-1):
-                img[height_img/2+sign*height,i*width_column+iw]+=1
-                img[height_img/2+sign*height-sign,i*width_column+iw]+=1
-                img[height_img/2+sign*height-sign*2,i*width_column+iw]+=0.5
-                img[height_img/2+sign*height-sign*3,i*width_column+iw]+=0.1
+                img[height_img//2+sign*height,i*width_column+iw]+=1
+                img[height_img//2+sign*height-sign,i*width_column+iw]+=1
+                img[height_img//2+sign*height-sign*2,i*width_column+iw]+=0.5
+                img[height_img//2+sign*height-sign*3,i*width_column+iw]+=0.1
     img=img/np.max(img)
     mapped_datau8 = (255 * my_cm(img)).astype('uint8')
     im = PIL.Image.fromarray(np.uint8(mapped_datau8))

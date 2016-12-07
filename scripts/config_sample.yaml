@@ -3,7 +3,7 @@ type_vectors:
 
 #can specify multiple locations here
 path_vectors: [/work/alex/data/vectors/explicit/Japanese/_factorized/explicit_BCCWJ_raw_m100_w2_svd_d1000,
-               ]
+   ]
 #only makes sense for SVD embeddings
 alpha: 0.7
 

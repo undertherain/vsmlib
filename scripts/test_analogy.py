@@ -159,19 +159,21 @@ def do_test_on_pair_3CosAdd(pairs_test, pairs_train, file_out):
         for p_train in pairs_train:
             cnt_total += 1
             #quad = p_test + p_train
-            quad = p_train + p_test
-            if is_quad_missing(quad):
+            #quad = p_train + p_test
+            #print ("iterating p_train")
+            if is_quad_missing(p_train + p_test):
                 # cnt_missing+=1;
                 # file_out.write("{}\t{}\t{}\t{}\t{}\n".format(quad[0],quad[1],quad[2],quad[3],"MISSSING"))
                 continue
 #            print ("doing {} - {} + {}".format(quad[1][0],quad[0],quad[2]))
-            vec_a = m.get_row(quad[0])
-            vec_a_prime = m.get_row(quad[1][0])
-            vec_b = m.get_row(quad[2])
+            vec_a = m.get_row(p_train[0])
+            vec_a_prime = m.get_row(p_train[1][0])
+            vec_b = m.get_row(p_test[0])
+            
             if scipy.sparse.issparse(m_normed):
-                vec_a = m.get_row(quad[0]).toarray()[0]
-                vec_a_prime = m.get_row(quad[1][0]).toarray()[0]
-                vec_b = m.get_row(quad[2]).toarray()[0]
+                vec_a = vec_a.toarray()[0]
+                vec_a_prime = vec_a_prime.toarray()[0]
+                vec_b = vec_b.toarray()[0]
 
             # file_out.write("{}\t{}\t{}\t".format(quad[0],quad[1],quad[2]))
             if options["name_method"] == "3CosAdd":
@@ -182,16 +184,17 @@ def do_test_on_pair_3CosAdd(pairs_test, pairs_train, file_out):
                 scores = get_most_collinear_fast(vec_a, vec_a_prime, vec_b)
             ids_max = np.argsort(scores)[::-1]
             is_hit = False
-            ids_question = {
-                m.vocabulary.get_id(
-                    quad[0]), m.vocabulary.get_id(
-                    quad[2])}
-            for z in quad[1]:
-                ids_question.add(m.vocabulary.get_id(z))
+            #print ("about to report results")
+            #ids_question = {
+                #m.vocabulary.get_id(
+                    #quad[0]), m.vocabulary.get_id(
+                    #quad[2])}
+            #for z in quad[1]:
+                #ids_question.add(m.vocabulary.get_id(z))
             #print (ids_question)
             #,m.vocabulary.get_id(quad[1])}#,m.vocabulary.get_id(quad[2])}
-            b_prime = quad[3]
-            b_primes = [i.strip() for i in b_prime]
+            #b_prime = quad[3]
+            #b_primes = [i.strip() for i in b_prime]
             #extr="as {} to {}".format(p_train[0],p_train[1])
             process_prediction(p_test, scores, None, None, file_out, p_train)
 
@@ -243,23 +246,26 @@ def process_prediction(
         # file_out.write (s)
         extr = ""
         if len(p_train) > 0:
-            extr = "as {} is to {}".format(p_train[0], p_train[1])
-            set_exclude = set([p_train[0]]) | set(p_train[1] ) |  set(p_test_one[0])
+            extr = "as {} is to {}".format(p_train[1], p_train[0])
+            set_exclude = set([p_train[0]]) | set(p_train[1] ) 
         else:
             set_exclude = {}
+        set_exclude.add(p_test_one[0])
+        set_exclude = {}
+
         file_out.write("Q: What is to \t{} {}\n".format(p_test_one[0], extr))
         file_out.write("Expected answer:\t{}\n".format(",".join(p_test_one[1])))
         cnt_reported = 0
         for i in ids_max[:10]:
-            if i == id_question:
-                continue
+            #if i == id_question:
+            #    continue
             ans = m.vocabulary.get_word_by_id(i)
             if ans in set_exclude:
                 continue
             cnt_reported += 1
             if score_sim is None:
                 file_out.write(
-                    "\tA:sc_ttl: {:.2f}\t{}\t".format(
+                    "\tA:sc_ttl: {:.3f}\t{}\t".format(
                         scores[i], ans))
             else:
                 file_out.write(
@@ -499,8 +505,9 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     if not os.path.exists(os.path.dirname(name_file_out)):
         os.makedirs(os.path.dirname(name_file_out))
     #loo = sklearn.cross_validation.LeaveOneOut(len(pairs))
-    loo = sklearn.cross_validation.KFold(
-        n=len(pairs), n_folds=len(pairs) // size_cv_test)
+    kf = sklearn.model_selection.KFold(n_splits=len(pairs) // size_cv_test)
+    cnt_splits=kf.get_n_splits(pairs)
+    loo = kf.split(pairs)
     if need_subsample:
         file_out = open("/dev/null", "a", errors="replace")
         loo = sklearn.cross_validation.KFold(
@@ -545,7 +552,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
         cnt_total_correct += cnt_correct
     else:
         file_out = open(name_file_out, "w", errors="replace")
-        my_prog = tqdm(0, total=len(loo), desc=name_category)
+        my_prog = tqdm(0, total=cnt_splits, desc=name_category)
         cnt_total = 0
         cnt_correct = 0
         for train, test in loo:

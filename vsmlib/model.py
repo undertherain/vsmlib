@@ -14,6 +14,7 @@ import brewer2mpl
 import tables
 import json
 import datetime
+import numba
 
 class bcolors:
     HEADER = '\033[95m'
@@ -78,6 +79,7 @@ class Model(object):
                 vert=np.vstack([vert,rows[:,i]])
         labels=[self.get_x_label(i) for i in cols]
         return rows,vert.T,labels    
+    @numba.jit
     def get_most_similar_vectors(self,u):
         scores=[]
         for i in range(self.matrix.shape[0]):
