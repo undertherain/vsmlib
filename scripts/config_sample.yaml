@@ -12,3 +12,4 @@ method: 3CosAdd
 
 path_dataset: /work/alex/data/linguistic/datasets/analogies/Japanese
 
+path_results: "/path/for/results/to/be/logged"

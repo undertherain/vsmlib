@@ -15,13 +15,19 @@ import sys
 sys.path.append("..")
 import vsmlib
 import yaml
+from itertools import product
+
+def profile_trivial(a):
+    return a
+try:
+    profile
+except NameError:
+    profile = profile_trivial
+
 
 options = {}
 
-
-dir_out = "out"
 do_top5 = True
-
 
 # this are some hard-coded bits which will be implemented later
 need_subsample = False
@@ -36,56 +42,9 @@ inverse_regularization_strength = 1.0
 # name_kernel='rbf'
 
 
-class Session:
-
-    def __init__(self):
-        self.name = str(datetime.datetime.now()) + " " + options["name_method"]
-        self.files = {}
-
-    def acumulate(keys, values):
-        for key in keys:
-            pass
-
-    def append_vals_to_csv(self, name_file, vals):
-        keys = sorted(list(vals.keys()))
-        name_file_full = "sessions/" + self.name + "/" + name_file
-        if name_file_full not in self.files:
-            if not os.path.exists(os.path.dirname(name_file_full)):
-                os.makedirs(os.path.dirname(name_file_full))
-            if not os.path.exists(name_file_full):
-                fd = open(name_file_full, 'w')
-                self.files[name_file_full] = fd
-                writer_csv = csv.writer(
-                    fd, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                writer_csv.writerow(keys)
-        # else:
-        writer_csv = csv.writer(
-            self.files[name_file_full],
-            delimiter=',',
-            quotechar='"',
-            quoting=csv.QUOTE_MINIMAL)
-        vs = [vals[key] for key in keys]
-        writer_csv.writerow(vs)
-        #str_row=','.join(map(str, vs))
-        # self.files[name_file].write(str_row+"\n")
-        # fd.close()
-
-    def __del__(self):
-        for key in self.files:
-            self.files[key].close()
-
-    def flush(self):
-        for key in self.files:
-            self.files[key].close()
-            self.files[key] = open(key, 'a')
-# session=Session()
-
-
 def get_most_similar_fast(v):
     scores = v @ m_normed.T
     return scores
-
-# def get_most_similar_sparse(v)
 
 
 def get_most_collinear_fast(a, ap, b):
@@ -100,26 +59,33 @@ def get_most_collinear_fast(a, ap, b):
     return scores
 
 
-def is_pair_missing(pair):
-    if m.vocabulary.get_id(pair[0]) < 0:
-        return True
-    # if m.vocabulary.get_id(pair[0,0])<0: return True
-#    for entry in pair:
-#        for token in entry:
-#            if m.vocabulary.get_id(token)<0: return True
+def is_at_least_one_word_present(words):
+    for w in words:
+        if m.vocabulary.get_id(w) >= 0: return True
+    return False
+
+def is_pair_missing(pairs):
+    #print (pairs)
+    for pair in pairs:
+        if m.vocabulary.get_id(pair[0]) < 0:
+            return True
+        if m.vocabulary.get_id(pair[1][0]) < 0:
+            return True
+        #if not is_at_least_one_word_present(pair[1]):
+            #return True
     return False
 
 
-def is_quad_missing(quad):
-    if m.vocabulary.get_id(quad[0]) < 0:
-        return True
-    if m.vocabulary.get_id(quad[2]) < 0:
-        return True
-    if m.vocabulary.get_id(quad[1][0]) < 0:
-        return True
-    if m.vocabulary.get_id(quad[3][0]) < 0:
-        return True
-    return False
+#def is_quad_missing(quad):
+#    if m.vocabulary.get_id(quad[0]) < 0:
+#        return True
+#    if m.vocabulary.get_id(quad[2]) < 0:
+#        return True
+#    if m.vocabulary.get_id(quad[1][0]) < 0:
+#        return True
+#    if m.vocabulary.get_id(quad[3][0]) < 0:
+#        return True
+#    return False
 
 
 def gen_vec_single(pairs):
@@ -143,62 +109,140 @@ def gen_vec_single_nonoise(pairs):
     Y = np.hstack([np.ones(len(a_prime)), np.zeros(len(x) - len(a_prime))])
     return X, Y
 
+def get_crowndedness(vector):
+    scores = get_most_similar_fast(vector / np.linalg.norm(vector))
+    scores.sort()
+    return (scores[-11:-1][::-1]).tolist()
 
-def trivial(a):
-    return a
-try:
-    profile
-except NameError:
-    profile = trivial
+class PairWise:
+    def __call__(self, pairs_train, pairs_test):
+        results=[]
+        for p_train, p_test in product(pairs_train, pairs_test):
+            if is_pair_missing([p_train, p_test]): continue
+            result = self.do_on_two_pairs(p_train,p_test)
+            result["b in neighbourhood of b_prime"] = get_rank(p_test[0],p_test[1][0])
+            result["b_prime in neighbourhood of b"] = get_rank(p_test[1],p_test[0])
+            results.append(result)
+        return results
 
 
-def do_test_on_pair_3CosAdd(pairs_test, pairs_train, file_out):
+
+class LinearOffset(PairWise):
+
+    def do_on_two_pairs(self, p_train, p_test):
+        vec_a = m.get_row(p_train[0])
+        vec_a_prime = m.get_row(p_train[1][0])
+        vec_b = m.get_row(p_test[0])
+        vec_b_prime = m.get_row(p_test[1][0])
+
+        if scipy.sparse.issparse(m_normed):
+            vec_a = vec_a.toarray()[0]
+            vec_a_prime = vec_a_prime.toarray()[0]
+            vec_b = vec_b.toarray()[0]
+
+        if options["name_method"] == "3CosAdd":
+            vec_b_prime_predicted = vec_a_prime - vec_a + vec_b
+            vec_b_prime_predicted /= np.linalg.norm(vec_b_prime_predicted)
+            scores = get_most_similar_fast(vec_b_prime_predicted)
+        else:
+            scores = get_most_collinear_fast(vec_a, vec_a_prime, vec_b)
+        ids_max = np.argsort(scores)[::-1]
+        result = process_prediction(p_test, scores, None, None, p_train)
+        result["similarity predicted to b_prime cosine"]=m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
+        result["similarity a to a_prime cosine"]=m.cmp_vectors(vec_a, vec_a_prime)
+        result["similarity a_prime to b_prime cosine"]=m.cmp_vectors(vec_a_prime, vec_b_prime)
+        result["similarity b to b_prime cosine"]=m.cmp_vectors(vec_b, vec_b_prime)
+        
+        result["distance a to a_prime euclidean"] = scipy.spatial.distance.euclidean(vec_a, vec_a_prime)
+        result["distance a_prime to b_prime euclidean"] = scipy.spatial.distance.euclidean(vec_a_prime, vec_b_prime)
+        result["crowdedness of b_prime"] = get_crowndedness(vec_b_prime)
+
+        return result
+
+
+class SimilarToAny(PairWise):
+
+    def compute_scores(self, vectors):
+        scores = get_most_similar_fast(vectors)
+        #print("scores shape:", scores.shape)
+        best = scores.max(axis=0)
+        return best
+
+    def do_on_two_pairs(self, pair_train, pair_test):
+        vec_a = m.get_row(pair_train[0])
+        vec_a_prime = m.get_row(pair_train[1][0])
+        vec_b = m.get_row(pair_test[0])
+        vectors = np.array([vec_a, vec_a_prime,vec_b])
+        #print("vec shape :", vectors.shape)
+        scores = self.compute_scores(vectors)
+#        print(scores.shape)
+        result = process_prediction(pair_test, scores, None, pair_train)
+        #result["similarity to correct cosine"]=m.cmp_vectors(vec_b,vec_b_prime)
+        return result
+
+result_miss = {
+    "rank": -1,
+    "reason": "missing words"
+    }
+
+class SimilarToB():
+    def __call__(self, pairs_train, pairs_test):
+        results=[]
+        for p_test in  pairs_test:
+            if is_pair_missing([p_test]): continue
+            result = self.do_on_two_pairs(p_test)
+            result["b in neighbourhood of b_prime"] = get_rank(p_test[0],p_test[1][0])
+            result["b_prime in neighbourhood of b"] = get_rank(p_test[1],p_test[0])
+            results.append(result)
+        return results
+
+    def do_on_two_pairs(self, pair_test):
+        #print ("pre ",pair_test)
+        if is_pair_missing([pair_test]):
+            result=result_miss
+        else:
+            vec_b = m.get_row(pair_test[0])
+            vec_b_prime = m.get_row(pair_test[1][0])
+            scores = get_most_similar_fast(vec_b)
+            result = process_prediction(pair_test, scores, None, None)
+            result["similarity to correct cosine"]=m.cmp_vectors(vec_b,vec_b_prime)
+        return result
+   
+
+def do_test_on_pair_3CosAvg(p_train, p_test):
     cnt_total = 0
     cnt_correct = 0
-    for p_test in pairs_test:
-        for p_train in pairs_train:
-            cnt_total += 1
-            #quad = p_test + p_train
-            #quad = p_train + p_test
-            #print ("iterating p_train")
-            if is_quad_missing(p_train + p_test):
-                # cnt_missing+=1;
-                # file_out.write("{}\t{}\t{}\t{}\t{}\n".format(quad[0],quad[1],quad[2],quad[3],"MISSSING"))
-                continue
-#            print ("doing {} - {} + {}".format(quad[1][0],quad[0],quad[2]))
-            vec_a = m.get_row(p_train[0])
-            vec_a_prime = m.get_row(p_train[1][0])
-            vec_b = m.get_row(p_test[0])
-            
-            if scipy.sparse.issparse(m_normed):
-                vec_a = vec_a.toarray()[0]
-                vec_a_prime = vec_a_prime.toarray()[0]
-                vec_b = vec_b.toarray()[0]
+    vecs_a = []
+    vecs_a_prime = []
+    for p in p_train:
+        vecs_a_prime_local=[]
+        for t in p[1]:
+            if m.vocabulary.get_id(t) >= 0:
+                vecs_a_prime_local.append(m.get_row(t))
+            break
+        if len(vecs_a_prime_local)>0:
+            vecs_a.append(m.get_row(p[0]))
+            vecs_a_prime.append(np.vstack(vecs_a_prime_local).mean(axis=0))
+    if len(vecs_a_prime) == 0:
+        print("AAAA SOMETHIGN MISSING")
+        return([])
 
-            # file_out.write("{}\t{}\t{}\t".format(quad[0],quad[1],quad[2]))
-            if options["name_method"] == "3CosAdd":
-                vec_b_prime = vec_a_prime - vec_a + vec_b
-                vec_b_prime /= np.linalg.norm(vec_b_prime)
-                scores = get_most_similar_fast(vec_b_prime)
-            else:
-                scores = get_most_collinear_fast(vec_a, vec_a_prime, vec_b)
-            ids_max = np.argsort(scores)[::-1]
-            is_hit = False
-            #print ("about to report results")
-            #ids_question = {
-                #m.vocabulary.get_id(
-                    #quad[0]), m.vocabulary.get_id(
-                    #quad[2])}
-            #for z in quad[1]:
-                #ids_question.add(m.vocabulary.get_id(z))
-            #print (ids_question)
-            #,m.vocabulary.get_id(quad[1])}#,m.vocabulary.get_id(quad[2])}
-            #b_prime = quad[3]
-            #b_primes = [i.strip() for i in b_prime]
-            #extr="as {} to {}".format(p_train[0],p_train[1])
-            process_prediction(p_test, scores, None, None, file_out, p_train)
+    vec_a = np.vstack(vecs_a).mean(axis=0)
+    vec_a_prime = np.vstack(vecs_a_prime).mean(axis=0)
 
-    return cnt_total, cnt_correct
+    results=[]
+    for p_test_one in p_test:
+        if is_pair_missing(p_test_one):
+            continue
+        vec_b_prime = m.get_row(p_test_one[1][0])
+        vec_b = m.get_row(p_test_one[0])
+        vec_b_prime_predicted = vec_a_prime - vec_a + vec_b
+        # oh crap, why are we not normalizing here? 
+        scores = get_most_similar_fast(vec_b_prime_predicted)
+        result = process_prediction(p_test_one, scores, None, None)
+        result["distances to correct cosine"]=m.cmp_vectors(vec_b_prime_predicted,vec_b_prime)
+        results.append(result)
+    return results
 
 
 def create_list_test_right(pairs):
@@ -207,120 +251,71 @@ def create_list_test_right(pairs):
     a_prime = [i for sublist in a_prime for i in sublist]
     set_aprimes_test = set(a_prime)
 
+def get_distance_closest_words(center,cnt_words=1):
+    scores = get_most_similar_fast(center)
+    ids_max = np.argsort(scores)[::-1]
+    distances = np.zeros(cnt_words)
+    for i in range(cnt_words):
+        distances[i] = scores[ids_max[i+1]]
+    return distances.mean()
 
-def process_prediction(
-        p_test_one,
-        scores,
-        score_reg,
-        score_sim,
-        file_out,
-        p_train=[]):
+def get_rank(source,center):
+    if isinstance(center, str):
+        #print ("getting rank for ",center)
+        center = m.get_row(center)
+    if isinstance(source, str):
+        source = [source]
+    scores = get_most_similar_fast(center)
+    ids_max = np.argsort(scores)[::-1]
+    for i in range(ids_max.shape[0]):
+        #print("\t try ", m.vocabulary.get_word_by_id(ids_max[i]))
+        if m.vocabulary.get_word_by_id(ids_max[i]) in source: break
+    rank = i
+    return rank
+
+def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[]):
     ids_max = np.argsort(scores)[::-1]
     id_question = m.vocabulary.get_id(p_test_one[0])
- #   print ("p_test=",p_test_one)
-    # for i in ids_max[:2]:
-    #     if i == id_question: continue
-    #     ans=m.vocabulary.get_word_by_id(i)
-    #     if ans in p_test_one[1]:
-    #         file_out.write("{}\t{}\t{}\t{}\n".format(p_test_one[0],p_test_one[1],ans,"YES"))
-    #         cnt_correct+=1
-    #         props_experiment={"a":p_test_one[0],"a_prime":p_test_one[1],"ans":ans,"correct":"YES","similarity":score_sim[i],"class_proba":score_reg[i],"method":options["name_method"]}
-    #         props_experiment.update(m.props)
-    #     else:
-    #         props_experiment={"a":p_test_one[0],"a_prime":p_test_one[1],"ans":ans,"correct":"NO","similarity":score_sim[i],"class_proba":score_reg[i],"method":options["name_method"]}
-    #         props_experiment.update(m.props)
-    #         file_out.write("{}\t{}\t{}\t{}\n".format(p_test_one[0],p_test_one[1],ans,"NO"))
-    #     #session.append_vals_to_csv("hits.csv",props_experiment)
-    #     break
-    if do_top5:
-        # result={}
-        # result["question"]=p_test_one[0]
-        # result["expected answer"]=p_test_one[1]
-        # result["answers"]=[]
-        # for i in ids_max[:5]:
-        #     if i == id_question: continue
-        #     ans=m.vocabulary.get_word_by_id(i)
-        #     d_ans={"answer":ans,"proba":scores[i],"correct":ans in p_test_one[1]}
-        #     result["answers"].append(d_ans)
-        # s=json.dumps(result,indent=2)
-        # file_out.write (s)
-        extr = ""
-        if len(p_train) > 0:
-            extr = "as {} is to {}".format(p_train[1], p_train[0])
-            set_exclude = set([p_train[0]]) | set(p_train[1] ) 
-        else:
-            set_exclude = {}
-        set_exclude.add(p_test_one[0])
-        set_exclude = {}
-
-        file_out.write("Q: What is to \t{} {}\n".format(p_test_one[0], extr))
-        file_out.write("Expected answer:\t{}\n".format(",".join(p_test_one[1])))
-        cnt_reported = 0
-        for i in ids_max[:10]:
-            #if i == id_question:
-            #    continue
-            ans = m.vocabulary.get_word_by_id(i)
-            if ans in set_exclude:
-                continue
-            cnt_reported += 1
-            if score_sim is None:
-                file_out.write(
-                    "\tA:sc_ttl: {:.3f}\t{}\t".format(
-                        scores[i], ans))
-            else:
-                file_out.write(
-                    "\tA:\tsc_class: {:.2f}\tsc_sim: {:.2f}\tsc_ttl: {:.2f}\t{}\t".format(
-                        score_reg[i], score_sim[i], scores[i], ans))
-            if ans in p_test_one[1]:
-                file_out.write("YES\n")
-            else:
-                file_out.write("NO\n")
-            if cnt_reported > 4:
-                break
-        file_out.write("\n")
+    result = dict()
+    cnt_answers_to_report=6
+    extr = ""
+    if len(p_train) > 0:
+        extr = "as {} is to {}".format(p_train[1], p_train[0])
+        set_exclude = set([p_train[0]]) | set(p_train[1] ) 
     else:
-        for i in ids_max[:2]:
-            if i == id_question:
-                continue
-            ans = m.vocabulary.get_word_by_id(i)
-            if ans in p_test_one[1]:
-                file_out.write(
-                    "{}\t{}\t{}\t{}\n".format(
-                        p_test_one[0],
-                        p_test_one[1],
-                        ans,
-                        "YES"))
-                cnt_correct += 1
-                props_experiment = {
-                    "a": p_test_one[0],
-                    "a_prime": p_test_one[1],
-                    "ans": ans,
-                    "correct": "YES",
-                    "similarity": score_sim[i],
-                    "class_proba": score_reg[i],
-                    "method": options["name_method"]}
-                props_experiment.update(m.props)
-            else:
-                props_experiment = {
-                    "a": p_test_one[0],
-                    "a_prime": p_test_one[1],
-                    "ans": ans,
-                    "correct": "NO",
-                    "similarity": score_sim[i],
-                    "class_proba": score_reg[i],
-                    "method": options["name_method"]}
-                props_experiment.update(m.props)
-                file_out.write(
-                    "{}\t{}\t{}\t{}\n".format(
-                        p_test_one[0],
-                        p_test_one[1],
-                        ans,
-                        "NO"))
-            # session.append_vals_to_csv("hits.csv",props_experiment)
+        set_exclude = set()
+    set_exclude.add(p_test_one[0])
+    result["question verbose"] = "What is to {} {}".format(p_test_one[0], extr)
+    result["b"] = p_test_one[0]
+    result["expected answer"] = p_test_one[1]
+    result["predictions"] = []
+    cnt_reported = 0
+    for i in ids_max[:10]:
+        prediction = dict()
+        ans = m.vocabulary.get_word_by_id(i)
+        if ans in set_exclude:
+            continue
+        cnt_reported += 1
+        prediction["score"]=float(scores[i])
+        prediction["answer"]=ans
+        if ans in p_test_one[1]:
+            prediction["hit"]=True
+        else:
+            prediction["hit"]=False
+        result["predictions"].append(prediction)
+        if cnt_reported >= cnt_answers_to_report:
             break
+    for i in range(ids_max.shape[0]):
+        if m.vocabulary.get_word_by_id(ids_max[i]) in p_test_one[1]: break
+    result["rank"] = i
+ 
+    vec_b_prime = m.get_row(p_test_one[1][0])
+    result["closest words to answer 1"] = get_distance_closest_words(vec_b_prime,1)
+    result["closest words to answer 5"] = get_distance_closest_words(vec_b_prime,5)
+    return result
 
 
-def do_test_on_pair_regr_old(p_test, p_train, file_out):
+def do_test_on_pair_regr_old(p_train, p_test, file_out):
     cnt_total = 0
     cnt_correct = 0
     # create_list_test_right(p_test)
@@ -356,7 +351,7 @@ def do_test_on_pair_regr_old(p_test, p_train, file_out):
     return cnt_total, cnt_correct
 
 
-def do_test_on_pair_regr(p_test, p_train, file_out):
+def do_test_on_pair_regr(p_train, p_test, file_out):
     cnt_total = 0
     cnt_correct = 0
     # create_list_test_right(p_test)
@@ -400,68 +395,20 @@ def do_test_on_pair_regr(p_test, p_train, file_out):
 
     return cnt_total, cnt_correct
 
-#@profile
-
-
-def do_test_on_pair_3CosAvg(p_test, p_train, file_out):
-    cnt_total = 0
-    cnt_correct = 0
-    vecs_a = []
-    vecs_a_prime = []
-    for p in p_train:
-        vecs_a_prime_local=[]
-        for t in p[1]:
-            if m.vocabulary.get_id(t) >= 0:
-                vecs_a_prime_local.append(m.get_row(t))
-            break
-        if len(vecs_a_prime_local)>0:
-            vecs_a.append(m.get_row(p[0]))
-            vecs_a_prime.append(np.vstack(vecs_a_prime_local).mean(axis=0))
-    if len(vecs_a_prime) == 0:
-        for p_test_one in p_test:
-            file_out.write(
-                "{}\t{}\t{}\n".format(
-                    p_test_one[0],
-                    p_test_one[1],
-                    "training MISSING"))
-        return(len(p_test), 0)
-
-    vec_a = np.vstack(vecs_a).mean(axis=0)
-    vec_a_prime = np.vstack(vecs_a_prime).mean(axis=0)
-
-    for p_test_one in p_test:
-        cnt_total += 1
-        if is_pair_missing(p_test_one):
-            #   file_out.write("{}\t{}\t{}\n".format( p_test_one[0], p_test_one[1], "MISSING"))
-            continue
-        vec_b = m.get_row(p_test_one[0])
-        vec_b_prime = vec_a_prime - vec_a + vec_b
-        scores = get_most_similar_fast(vec_b_prime)
-        process_prediction(p_test_one, scores, None, None, file_out)
-
-        # ids_max=np.argsort(scores)[::-1]
-        # id_question = m.vocabulary.get_id(p_test_one[0])
-        # for i in ids_max[:2]:
-        #     if i == id_question: continue
-        #     ans=m.vocabulary.get_word_by_id(i)
-        #     if ans in p_test_one[1]:
-        #         file_out.write("{}\t{}\t{}\t{}\n".format(p_test_one[0],p_test_one[1],ans,"YES"))
-        #         cnt_correct+=1
-        #     else:
-        #         file_out.write("{}\t{}\t{}\t{}\n".format(p_test_one[0],p_test_one[1],ans,"NO"))
-        #     break
-    return cnt_total, cnt_correct
-
 
 do_test_on_pairs = None
-
 
 def register_test_func():
     global do_test_on_pairs
     if options["name_method"] == "3CosAvg":
         do_test_on_pairs = do_test_on_pair_3CosAvg
+    elif options["name_method"] == "SimilarToAny":
+        do_test_on_pairs = SimilarToAny()
+    elif options["name_method"] == "SimilarToB":
+        do_test_on_pairs = SimilarToB()
     elif options["name_method"] == "3CosAdd":
-        do_test_on_pairs = do_test_on_pair_3CosAdd
+#        do_test_on_pairs = do_test_on_pair_3CosAdd
+        do_test_on_pairs = LinearOffset()
     elif options["name_method"] == "PairDistance":
         do_test_on_pairs = do_test_on_pair_3CosAdd
     elif options["name_method"] == "LRCos" or options["name_method"] == "SVMCos":
@@ -475,7 +422,7 @@ def register_test_func():
 def run_category_subsample(pairs, name_dataset, name_category="not yet"):
     name_file_out = os.path.join(
         ".",
-        dir_out,
+        options["path_results"],
         name_dataset,
         options["name_method"])
     if options["name_method"] == "SVMCos":
@@ -491,11 +438,8 @@ def run_category_subsample(pairs, name_dataset, name_category="not yet"):
 def run_category(pairs, name_dataset, name_category="not yet"):
     global cnt_total_total
     global cnt_total_correct
-    name_file_out = os.path.join(
-        ".",
-        dir_out,
-        name_dataset,
-        options["name_method"])
+    results = []
+    name_file_out = os.path.join(options["path_results"], name_dataset, options["name_method"])
     if options["name_method"] == "SVMCos":
         name_file_out += "_" + name_kernel
     if options["name_method"].startswith("LRCos"):
@@ -514,14 +458,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
             n=len(pairs), n_folds=len(pairs) // size_cv_test)
         for max_size_train in range(10, 300, 5):
             finished = False
-            my_prog = tqdm(
-                0,
-                total=len(loo),
-                desc=name_category +
-                ":" +
-                str(max_size_train))
-            cnt_total = 0
-            cnt_correct = 0
+            my_prog = tqdm(0, total=len(loo), desc=name_category + ":" + str(max_size_train))
             for train, test in loo:
                 p_test = [pairs[i] for i in test]
                 p_train = [pairs[i] for i in train]
@@ -531,40 +468,31 @@ def run_category(pairs, name_dataset, name_category="not yet"):
                     continue
                 p_train = random.sample(p_train, max_size_train)
                 my_prog.update()
-                t, c = do_test_on_pairs(p_test, p_train, file_out)
-                cnt_total += t
-                cnt_correct += c
+                do_test_on_pairs(p_train, p_test, file_out)
             if finished:
                 print("finished")
                 break
-            props_experiment = {
-                "vectors": m.name,
-                "dataset": name_dataset,
-                "method": options["name_method"],
-                "category": name_category,
-                "total": cnt_total,
-                "correct": cnt_correct,
-                "size_train": max_size_train}
-            props_experiment.update(m.props)
-            # session.append_vals_to_csv("subsample.csv",props_experiment)
-            # session.flush()
-        cnt_total_total += cnt_total
-        cnt_total_correct += cnt_correct
+#            props_experiment = {
+#                "vectors": m.name,
+#                "dataset": name_dataset,
+#                "method": options["name_method"],
+#                "category": name_category,
+#                "total": cnt_total,
+###                "correct": cnt_correct,
+#                "size_train": max_size_train}
+#            props_experiment.update(m.props)
+
     else:
-        file_out = open(name_file_out, "w", errors="replace")
         my_prog = tqdm(0, total=cnt_splits, desc=name_category)
         cnt_total = 0
         cnt_correct = 0
         for train, test in loo:
             p_test = [pairs[i] for i in test]
             p_train = [pairs[i] for i in train]
-            p_train = [x for x in p_train if not is_pair_missing(x)]
+            #p_train = [x for x in p_train if not is_pair_missing(x)]
             my_prog.update()
-            t, c = do_test_on_pairs(p_test, p_train, file_out)
-            cnt_total += t
-            cnt_total_total += t
-            cnt_correct += c
-            cnt_total_correct += c
+            results += do_test_on_pairs(p_train, p_test)
+
         props_experiment = {
             "vectors": m.name,
             "dataset": name_dataset,
@@ -573,10 +501,19 @@ def run_category(pairs, name_dataset, name_category="not yet"):
             "total": cnt_total,
             "correct": cnt_correct}
         props_experiment.update(m.props)
-        # session.append_vals_to_csv("acc.csv",props_experiment)
+    out = dict()
+    out["results"]=results
+    out["experiment setup"]=dict()
+    out["experiment setup"]["method"] = options["name_method"]
+    out["experiment setup"]["dataset"] = name_dataset
+    out["experiment setup"]["embeddings"] = m.name
+    out["experiment setup"]["category"] = name_category
+    str_results = json.dumps(out, indent=4, separators=(',', ': '), sort_keys=True)
+    #print(str_results) 
+    file_out = open(name_file_out, "w", errors="replace")
+    file_out.write(str_results)
     file_out.close()
-    # session.flush()
-
+    
 
 def get_pairs(fname):
     pairs = []
@@ -690,7 +627,7 @@ def main():
     options["path_dataset"] = cfg["path_dataset"]
     options["name_dataset"] = os.path.basename(options["path_dataset"])
     options["dir_root_dataset"] = os.path.dirname(options["path_dataset"])
-
+    options["path_results"] = cfg["path_results"]
     global m
     for d in dirs:
         if "factorized" in d:
