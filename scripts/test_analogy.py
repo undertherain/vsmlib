@@ -93,6 +93,7 @@ def gen_vec_single(pairs):
     a_prime = [i[0] for i in a_prime]
     #a_prime=[i for sublist in a_prime for i in sublist]
     a_prime = [i for i in a_prime if m.vocabulary.get_id(i) >= 0]
+    a = [i for i in a if m.vocabulary.get_id(i) >= 0]
     noise = [random.choice(m.vocabulary.lst_words) for i in range(len(a))]
     x = list(a_prime) + list(a) + list(a) + list(a) + list(a) + noise
     X = np.array([m.get_row(i) for i in x])
@@ -147,7 +148,7 @@ class LinearOffset(PairWise):
         else:
             scores = get_most_collinear_fast(vec_a, vec_a_prime, vec_b)
         ids_max = np.argsort(scores)[::-1]
-        result = process_prediction(p_test, scores, None, None, p_train)
+        result = process_prediction(p_test, scores, None, None, [p_train], exclude=options["exclude"])
         result["similarity predicted to b_prime cosine"]=m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
         result["similarity a to a_prime cosine"]=m.cmp_vectors(vec_a, vec_a_prime)
         result["similarity a_prime to b_prime cosine"]=m.cmp_vectors(vec_a_prime, vec_b_prime)
@@ -176,7 +177,7 @@ class SimilarToAny(PairWise):
         #print("vec shape :", vectors.shape)
         scores = self.compute_scores(vectors)
 #        print(scores.shape)
-        result = process_prediction(pair_test, scores, None, pair_train)
+        result = process_prediction(pair_test, scores, None, [pair_train])
         #result["similarity to correct cosine"]=m.cmp_vectors(vec_b,vec_b_prime)
         return result
 
@@ -273,15 +274,15 @@ def get_rank(source,center):
     rank = i
     return rank
 
-def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[]):
+def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exclude=True):
     ids_max = np.argsort(scores)[::-1]
     id_question = m.vocabulary.get_id(p_test_one[0])
     result = dict()
     cnt_answers_to_report=6
     extr = ""
-    if len(p_train) > 0:
-        extr = "as {} is to {}".format(p_train[1], p_train[0])
-        set_exclude = set([p_train[0]]) | set(p_train[1] ) 
+    if len(p_train) == 1:
+        extr = "as {} is to {}".format(p_train[0][1], p_train[0][0])
+        set_exclude = set([p_train[0][0]]) | set(p_train[0][1] ) 
     else:
         set_exclude = set()
     set_exclude.add(p_test_one[0])
@@ -293,7 +294,7 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[]):
     for i in ids_max[:10]:
         prediction = dict()
         ans = m.vocabulary.get_word_by_id(i)
-        if ans in set_exclude:
+        if exclude and (ans in set_exclude):
             continue
         cnt_reported += 1
         prediction["score"]=float(scores[i])
@@ -312,13 +313,45 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[]):
     vec_b_prime = m.get_row(p_test_one[1][0])
     result["closest words to answer 1"] = get_distance_closest_words(vec_b_prime,1)
     result["closest words to answer 5"] = get_distance_closest_words(vec_b_prime,5)
+    #where prediction lands:
+    ans = m.vocabulary.get_word_by_id(ids_max[0])
+    if ans == p_test_one[0]: 
+        result["landing_b"]=True 
+    else:
+        result["landing_b"]=False 
+
+    if ans in p_test_one[1]: 
+        result["landing_b_prime"]=True 
+    else:
+        result["landing_b_prime"]=False 
+
+    all_a = [i[0] for i in p_train]
+
+    all_a_prime = [item for sublist in p_train for item in sublist[1]]
+#    print("all_a",all_a)
+    #print("all_a_prime",all_a_prime)
+    if ans in all_a: 
+        result["landing_a"]=True 
+    else:
+        result["landing_a"]=False 
+
+    if ans in all_a_prime: 
+        result["landing_a_prime"]=True 
+    else:
+        result["landing_a_prime"]=False 
+
+
+    #print (p_train)
+    #exit(1)
+
+
     return result
 
 
-def do_test_on_pair_regr_old(p_train, p_test, file_out):
-    cnt_total = 0
-    cnt_correct = 0
+def do_test_on_pair_regr_old(p_train, p_test):
+    results = []
     # create_list_test_right(p_test)
+
 
     X_train, Y_train = gen_vec_single(p_train)
     # print(Y_train)
@@ -337,8 +370,7 @@ def do_test_on_pair_regr_old(p_train, p_test, file_out):
     model_regression.fit(X_train, Y_train)
     score_reg = model_regression.predict_proba(m.matrix)[:, 1]
     for p_test_one in p_test:
-        cnt_total += 1
-        if is_pair_missing(p_test_one):
+        if is_pair_missing([p_test_one]):
             # file_out.write("{}\t{}\t{}\n".format(p_test_one[0],p_test_one[1],"MISSING"))
             continue
         v = m.get_row(p_test_one[0])
@@ -346,9 +378,9 @@ def do_test_on_pair_regr_old(p_train, p_test, file_out):
         score_sim = v @ m_normed.T
         # scores=score_sim*np.sqrt(score_reg)
         scores = score_sim * score_reg
-        process_prediction(p_test_one, scores, score_reg, score_sim, file_out)
-
-    return cnt_total, cnt_correct
+        result = process_prediction(p_test_one, scores, score_reg, score_sim)
+        results.append(result)
+    return results
 
 
 def do_test_on_pair_regr(p_train, p_test, file_out):
@@ -444,6 +476,8 @@ def run_category(pairs, name_dataset, name_category="not yet"):
         name_file_out += "_" + name_kernel
     if options["name_method"].startswith("LRCos"):
         name_file_out += "_C{}".format(inverse_regularization_strength)
+    if not options["exclude"]:
+        name_file_out += "_honest"
     name_file_out += "/" + m.name + "/" + name_category
     print("saving to", name_file_out)
     if not os.path.exists(os.path.dirname(name_file_out)):
@@ -505,6 +539,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     out["results"]=results
     out["experiment setup"]=dict()
     out["experiment setup"]["method"] = options["name_method"]
+    if options["exclude"] : out["experiment setup"]["method"]+="_honest"
     out["experiment setup"]["dataset"] = name_dataset
     out["experiment setup"]["embeddings"] = m.name
     out["experiment setup"]["category"] = name_category
@@ -622,6 +657,7 @@ def main():
     print(cfg)
     dirs = cfg["path_vectors"]
     options["name_method"] = cfg["method"]
+    options["exclude"] = cfg["exclude"]
     # return
     # check if all pathes exist
     options["path_dataset"] = cfg["path_dataset"]
