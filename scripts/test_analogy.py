@@ -35,6 +35,11 @@ size_cv_test = 1
 set_aprimes_test = None
 inverse_regularization_strength = 1.0
 
+result_miss = {
+    "rank": -1,
+    "reason": "missing words"
+    }
+
 # options["degree"]=3
 # name_method="SVMCos"
 # name_kernel="linear"
@@ -42,9 +47,14 @@ inverse_regularization_strength = 1.0
 # name_kernel='rbf'
 
 
+def normed(v):
+    return v / np.linalg.norm(v)
+
+
 def get_most_similar_fast(v):
     scores = v @ m_normed.T
     return scores
+
 
 
 def get_most_collinear_fast(a, ap, b):
@@ -61,11 +71,12 @@ def get_most_collinear_fast(a, ap, b):
 
 def is_at_least_one_word_present(words):
     for w in words:
-        if m.vocabulary.get_id(w) >= 0: return True
+        if m.vocabulary.get_id(w) >= 0:
+            return True
     return False
 
+
 def is_pair_missing(pairs):
-    #print (pairs)
     for pair in pairs:
         if m.vocabulary.get_id(pair[0]) < 0:
             return True
@@ -110,81 +121,88 @@ def gen_vec_single_nonoise(pairs):
     Y = np.hstack([np.ones(len(a_prime)), np.zeros(len(x) - len(a_prime))])
     return X, Y
 
+
 def get_crowndedness(vector):
     scores = get_most_similar_fast(vector / np.linalg.norm(vector))
     scores.sort()
     return (scores[-11:-1][::-1]).tolist()
 
+
 class PairWise:
     def __call__(self, pairs_train, pairs_test):
-        results=[]
+        results = []
         for p_train, p_test in product(pairs_train, pairs_test):
-            if is_pair_missing([p_train, p_test]): continue
-            result = self.do_on_two_pairs(p_train,p_test)
-            result["b in neighbourhood of b_prime"] = get_rank(p_test[0],p_test[1][0])
-            result["b_prime in neighbourhood of b"] = get_rank(p_test[1],p_test[0])
+            if is_pair_missing([p_train, p_test]):
+                continue
+            result = self.do_on_two_pairs(p_train, p_test)
+            result["b in neighbourhood of b_prime"] = get_rank(p_test[0], p_test[1][0])
+            result["b_prime in neighbourhood of b"] = get_rank(p_test[1], p_test[0])
             results.append(result)
         return results
-
-
-
-class LinearOffset(PairWise):
 
     def do_on_two_pairs(self, p_train, p_test):
         vec_a = m.get_row(p_train[0])
         vec_a_prime = m.get_row(p_train[1][0])
         vec_b = m.get_row(p_test[0])
         vec_b_prime = m.get_row(p_test[1][0])
-
-        if scipy.sparse.issparse(m_normed):
+        if scipy.sparse.issparse(m.matrix):
             vec_a = vec_a.toarray()[0]
             vec_a_prime = vec_a_prime.toarray()[0]
             vec_b = vec_b.toarray()[0]
 
-        if options["name_method"] == "3CosAdd":
-            vec_b_prime_predicted = vec_a_prime - vec_a + vec_b
-            vec_b_prime_predicted /= np.linalg.norm(vec_b_prime_predicted)
-            scores = get_most_similar_fast(vec_b_prime_predicted)
-        else:
-            scores = get_most_collinear_fast(vec_a, vec_a_prime, vec_b)
+        scores, vec_b_prime_predicted = self.compute_scores(vec_a, vec_a_prime, vec_b)
         ids_max = np.argsort(scores)[::-1]
         result = process_prediction(p_test, scores, None, None, [p_train], exclude=options["exclude"])
-        result["similarity predicted to b_prime cosine"]=m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
+        self.collect_stats(result, vec_a, vec_a_prime, vec_b, vec_b_prime, vec_b_prime_predicted)
+        return result
+
+    def collect_stats(self, result, vec_a, vec_a_prime, vec_b, vec_b_prime, vec_b_prime_predicted):
+        if not vec_b_prime_predicted is None:
+            result["similarity predicted to b_prime cosine"]=m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
+        
         result["similarity a to a_prime cosine"]=m.cmp_vectors(vec_a, vec_a_prime)
         result["similarity a_prime to b_prime cosine"]=m.cmp_vectors(vec_a_prime, vec_b_prime)
         result["similarity b to b_prime cosine"]=m.cmp_vectors(vec_b, vec_b_prime)
+        result["similarity a to b_prime cosine"]=m.cmp_vectors(vec_a, vec_b_prime)
         
         result["distance a to a_prime euclidean"] = scipy.spatial.distance.euclidean(vec_a, vec_a_prime)
         result["distance a_prime to b_prime euclidean"] = scipy.spatial.distance.euclidean(vec_a_prime, vec_b_prime)
+        result["distance b to b_prime euclidean"] = scipy.spatial.distance.euclidean(vec_b, vec_b_prime)
+        result["distance a to b_prime euclidean"] = scipy.spatial.distance.euclidean(vec_a, vec_b_prime)
+        
         result["crowdedness of b_prime"] = get_crowndedness(vec_b_prime)
 
-        return result
+
+class LinearOffset(PairWise):
+    def compute_scores(self, vec_a, vec_a_prime, vec_b):
+        vec_b_prime_predicted = vec_a_prime - vec_a + vec_b
+        vec_b_prime_predicted = normed(vec_b_prime_predicted)
+        scores = get_most_similar_fast(vec_b_prime_predicted)
+        return scores, vec_b_prime_predicted
+
+
+class PairDistance(PairWise):
+    def compute_scores(self, vec_a, vec_a_prime, vec_b):
+        scores = get_most_collinear_fast(vec_a, vec_a_prime, vec_b)
+        return scores, vec_b_prime_predicted
+
+
+class ThreeCosMul(PairWise):
+    def compute_scores(self, vec_a, vec_a_prime, vec_b):
+        epsilon = 0.001
+        sim_b_prim_a = get_most_similar_fast(normed(vec_a))
+        sim_b_prim_b = get_most_similar_fast(normed(vec_b))
+        scores = (sim_b_prim_a * sim_b_prim_b) / (sim_b_prim_a + epsilon)
+        return scores, None
 
 
 class SimilarToAny(PairWise):
-
     def compute_scores(self, vectors):
         scores = get_most_similar_fast(vectors)
         #print("scores shape:", scores.shape)
         best = scores.max(axis=0)
         return best
 
-    def do_on_two_pairs(self, pair_train, pair_test):
-        vec_a = m.get_row(pair_train[0])
-        vec_a_prime = m.get_row(pair_train[1][0])
-        vec_b = m.get_row(pair_test[0])
-        vectors = np.array([vec_a, vec_a_prime,vec_b])
-        #print("vec shape :", vectors.shape)
-        scores = self.compute_scores(vectors)
-#        print(scores.shape)
-        result = process_prediction(pair_test, scores, None, [pair_train])
-        #result["similarity to correct cosine"]=m.cmp_vectors(vec_b,vec_b_prime)
-        return result
-
-result_miss = {
-    "rank": -1,
-    "reason": "missing words"
-    }
 
 class SimilarToB():
     def __call__(self, pairs_train, pairs_test):
@@ -306,13 +324,18 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
         result["predictions"].append(prediction)
         if cnt_reported >= cnt_answers_to_report:
             break
+    rank = 0
     for i in range(ids_max.shape[0]):
-        if m.vocabulary.get_word_by_id(ids_max[i]) in p_test_one[1]: break
-    result["rank"] = i
+        ans = m.vocabulary.get_word_by_id(ids_max[i])
+        if exclude and (ans in set_exclude):
+            continue
+        if ans in p_test_one[1]: break
+        rank+=1
+    result["rank"] = rank
  
-    vec_b_prime = m.get_row(p_test_one[1][0])
-    result["closest words to answer 1"] = get_distance_closest_words(vec_b_prime,1)
-    result["closest words to answer 5"] = get_distance_closest_words(vec_b_prime,5)
+    #vec_b_prime = m.get_row(p_test_one[1][0])
+    #result["closest words to answer 1"] = get_distance_closest_words(vec_b_prime,1)
+    #result["closest words to answer 5"] = get_distance_closest_words(vec_b_prime,5)
     #where prediction lands:
     ans = m.vocabulary.get_word_by_id(ids_max[0])
     if ans == p_test_one[0]: 
@@ -339,11 +362,6 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
         result["landing_a_prime"]=True 
     else:
         result["landing_a_prime"]=False 
-
-
-    #print (p_train)
-    #exit(1)
-
 
     return result
 
@@ -373,12 +391,14 @@ def do_test_on_pair_regr_old(p_train, p_test):
         if is_pair_missing([p_test_one]):
             # file_out.write("{}\t{}\t{}\n".format(p_test_one[0],p_test_one[1],"MISSING"))
             continue
-        v = m.get_row(p_test_one[0])
-        v /= np.linalg.norm(v)
+        vec_b = m.get_row(p_test_one[0])
+        vec_b_prime = m.get_row(p_test_one[1][0])
+        v = vec_b / np.linalg.norm(vec_b)
         score_sim = v @ m_normed.T
         # scores=score_sim*np.sqrt(score_reg)
         scores = score_sim * score_reg
         result = process_prediction(p_test_one, scores, score_reg, score_sim)
+        result["similarity b to b_prime cosine"]=m.cmp_vectors(vec_b, vec_b_prime)
         results.append(result)
     return results
 
@@ -438,11 +458,12 @@ def register_test_func():
         do_test_on_pairs = SimilarToAny()
     elif options["name_method"] == "SimilarToB":
         do_test_on_pairs = SimilarToB()
+    elif options["name_method"] == "3CosMul":
+        do_test_on_pairs = ThreeCosMul()
     elif options["name_method"] == "3CosAdd":
-#        do_test_on_pairs = do_test_on_pair_3CosAdd
         do_test_on_pairs = LinearOffset()
     elif options["name_method"] == "PairDistance":
-        do_test_on_pairs = do_test_on_pair_3CosAdd
+        do_test_on_pairs = PairDistance()
     elif options["name_method"] == "LRCos" or options["name_method"] == "SVMCos":
         do_test_on_pairs = do_test_on_pair_regr_old
     elif options["name_method"] == "LRCosF":
@@ -506,15 +527,6 @@ def run_category(pairs, name_dataset, name_category="not yet"):
             if finished:
                 print("finished")
                 break
-#            props_experiment = {
-#                "vectors": m.name,
-#                "dataset": name_dataset,
-#                "method": options["name_method"],
-#                "category": name_category,
-#                "total": cnt_total,
-###                "correct": cnt_correct,
-#                "size_train": max_size_train}
-#            props_experiment.update(m.props)
 
     else:
         my_prog = tqdm(0, total=cnt_splits, desc=name_category)
@@ -539,7 +551,8 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     out["results"]=results
     out["experiment setup"]=dict()
     out["experiment setup"]["method"] = options["name_method"]
-    if options["exclude"] : out["experiment setup"]["method"]+="_honest"
+    if not options["exclude"]:
+        out["experiment setup"]["method"] += "_honest"
     out["experiment setup"]["dataset"] = name_dataset
     out["experiment setup"]["embeddings"] = m.name
     out["experiment setup"]["category"] = name_category

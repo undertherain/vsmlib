@@ -26,6 +26,9 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+def normed(v):
+    return v / np.linalg.norm(v)
+
 class Model(object):
     provenance=""
     name = ""
@@ -114,7 +117,7 @@ class Model(object):
             if math.isnan(c): return 0
             return c
         else:
-            c= scipy.spatial.distance.cosine(r1,r2)
+            c= scipy.spatial.distance.cosine(normed(r1),normed(r2))
             if math.isnan(c): return 0
             return 1-c    
     def cmp_rows(self,id1,id2):

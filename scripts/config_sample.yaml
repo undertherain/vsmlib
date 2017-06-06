@@ -10,6 +10,8 @@ alpha: 0.7
 #allowed values are 3CosAdd, 3CosAvg, PairDistance, LRCos and LRCosF
 method: 3CosAdd
 
+exclude: True
+
 path_dataset: /work/alex/data/linguistic/datasets/analogies/Japanese
 
 path_results: "/path/for/results/to/be/logged"

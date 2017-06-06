@@ -6,7 +6,7 @@ import vsmlib
 import numpy as np
 import scipy.sparse.linalg
 	
-cnt_dimensions = 1000
+cnt_dimensions = 500
 argv = sys.argv
 if len(argv) < 2:
 	print ("directory name required")
