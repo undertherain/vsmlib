@@ -29,6 +29,8 @@ options = {}
 
 do_top5 = True
 
+normalize=True
+
 # this are some hard-coded bits which will be implemented later
 need_subsample = False
 size_cv_test = 1
@@ -48,11 +50,15 @@ result_miss = {
 
 
 def normed(v):
-    return v / np.linalg.norm(v)
+    if normalize:
+        return v
+    else:
+        return v / np.linalg.norm(v)
 
 
 def get_most_similar_fast(v):
-    scores = v @ m_normed.T
+    scores = normed(v) @ m_normed.T
+    scores = (scores + 1) / 2
     return scores
 
 
@@ -123,7 +129,7 @@ def gen_vec_single_nonoise(pairs):
 
 
 def get_crowndedness(vector):
-    scores = get_most_similar_fast(vector / np.linalg.norm(vector))
+    scores = get_most_similar_fast(vector)
     scores.sort()
     return (scores[-11:-1][::-1]).tolist()
 
@@ -190,11 +196,23 @@ class PairDistance(PairWise):
 class ThreeCosMul(PairWise):
     def compute_scores(self, vec_a, vec_a_prime, vec_b):
         epsilon = 0.001
-        sim_b_prim_a = get_most_similar_fast(normed(vec_a))
-        sim_b_prim_b = get_most_similar_fast(normed(vec_b))
-        scores = (sim_b_prim_a * sim_b_prim_b) / (sim_b_prim_a + epsilon)
+        sim_a = get_most_similar_fast(vec_a)
+        sim_a_prime = get_most_similar_fast(vec_a_prime)
+        sim_b = get_most_similar_fast(vec_b)
+        scores = (sim_a_prime * sim_b) / (sim_a + epsilon)
         return scores, None
 
+
+class ThreeCosMul2(PairWise):
+    def compute_scores(self, vec_a, vec_a_prime, vec_b):
+        epsilon = 0.001
+        #sim_a = get_most_similar_fast(vec_a)
+        #sim_a_prime = get_most_similar_fast(vec_a_prime)
+        #sim_b = get_most_similar_fast(vec_b)
+        #   scores = (sim_a_prime * sim_b) / (sim_a + epsilon)
+        predicted = ( ((vec_a_prime+0.5) /2) * ((vec_b+0.5)/2)) / (((vec_a+0.5)/2) + epsilon)
+        scores = get_most_similar_fast(predicted)
+        return scores, predicted
 
 class SimilarToAny(PairWise):
     def compute_scores(self, vectors):
@@ -460,6 +478,8 @@ def register_test_func():
         do_test_on_pairs = SimilarToB()
     elif options["name_method"] == "3CosMul":
         do_test_on_pairs = ThreeCosMul()
+    elif options["name_method"] == "3CosMul2":
+        do_test_on_pairs = ThreeCosMul2()
     elif options["name_method"] == "3CosAdd":
         do_test_on_pairs = LinearOffset()
     elif options["name_method"] == "PairDistance":
@@ -491,6 +511,10 @@ def run_category_subsample(pairs, name_dataset, name_category="not yet"):
 def run_category(pairs, name_dataset, name_category="not yet"):
     global cnt_total_total
     global cnt_total_correct
+
+    if name_dataset.endswith("_D") or name_dataset.endswith("_I") or name_dataset.endswith("_E") or name_dataset.endswith("_L"):
+        name_dataset = name_dataset[:-2]
+
     results = []
     name_file_out = os.path.join(options["path_results"], name_dataset, options["name_method"])
     if options["name_method"] == "SVMCos":
@@ -619,16 +643,19 @@ def subsample_dims(newdim):
 
 def make_normalized_copy():
     global m_normed
-    m_normed = m.matrix.copy()
-    print("created matrix copy for normalization, normalizing.... ")
-    # print(type(m_normed))
-    if scipy.sparse.issparse(m_normed):
-        norm = scipy.sparse.linalg.norm(m_normed, axis=1)[:, None]
-        m_normed.data /= norm.repeat(np.diff(m_normed.indptr))
+    if normalize:
+        m_normed = m.matrix
     else:
-        m_normed /= np.linalg.norm(m_normed, axis=1)[:, None]
+        m_normed = m.matrix.copy()
+        print("created matrix copy for normalization, normalizing.... ")
+        # print(type(m_normed))
+        if scipy.sparse.issparse(m_normed):
+            norm = scipy.sparse.linalg.norm(m_normed, axis=1)[:, None]
+            m_normed.data /= norm.repeat(np.diff(m_normed.indptr))
+        else:
+            m_normed /= np.linalg.norm(m_normed, axis=1)[:, None]
 
-    print("normalized copy")
+        print("normalized copy")
 
 
 #    for dims in [1300,1200,1000,900,800,700,600,500,400,300,200,100]:
@@ -675,6 +702,8 @@ def main():
     # check if all pathes exist
     options["path_dataset"] = cfg["path_dataset"]
     options["name_dataset"] = os.path.basename(options["path_dataset"])
+
+
     options["dir_root_dataset"] = os.path.dirname(options["path_dataset"])
     options["path_results"] = cfg["path_results"]
     global m
@@ -686,9 +715,10 @@ def main():
         else:
             m = vsmlib.model.load_from_dir(d)
 
-        if m.name.startswith("explicit"):
+        if normalize:
             # m.clip_negatives()  #make this configurable
             m.normalize()
+        
         print(m.name)
         name_model = m.name
         make_normalized_copy()
