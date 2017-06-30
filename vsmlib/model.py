@@ -13,8 +13,6 @@ import brewer2mpl
 import tables
 import json
 import datetime
-import numba
-
 
 class bcolors:
     HEADER = '\033[95m'
