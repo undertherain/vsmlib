@@ -12,7 +12,7 @@ import gzip
 import brewer2mpl
 import tables
 import json
-from misc.formathelper import bcolors
+from .misc.formathelper import bcolors
 
 
 def normed(v):
