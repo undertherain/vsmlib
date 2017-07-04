@@ -61,12 +61,12 @@ class Model(object):
         ids_of_interest = [self.vocabulary.get_id(
             w) for w in words_of_interest]
         rows = self.filter_rows(ids_of_interest)
-        xdim = rows.shape[1]
-        #max_width = 25
+        # xdim = rows.shape[1]
+        # max_width = 25
         # width=min(xdim,max_width)
         vert = None  # np.empty((rows.shape[0],0))
         cols = self.get_most_informative_columns(rows, width)
-        #print (cols)
+        # print (cols)
         for i in cols:
             if vert is None:
                 vert = (rows[:, i])
@@ -113,7 +113,7 @@ class Model(object):
                 return 0
             return c
         else:
-            c = scipy.spatial.distance.cosine(normed(r1), normed(r2))
+            c = cosine(normed(r1), normed(r2))
             if math.isnan(c):
                 return 0
             return 1 - c
@@ -268,10 +268,10 @@ class Model_numbered(Model_dense):
             row = row / np.linalg.norm(row)
             if colored:
                 plt.bar(range(0, len(row)), row,
-                        color=colors[cnt], linewidth=0, alpha=0.6,  label=i)
+                        color=colors[cnt], linewidth=0, alpha=0.6, label=i)
             else:
                 plt.bar(range(0, len(row)), row, color="black",
-                        linewidth=0, alpha=1 / len(wl),  label=i)
+                        linewidth=0, alpha=1 / len(wl), label=i)
             cnt += 1
         if show_legend:
             plt.legend()
@@ -328,12 +328,12 @@ class Model_w2v(Model_numbered):
         for i in range(cnt_rows):
             word = Model_w2v.load_word(f).decode(
                 'UTF-8', errors="ignore").strip()
-            #print (word)
+            # print (word)
             self.vocabulary.dic_words_ids[word] = i
             self.vocabulary.lst_words.append(word)
             s_row = f.read(size_row * 4)
             row = np.fromstring(s_row, dtype=np.float32)
-            #row = row / np.linalg.norm(row)
+            # row = row / np.linalg.norm(row)
             self.matrix[i] = row
         f.close()
 
@@ -368,7 +368,7 @@ class Model_glove(Model_numbered):
                 self.vocabulary.dic_words_ids[word] = i
                 self.vocabulary.lst_words.append(word)
                 str_vec = tokens[1:]
-                #print (str_vec)
+                # print (str_vec)
                 row = np.zeros(len(str_vec), dtype=np.float32)
                 for j in range(len(str_vec)):
                     row[j] = float(str_vec[j])
