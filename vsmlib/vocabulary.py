@@ -56,7 +56,7 @@ class Vocabulary_simple(Vocabulary):
         return rdic
 
     def load_list_from_file(self, filename, n):
-        postfix = 0
+        # postfix = 0
         self.lst_words = [""] * n
         # rdic={}
         # rlst=[]

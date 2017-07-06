@@ -379,6 +379,8 @@ class Model_glove(ModelNumbered):
             self.matrix[i] = rows[i]
 
 
+
+
 def load_from_dir(path):
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
         print("this is sparse explicit in hdf5")
