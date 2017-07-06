@@ -8,7 +8,7 @@ class Tests(unittest.TestCase):
     def test_similarity(self):
         model = ModelNumbered()
         model.load_with_alpha(path)
-        l = model.get_most_similar_words("apple")
+        l = model.get_most_similar_words("apple", 12)
         for w, s in l:
-            print(w,s)
+            print(w, s)
         self.assertIsInstance(model, object)
