@@ -91,7 +91,7 @@ class Model(object):
             vec = self.matrix[self.vocabulary.get_id(w)]
         else:
             vec = w
-        rows = self.get_most_similar_vectors(vec)
+        rows = self.get_most_similar_vectors(vec, cnt)
         results = []
         for i in rows:
             results.append([self.vocabulary.get_word_by_id(i[0]), i[1]])
