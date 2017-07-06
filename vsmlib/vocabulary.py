@@ -89,8 +89,9 @@ class Vocabulary_simple(Vocabulary):
         self.dic_words_ids = self.load_dic_from_file("ids")
         self.load_list_from_file("ids", len(self.dic_words_ids))
         if os.path.isfile(os.path.join(path, "freq_per_id")):
-            self.l_frequencies = np.fromfile(
-                open(os.path.join(self.dir_root, "freq_per_id")), dtype=np.uint64)
+            f = open(os.path.join(self.dir_root, "freq_per_id"))
+            self.l_frequencies = np.fromfile(f, dtype=np.uint64)
+            f.close()
 
 
 class Vocabulary_cooccurrence(Vocabulary_simple):

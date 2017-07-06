@@ -75,13 +75,13 @@ class Model(object):
         labels = [self.get_x_label(i) for i in cols]
         return rows, vert.T, labels
 
-    def get_most_similar_vectors(self, u):
+    def get_most_similar_vectors(self, u, cnt=10):
         scores = []
         for i in range(self.matrix.shape[0]):
             scores.append([self.cmp_vectors(u, self.matrix[i]), i])
         scores.sort()
         result = []
-        for q in reversed(scores[-10:]):
+        for q in reversed(scores[-cnt:]):
             if q[0] > 0:
                 result.append([q[1], q[0]])
         return result
@@ -113,10 +113,10 @@ class Model(object):
                 return 0
             return c
         else:
-            c = cosine(normed(r1), normed(r2))
+            c = normed(r1) @ normed(r2)
             if math.isnan(c):
                 return 0
-            return 1 - c
+            return c
 
     def cmp_rows(self, id1, id2):
         r1 = self.matrix[id1]
@@ -190,7 +190,7 @@ class Model_explicit(Model):
         normalize(self.matrix)
         self.name += "_normalized"
         self.provenance += "\ntransform : normalize"
-
+        self.normalized = True
 
 class Model_dense(Model):
     def save_matr_to_hdf5(self, path):
@@ -256,7 +256,7 @@ class Model_dense(Model):
         self.props["normalized"] = True
 
 
-class Model_numbered(Model_dense):
+class ModelNumbered(Model_dense):
     def get_x_label(self, i):
         return i
 
@@ -291,7 +291,7 @@ class Model_Levi(Model_dense):
             self.vocabulary.dic_words_ids[self.vocabulary.lst_words[i]] = i
 
 
-class Model_svd_scipy(Model_numbered):
+class Model_svd_scipy(ModelNumbered):
     def __init__(self, original, cnt_singular_vectors, power):
         ut, s_ev, vt = scipy.sparse.linalg.svds(
             original.matrix, k=cnt_singular_vectors, which='LM')  # LM SM LA SA BE
@@ -306,7 +306,7 @@ class Model_svd_scipy(Model_numbered):
             "_svd_{}_C{}".format(cnt_singular_vectors, power)
 
 
-class Model_w2v(Model_numbered):
+class Model_w2v(ModelNumbered):
     @staticmethod
     def load_word(f):
         result = b''
@@ -343,7 +343,7 @@ class Model_w2v(Model_numbered):
         self.load_provenance(path)
 
 
-class Model_glove(Model_numbered):
+class Model_glove(ModelNumbered):
     def __init__(self):
         self.name = "glove"
 
@@ -402,7 +402,7 @@ def load_from_dir(path):
         print("this is Levi ")
         return m
     if os.path.isfile(os.path.join(path, "vectors.npy")):
-        m = vsmlib.Model_numbered()
+        m = vsmlib.ModelNumbered()
         m.load_from_dir(path)
         print("this is dense ")
         return m
