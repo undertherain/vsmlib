@@ -76,15 +76,15 @@ class Model(object):
         return rows, vert.T, labels
 
     def get_most_similar_vectors(self, u, cnt=10):
-        scores = []
+        # scores = []
+        scores = np.zeros(self.matrix.shape[0], dtype=np.float32)
         for i in range(self.matrix.shape[0]):
-            scores.append([self.cmp_vectors(u, self.matrix[i]), i])
-        scores.sort()
-        result = []
-        for q in reversed(scores[-cnt:]):
-            if q[0] > 0:
-                result.append([q[1], q[0]])
-        return result
+            # scores.append([self.cmp_vectors(u, self.matrix[i]), i])
+            scores[i] = self.cmp_vectors(u, self.matrix[i])
+        ids = np.argsort(scores)[::-1]
+        ids = ids[:cnt]
+        return zip(ids, scores[ids])
+
 
     def get_most_similar_words(self, w, cnt=10):
         if isinstance(w, str):
