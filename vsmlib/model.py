@@ -3,7 +3,7 @@ import vsmlib.matrix
 import numpy as np
 import scipy
 from scipy import sparse
-from scipy.spatial.distance import cosine
+#from scipy.spatial.distance import cosine
 import scipy.sparse.linalg
 import math
 from matplotlib import pyplot as plt
@@ -86,7 +86,7 @@ class Model(object):
                 result.append([q[1], q[0]])
         return result
 
-    def get_most_similar_words(self, w):
+    def get_most_similar_words(self, w, cnt=10):
         if isinstance(w, str):
             vec = self.matrix[self.vocabulary.get_id(w)]
         else:
