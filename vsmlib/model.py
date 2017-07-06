@@ -85,7 +85,6 @@ class Model(object):
         ids = ids[:cnt]
         return zip(ids, scores[ids])
 
-
     def get_most_similar_words(self, w, cnt=10):
         if isinstance(w, str):
             vec = self.matrix[self.vocabulary.get_id(w)]
