@@ -710,7 +710,7 @@ def main():
     for d in dirs:
         if "factorized" in d:
             alpha = cfg["alpha"]
-            m = vsmlib.model.Model_numbered()
+            m = vsmlib.model.ModelNumbered()
             m.load_with_alpha(d, alpha)
         else:
             m = vsmlib.model.load_from_dir(d)

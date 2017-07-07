@@ -257,6 +257,30 @@ class Model_dense(Model):
         self.provenance += "\ntransform : normalized"
         self.props["normalized"] = True
 
+    def load_from_text(self, path, ungzip=True):
+        i = 0
+        # self.name+="_"+os.path.basename(os.path.normpath(path))
+        self.vocabulary = vsmlib.Vocabulary()
+        rows = []
+        with gzip.open(path) if ungzip else open(path) as f:
+            for line in f:
+                tokens = line.split()
+#                word = tokens[0].decode('ascii',errors="ignore")
+                word = tokens[0].decode('UTF-8', errors="ignore")
+                self.vocabulary.dic_words_ids[word] = i
+                self.vocabulary.lst_words.append(word)
+                str_vec = tokens[1:]
+                # print (str_vec)
+                row = np.zeros(len(str_vec), dtype=np.float32)
+                for j in range(len(str_vec)):
+                    row[j] = float(str_vec[j])
+                rows.append(row)
+                i += 1
+        self.matrix = np.zeros((len(rows), len(rows[0])), dtype=np.float32)
+        self.name += "_{}".format(len(rows[0]))
+        for i in (range(len(rows))):
+            self.matrix[i] = rows[i]
+
 
 class ModelNumbered(Model_dense):
     def get_x_label(self, i):
@@ -355,31 +379,7 @@ class Model_glove(ModelNumbered):
         for f in files:
             if f.endswith(".gz"):
                 print("this is Glove")
-                self.load_from_file(os.path.join(path, f))
-
-    def load_from_file(self, path):
-        i = 0
-        # self.name+="_"+os.path.basename(os.path.normpath(path))
-        self.vocabulary = vsmlib.Vocabulary()
-        rows = []
-        with gzip.open(path) as f:
-            for line in f:
-                tokens = line.split()
-#                word = tokens[0].decode('ascii',errors="ignore")
-                word = tokens[0].decode('UTF-8', errors="ignore")
-                self.vocabulary.dic_words_ids[word] = i
-                self.vocabulary.lst_words.append(word)
-                str_vec = tokens[1:]
-                # print (str_vec)
-                row = np.zeros(len(str_vec), dtype=np.float32)
-                for j in range(len(str_vec)):
-                    row[j] = float(str_vec[j])
-                rows.append(row)
-                i += 1
-        self.matrix = np.zeros((len(rows), len(rows[0])), dtype=np.float32)
-        self.name += "_{}".format(len(rows[0]))
-        for i in (range(len(rows))):
-            self.matrix[i] = rows[i]
+                self.load_from_text(os.path.join(path, f))
 
 
 def load_from_dir(path):
