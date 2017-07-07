@@ -104,19 +104,6 @@ class Model(object):
         row = self.matrix[i]
         return row
 
-    def cmp_vectors(self, r1, r2):
-        if sparse.issparse(r1):
-            c = r1.dot(r2.T) / (np.linalg.norm(r1.data) * np.linalg.norm(r2.data))
-            c = c[0, 0]
-            if math.isnan(c):
-                return 0
-            return c
-        else:
-            c = normed(r1) @ normed(r2)
-            if math.isnan(c):
-                return 0
-            return c
-
     def cmp_rows(self, id1, id2):
         r1 = self.matrix[id1]
         r2 = self.matrix[id2]
@@ -158,6 +145,14 @@ class Model_explicit(Model):
     def __init__(self):
         self.name += "explicit_"
 
+    def cmp_vectors(self, r1, r2):
+        c = r1.dot(r2.T) / (np.linalg.norm(r1.data) * np.linalg.norm(r2.data))
+        c = c[0, 0]
+        if math.isnan(c):
+            return 0
+        return c
+
+
     def load_from_hdf5(self, path):
         self.load_provenance(path)
         f = tables.open_file(os.path.join(path, 'cooccurrence_csr.h5p'), 'r')
@@ -191,7 +186,15 @@ class Model_explicit(Model):
         self.provenance += "\ntransform : normalize"
         self.normalized = True
 
+
 class Model_dense(Model):
+
+    def cmp_vectors(self, r1, r2):
+        c = normed(r1) @ normed(r2)
+        if math.isnan(c):
+            return 0
+        return c
+
     def save_matr_to_hdf5(self, path):
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'w')
         atom = tables.Atom.from_dtype(self.matrix.dtype)
@@ -377,8 +380,6 @@ class Model_glove(ModelNumbered):
         self.name += "_{}".format(len(rows[0]))
         for i in (range(len(rows))):
             self.matrix[i] = rows[i]
-
-
 
 
 def load_from_dir(path):

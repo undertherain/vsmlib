@@ -3,6 +3,7 @@ from vsmlib.model import ModelNumbered
 
 path = "/mnt/storage/Data/Embeddings/explicit_BNC_m100_w2_svd_d200"
 
+
 class Tests(unittest.TestCase):
 
     def test_similarity(self):
