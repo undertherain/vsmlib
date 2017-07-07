@@ -1,2 +1,3 @@
 brewer2mpl
 tables
+scipy
