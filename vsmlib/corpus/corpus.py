@@ -4,7 +4,7 @@
 import numpy as np
 
 
-def load_as_ids(path, vocabulary, gzipped=None):
+def load_as_ids(path, vocabulary, gzipped=None, downcase=True):
     # user proper tokenizer from cooc
     # options to ignore sentence bounbdaries
     # specify what to do with missing words
@@ -14,7 +14,10 @@ def load_as_ids(path, vocabulary, gzipped=None):
     with open(path) as f:
         for line in f:
             for token in line.split():
-                result.append(vocabulary.get_id(token))
+                w = token
+                if downcase:
+                    w = w.lower()
+                result.append(vocabulary.get_id(w))
     return np.array(result, dtype=np.int32)
 
 
