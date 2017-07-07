@@ -14,7 +14,7 @@ def load_as_ids(path, vocabulary, gzipped=None):
     with open(path) as f:
         for line in f:
             for token in line.split():
-                result.append(vocabulary.word_to_id(token))
+                result.append(vocabulary.get_id(token))
     return np.array(result, dtype=np.int32)
 
 
