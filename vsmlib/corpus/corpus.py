@@ -4,6 +4,18 @@
 import numpy as np
 
 
+class FileIterator():
+
+    def __init__(self, path):
+        self.path = path
+
+    def next(self):
+        with open(self.path) as f:
+            for line in f:
+                for token in line.split():
+                    yield token
+
+
 def load_as_ids(path, vocabulary, gzipped=None, downcase=True):
     # user proper tokenizer from cooc
     # options to ignore sentence bounbdaries
