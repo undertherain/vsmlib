@@ -22,6 +22,7 @@ def countof_fmt(num, suffix=''):
 class Vocabulary(object):
 
     def __init__(self):
+        # todo: check if ternary tree is available
         self.dic_words_ids = {}
         self.lst_words = []
 

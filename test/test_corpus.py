@@ -4,8 +4,9 @@ import unittest
 from vsmlib.corpus import load_as_ids
 from vsmlib.vocabulary import Vocabulary_simple
 
+# todo: use local vocab
 path_vocab = "/work/alex/data/linguistic/embeddings/explicit/English/austen_m10_w2/"
-path_text = "/work/alex/data/linguistic/corpora/raw_texts/Eng/literature/austen/sense.txt"
+path_text = "./test/data/corpora/small/sense_small.txt"
 
 
 class Tests(unittest.TestCase):
