@@ -7,6 +7,6 @@ from vsmlib.model import Model
 
 class Tests(unittest.TestCase):
 
-    def test_query_gpus(self):
+    def test_model(self):
         model = Model()
         self.assertIsInstance(model, object)

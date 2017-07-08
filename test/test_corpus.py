@@ -11,7 +11,7 @@ path_text = "./test/data/corpora/small/sense_small.txt"
 
 class Tests(unittest.TestCase):
 
-    def test_query_gpus(self):
+    def test_text_to_ids(self):
         v = Vocabulary_simple()
         v.load(path_vocab)
         doc = load_as_ids(path_text, v)
