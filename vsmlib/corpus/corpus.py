@@ -9,6 +9,9 @@ class FileIterator():
     def __init__(self, path):
         self.path = path
 
+    def __iter__(self):
+        return self.next()
+
     def next(self):
         with open(self.path) as f:
             for line in f:

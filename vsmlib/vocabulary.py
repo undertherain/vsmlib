@@ -86,9 +86,9 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
         t_start = time.time()
         Vocabulary_simple.load(self, path)
         t_end = time.time()
-        #assert len(self.lst_words)==len(self.dic_words_ids)
+        # assert len(self.lst_words)==len(self.dic_words_ids)
         if verbose:
-            cnt_words = len(lst_words)
+            cnt_words = len(self.lst_words)
             print("Vocabulary loaded in {0:0.2f} seconds".format(
                 t_end - t_start))
             print("{} words ({}) in vocabulary".format(

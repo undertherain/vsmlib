@@ -1,7 +1,7 @@
 """Tests for embeddings module."""
 
 import unittest
-from vsmlib.corpus import load_as_ids
+from vsmlib.corpus import load_as_ids, FileIterator
 from vsmlib.vocabulary import Vocabulary_simple
 
 # todo: use local vocab
@@ -10,6 +10,12 @@ path_text = "./test/data/corpora/small/sense_small.txt"
 
 
 class Tests(unittest.TestCase):
+
+    def test_file_iter(self):
+        cnt = 0
+        for w in (FileIterator(path_text)):
+            cnt += 1
+        print(cnt, "words read")
 
     def test_text_to_ids(self):
         v = Vocabulary_simple()

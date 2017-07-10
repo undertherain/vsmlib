@@ -1,1 +1,1 @@
-from .corpus import load_as_ids
+from .corpus import load_as_ids, FileIterator
