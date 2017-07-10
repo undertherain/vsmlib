@@ -28,6 +28,13 @@ class Vocabulary(object):
             return 0
         return(self.lst_frequencies[i])
 
+    def save_to_dir(self, path):
+        os.makedirs(path, exist_ok=True)
+        f = open(os.path.join(path, "vocab.tsv"), "w")
+        f.write("#word\tfrequency\n")
+        for i in range(len(self.lst_words)):
+            f.write("{}\t{}\n".format(self.lst_words[i], self.lst_frequencies[i]))
+
 
 class Vocabulary_simple(Vocabulary):
 
