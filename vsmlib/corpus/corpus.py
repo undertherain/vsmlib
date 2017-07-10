@@ -1,10 +1,9 @@
-# convert text to array of indices
-# or should we do this in vocabulary?
-
 import numpy as np
+import fnmatch
+import os
 
 
-class FileIterator():
+class FileTokenIterator:
 
     def __init__(self, path):
         self.path = path
@@ -17,6 +16,20 @@ class FileIterator():
             for line in f:
                 for token in line.split():
                     yield token
+
+
+class DirTokenIterator:
+    def __init__(self, path):
+        self.path = path
+
+    def __iter__(self):
+        return self.next()
+
+    def next(self):
+        for root, dir, files in os.walk(self.path, followlinks=True):
+            for items in fnmatch.filter(files, "*"):
+                for token in FileTokenIterator(os.path.join(root, items)):
+                    yield(token)
 
 
 def load_as_ids(path, vocabulary, gzipped=None, downcase=True):
