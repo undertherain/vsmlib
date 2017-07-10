@@ -26,7 +26,7 @@ class Vocabulary(object):
             i = self.get_id(i)
         if i < 0:
             return 0
-        return(self.l_frequencies[i])
+        return(self.lst_frequencies[i])
 
 
 class Vocabulary_simple(Vocabulary):
@@ -77,7 +77,7 @@ class Vocabulary_simple(Vocabulary):
         self.load_list_from_file("ids", len(self.dic_words_ids))
         if os.path.isfile(os.path.join(path, "freq_per_id")):
             f = open(os.path.join(self.dir_root, "freq_per_id"))
-            self.l_frequencies = np.fromfile(f, dtype=np.uint64)
+            self.lst_frequencies = np.fromfile(f, dtype=np.uint64)
             f.close()
 
 
@@ -106,5 +106,16 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
         # most_frequent = np.argsort(l_frequencies)[-10:]
 
 def create_from_dir(path):
+    dic_freqs = {}
+    for w in DirTokenIterator(path):
+        if w in dic_freqs:
+            dic_freqs[w] += 1
+        else:
+            dic_freqs[w] = 1
     v = Vocabulary_simple()
+    v.lst_frequencies = []
+    for i, word in enumerate(sorted(dic_freqs, key=dic_freqs.get, reverse=True)):
+        v.lst_frequencies.append(dic_freqs[word])
+        v.lst_words.append(word)
+        v.dic_words_ids[word] = i
     return v

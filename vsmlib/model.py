@@ -217,7 +217,8 @@ class Model_dense(Model):
         for i in range(len(self.vocabulary.lst_words)):
             text_file.write("{}\t{}\n".format(self.vocabulary.lst_words[i], i))
         text_file.close()
-        self.vocabulary.l_frequencies.tofile(
+        # todo: vocabulary should be saving itself
+        self.vocabulary.lst_frequencies.tofile(
             open(os.path.join(path, "freq_per_id"), "w"))
 
     def load_with_alpha(self, path, power=0.6, verbose=False):
