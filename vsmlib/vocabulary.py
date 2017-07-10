@@ -2,6 +2,7 @@ import os
 import numpy as np
 import time
 from .misc.formathelper import countof_fmt
+from vsmlib.corpus import DirTokenIterator
 
 
 class Vocabulary(object):
@@ -99,7 +100,11 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
         # for f in range(6):
             # cnt=0
             # for i in l_frequencies:
-            #if i==f: cnt+=1
-            #print ("words of frequency {}: {} of total {} - {:0.2f}%".format(f,countof_fmt(cnt), countof_fmt(len(l_frequencies)),100*cnt/len(l_frequencies)))
+            # if i==f: cnt+=1
+            # print ("words of frequency {}: {} of total {} - {:0.2f}%".format(f,countof_fmt(cnt), countof_fmt(len(l_frequencies)),100*cnt/len(l_frequencies)))
 
-        #most_frequent = np.argsort(l_frequencies)[-10:]
+        # most_frequent = np.argsort(l_frequencies)[-10:]
+
+def create_from_dir(path):
+    v = Vocabulary_simple()
+    return v
