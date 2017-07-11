@@ -10,9 +10,9 @@ def main():
     args = parser.parse_args()
 
     vocab = create_from_dir(args.src)
-    print("the:", vocab.get_id("the"))
+    # todo check if dir is not empty
+    vocab.save_to_dir(args.dst)
 
-    # save to destination
 
 if __name__ == "__main__":
     main()
