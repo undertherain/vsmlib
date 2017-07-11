@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import time
-from .misc.formathelper import countof_fmt
+from vsmlib.misc.formathelper import countof_fmt
 from vsmlib.corpus import DirTokenIterator
 
 
