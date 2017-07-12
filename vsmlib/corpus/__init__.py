@@ -1,1 +1,1 @@
-from .corpus import load_as_ids, FileTokenIterator, DirTokenIterator
+from .corpus import load_file_as_ids, FileTokenIterator, DirTokenIterator

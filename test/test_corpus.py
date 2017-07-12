@@ -1,7 +1,7 @@
 """Tests for embeddings module."""
 
 import unittest
-from vsmlib.corpus import load_as_ids, FileTokenIterator, DirTokenIterator
+from vsmlib.corpus import load_file_as_ids, FileTokenIterator, DirTokenIterator
 from vsmlib.vocabulary import Vocabulary
 
 # todo: use local vocab
@@ -27,6 +27,6 @@ class Tests(unittest.TestCase):
     def test_text_to_ids(self):
         v = Vocabulary()
         v.load(path_vocab)
-        doc = load_as_ids(path_text, v)
+        doc = load_file_as_ids(path_text_file, v)
         print(doc.shape)
         print(doc[:10])

@@ -32,7 +32,7 @@ class DirTokenIterator:
                     yield(token)
 
 
-def load_as_ids(path, vocabulary, gzipped=None, downcase=True):
+def load_file_as_ids(path, vocabulary, gzipped=None, downcase=True):
     # user proper tokenizer from cooc
     # options to ignore sentence bounbdaries
     # specify what to do with missing words
