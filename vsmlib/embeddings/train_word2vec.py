@@ -184,16 +184,11 @@ def save(args, model):
             f.write('%s %s\n' % (index2word[i], v))
 
 
-def main():
+def run(args):
     global index2word
-    args = parse_args()
-
     if args.gpu >= 0:
         chainer.cuda.get_device_from_id(args.gpu).use()
         cuda.check_cuda_available()
-
-    if args.gpu >= 0:
-        cuda.get_device_from_id(args.gpu).use()
 
     train, val, _ = chainer.datasets.get_ptb_words()
     counts = collections.Counter(train)
@@ -248,6 +243,11 @@ def main():
     trainer.extend(extensions.ProgressBar())
     trainer.run()
     save(args, model)
+
+
+def main():
+    args = parse_args()
+    run(args)
 
 
 if __name__ == "__main__":
