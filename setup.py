@@ -19,6 +19,7 @@ classifiers = [
         'Topic :: Text Processing :: Linguistic'
         ]
 
+description = "toolbox for various tasks in the area of vector space models of computational linguistic"
 
 def parse_requirements(
         requirements_path: str = 'requirements.txt') -> t.List[str]:
@@ -36,6 +37,13 @@ def parse_requirements(
     return requirements
 
 
+def parse_readme(readme_path: str = 'README.rst', encoding: str = 'utf-8') -> str:
+    """Read contents of readme file (by default "README.rst") and return them."""
+    with open(os.path.join(_HERE, readme_path), encoding=encoding) as readme_file:
+        desc = readme_file.read()
+    return desc
+
+
 def clean(build_directory_name: str = 'build') -> None:
     """Recursively delete build directory (by default "build") if it exists."""
     build_directory_path = os.path.join(_HERE, build_directory_name)
@@ -51,6 +59,8 @@ def setup():
         classifiers=classifiers,
         keywords=['NLP', 'linguistics', 'language'],
         install_requires=parse_requirements(),
+        description=description,
+        long_description=parse_readme(),
         packages=setuptools.find_packages(exclude=['contrib', 'docs', 'tests*'])
         )
 
