@@ -2,10 +2,10 @@
 
 import unittest
 from vsmlib.corpus import load_as_ids, FileTokenIterator, DirTokenIterator
-from vsmlib.vocabulary import Vocabulary_simple
+from vsmlib.vocabulary import Vocabulary
 
 # todo: use local vocab
-path_vocab = "/work/alex/data/linguistic/embeddings/explicit/English/austen_m10_w2/"
+path_vocab = "./test/data/vocab"
 path_text = "./test/data/corpora/small"
 path_text_file = "./test/data/corpora/small/sense_small.txt"
 
@@ -25,7 +25,7 @@ class Tests(unittest.TestCase):
         print(cnt, "words read")
 
     def test_text_to_ids(self):
-        v = Vocabulary_simple()
+        v = Vocabulary()
         v.load(path_vocab)
         doc = load_as_ids(path_text, v)
         print(doc.shape)

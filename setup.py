@@ -7,22 +7,22 @@ import shutil
 _HERE = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 
 classifiers = [
-        'Development Status :: 2 - Pre-Alpha',
-        'Environment :: Console',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: Apache Software License',
-        'Natural Language :: English',
-        'Operating System :: POSIX',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3 :: Only',
-        'Topic :: Text Processing :: Linguistic'
-        ]
+    'Development Status :: 2 - Pre-Alpha',
+    'Environment :: Console',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: Apache Software License',
+    'Natural Language :: English',
+    'Operating System :: POSIX',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3 :: Only',
+    'Topic :: Text Processing :: Linguistic'
+]
 
 description = "toolbox for various tasks in the area of vector space models of computational linguistic"
 
-def parse_requirements(
-        requirements_path: str = 'requirements.txt') -> t.List[str]:
+
+def parse_requirements(requirements_path: str = 'requirements.txt') -> t.List[str]:
     """Read contents of requirements.txt file and return data from its relevant lines.
 
     Only non-empty and non-comment lines are relevant.
@@ -62,12 +62,13 @@ def setup():
         description=description,
         long_description=parse_readme(),
         packages=setuptools.find_packages(exclude=['contrib', 'docs', 'tests*'])
-        )
+    )
 
 
 def main() -> None:
     clean()
     setup()
+
 
 if __name__ == '__main__':
     main()

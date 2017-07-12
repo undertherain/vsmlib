@@ -35,6 +35,22 @@ class Vocabulary(object):
         for i in range(len(self.lst_words)):
             f.write("{}\t{}\n".format(self.lst_words[i], self.lst_frequencies[i]))
 
+    def load(self, path):
+        pos = 0
+        f = open(os.path.join(path, "vocab.tsv"))
+        self.lst_frequencies = []
+        self.dic_words_ids = {}
+        self.lst_words = []
+        for line in f:
+            if line.startswith("#"):
+                continue
+            word, frequency = line.split("\t")
+            self.lst_words.append(word)
+            self.lst_frequencies.append(frequency)
+            self.dic_words_ids[word] = pos
+            pos += 1
+        f.close()
+
 
 class Vocabulary_simple(Vocabulary):
 
