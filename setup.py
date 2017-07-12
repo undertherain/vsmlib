@@ -2,9 +2,8 @@ import setuptools
 
 
 classifiers = [
-        'Development Status :: 1 - Planning',
+        'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
-        'Intended Audience :: Computational Linguists',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
@@ -12,8 +11,8 @@ classifiers = [
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3 :: Only',
-        'Topic :: Natural Language Processing'
-        ],
+        'Topic :: Text Processing :: Linguistic'
+        ]
 
 setuptools.setup(
     name='vsmlib',
