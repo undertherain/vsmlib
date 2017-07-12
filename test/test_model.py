@@ -1,12 +1,15 @@
-"""Tests for embeddings module."""
+"""Tests for model module."""
 
 import unittest
-
 import vsmlib
-# from vsmlib.model import Model
+from vsmlib.model import Model
 
 
 class Tests(unittest.TestCase):
+
+    def test_create(self):
+        model = Model()
+        self.assertIsInstance(model, object)
 
     def test_load(self):
         model = vsmlib.model.load_from_dir("/storage/embeddings/explicit_BNC_m100_w2_svd_d200")
