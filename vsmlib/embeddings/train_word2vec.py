@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 """Sample script of word embedding model.
 
-This code implements skip-gram model and continuous-bow model.
-
-This is taked from Chainer samples as a base-line/starting point
-Will be refactored significantly
+This module implements skip-gram model and continuous-bow model.
 
 """
 import argparse
@@ -18,10 +15,11 @@ from chainer import cuda
 import chainer.functions as F
 import chainer.initializers as I
 import chainer.links as L
-import chainer.optimizers as O
 from chainer import reporter
 from chainer import training
 from chainer.training import extensions
+from vsmlib.vocabulary import Vocabulary
+from vsmlib.corpus import load_file_as_ids
 
 
 def parse_args():
@@ -184,34 +182,49 @@ def save(args, model):
             f.write('%s %s\n' % (index2word[i], v))
 
 
+def get_data(path, vocab):
+    train, val, _ = chainer.datasets.get_ptb_words()
+    # doc = load_file_as_ids(path, vocab)
+    # doc = doc[doc >= 0]
+    # train, val = doc[:-100], doc[-100:]
+    print(train.shape)
+    print("min", train.min())
+    print("max", train.max())
+    return train, val
+
+
 def run(args):
     global index2word
     if args.gpu >= 0:
         chainer.cuda.get_device_from_id(args.gpu).use()
         cuda.check_cuda_available()
 
-    train, val, _ = chainer.datasets.get_ptb_words()
-    counts = collections.Counter(train)
-    counts.update(collections.Counter(val))
+    v = Vocabulary()
+    v.load(args.path_vocab)
+    # vocab = v.dic_words_ids
+    vocab = chainer.datasets.get_ptb_words_vocabulary()
+    train, val = get_data(args.path_text, v)
+
+    index2word = {wid: word for word, wid in six.iteritems(vocab)}
+    word_counts = collections.Counter(train)
+    word_counts.update(collections.Counter(val))
     n_vocab = max(train) + 1
 
     if args.test:
         train = train[:100]
         val = val[:100]
 
-    vocab = chainer.datasets.get_ptb_words_vocabulary()
-    index2word = {wid: word for word, wid in six.iteritems(vocab)}
-
+    # print("word counts:", word_counts)
     print('n_vocab: %d' % n_vocab)
     print('data length: %d' % len(train))
 
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
-        tree = HSM.create_huffman_tree(counts)
+        tree = HSM.create_huffman_tree(word_counts)
         loss_func = HSM(args.unit, tree)
         loss_func.W.data[...] = 0
     elif args.out_type == 'ns':
-        cs = [counts[w] for w in range(len(counts))]
+        cs = [word_counts[w] for w in range(len(word_counts))]
         loss_func = L.NegativeSampling(args.unit, cs, args.negative_size)
         loss_func.W.data[...] = 0
     elif args.out_type == 'original':
@@ -229,7 +242,7 @@ def run(args):
     if args.gpu >= 0:
         model.to_gpu()
 
-    optimizer = O.Adam()
+    optimizer = chainer.optimizers.Adam()
     optimizer.setup(model)
 
     train_iter = WindowIterator(train, args.window, args.batchsize)
@@ -247,6 +260,7 @@ def run(args):
 
 def main():
     args = parse_args()
+    print_params(args)
     run(args)
 
 
