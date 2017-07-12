@@ -175,7 +175,7 @@ def convert(batch, device):
     return center, context
 
 
-def save():
+def save(args, model):
     with open('word2vec.model', 'w') as f:
         f.write('%d %d\n' % (len(index2word), args.unit))
         w = cuda.to_cpu(model.embed.W.data)
@@ -247,6 +247,7 @@ def main():
     trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss']))
     trainer.extend(extensions.ProgressBar())
     trainer.run()
+    save(args, model)
 
 
 if __name__ == "__main__":
