@@ -7,6 +7,7 @@ def main():
     parser = argparse.ArgumentParser(description='Create vocabulary from dir')
     parser.add_argument("src")
     parser.add_argument("dst")
+    parser.add_argument('--min_frequency', type=int, default=1)
 
     args = parser.parse_args()
 
@@ -14,7 +15,7 @@ def main():
         print("destination dir is not empty")
         exit(-1)
 
-    vocab = create_from_dir(args.src)
+    vocab = create_from_dir(args.src, args.min_frequency)
     vocab.save_to_dir(args.dst)
 
 
