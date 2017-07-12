@@ -112,7 +112,7 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
 
         # most_frequent = np.argsort(l_frequencies)[-10:]
 
-def create_from_dir(path):
+def create_from_dir(path, min_frequency=0):
     dic_freqs = {}
     for w in DirTokenIterator(path):
         if w in dic_freqs:
@@ -122,7 +122,10 @@ def create_from_dir(path):
     v = Vocabulary_simple()
     v.lst_frequencies = []
     for i, word in enumerate(sorted(dic_freqs, key=dic_freqs.get, reverse=True)):
-        v.lst_frequencies.append(dic_freqs[word])
+        frequency = dic_freqs[word]
+        if frequency < min_frequency:
+            break
+        v.lst_frequencies.append(frequency)
         v.lst_words.append(word)
         v.dic_words_ids[word] = i
     return v
