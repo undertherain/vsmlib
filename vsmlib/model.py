@@ -386,6 +386,7 @@ class Model_w2v(ModelNumbered):
         self.load_provenance(path)
 
 
+@deprecated
 class Model_glove(ModelNumbered):
     def __init__(self):
         self.name = "glove"
@@ -399,11 +400,7 @@ class Model_glove(ModelNumbered):
                 self.load_from_text(os.path.join(path, f))
 
 
-def detect_and_load():
-    pass
 
-
-@deprecated
 def load_from_dir(path):
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
         print("this is sparse explicit in hdf5")
@@ -430,10 +427,15 @@ def load_from_dir(path):
         m.load_from_dir(path)
         print("this is dense ")
         return m
-    # must be glove
-    m = Model_glove()
-    m.load_from_dir(path)
-    m.load_provenance(path)
+
+    m = ModelNumbered()
+    files = os.listdir(path)
+    for f in files:
+        if f.endswith(".gz") or f.endswith(".bz"):
+            print("this is text")
+            m.load_from_text(os.path.join(path, f))
+    # m.load_from_dir(path)
+    # m.load_provenance(path)
 
     return m
 
