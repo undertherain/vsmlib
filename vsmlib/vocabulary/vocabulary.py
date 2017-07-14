@@ -50,6 +50,7 @@ class Vocabulary(object):
             self.dic_words_ids[word] = pos
             pos += 1
         f.close()
+        self.cnt_words = len(self.lst_words)
 
 
 class Vocabulary_simple(Vocabulary):
