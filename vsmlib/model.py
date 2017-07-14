@@ -9,6 +9,7 @@ import math
 from matplotlib import pyplot as plt
 import os
 import gzip
+import bz2
 import brewer2mpl
 import tables
 import json
@@ -17,6 +18,14 @@ from .misc.formathelper import bcolors
 
 def normed(v):
     return v / np.linalg.norm(v)
+
+
+def detect_archive_format_and_open(path):
+    if path.endswith(".bz2"):
+        return bz2.open(path)
+    if path.endswith(".gz"):
+        return gzip.open(path)
+    return open(path)
 
 
 class Model(object):
@@ -187,7 +196,7 @@ class Model_explicit(Model):
         self.normalized = True
 
 
-class Model_dense(Model):
+class ModelDense(Model):
 
     def cmp_vectors(self, r1, r2):
         c = normed(r1) @ normed(r2)
@@ -258,32 +267,39 @@ class Model_dense(Model):
         self.provenance += "\ntransform : normalized"
         self.props["normalized"] = True
 
-    def load_from_text(self, path, ungzip=True):
+    def load_from_text(self, path):
         i = 0
         # self.name+="_"+os.path.basename(os.path.normpath(path))
-        self.vocabulary = vsmlib.Vocabulary()
+        self.vocabulary = vsmlib.vocabulary.Vocabulary()
         rows = []
-        with gzip.open(path) if ungzip else open(path) as f:
+        header = False
+        with detect_archive_format_and_open(path) as f:
             for line in f:
                 tokens = line.split()
+                if i==0 and len(tokens)==2:
+                    header = True
+                    cnt_words = int(tokens[0])
+                    size_embedding = int(tokens[1])
+                    continue
 #                word = tokens[0].decode('ascii',errors="ignore")
                 word = tokens[0].decode('UTF-8', errors="ignore")
                 self.vocabulary.dic_words_ids[word] = i
                 self.vocabulary.lst_words.append(word)
                 str_vec = tokens[1:]
-                # print (str_vec)
                 row = np.zeros(len(str_vec), dtype=np.float32)
                 for j in range(len(str_vec)):
                     row[j] = float(str_vec[j])
                 rows.append(row)
                 i += 1
-        self.matrix = np.zeros((len(rows), len(rows[0])), dtype=np.float32)
-        self.name += "_{}".format(len(rows[0]))
-        for i in (range(len(rows))):
-            self.matrix[i] = rows[i]
+        if header:
+            assert cnt_words == len(rows)
+        self.matrix = np.vstack(rows)
+        if header:
+            assert size_embedding == self.matrix.shape[1]
+        # self.name += "_{}".format(len(rows[0]))
 
 
-class ModelNumbered(Model_dense):
+class ModelNumbered(ModelDense):
     def get_x_label(self, i):
         return i
 
@@ -304,7 +320,7 @@ class ModelNumbered(Model_dense):
             plt.legend()
 
 
-class Model_Levi(Model_dense):
+class Model_Levi(ModelNumbered):
     def load_from_dir(self, path):
         self.name = "Levi_" + os.path.basename(os.path.normpath(path))
         # m=vsmlib.model.Model_dense()
