@@ -14,6 +14,7 @@ import brewer2mpl
 import tables
 import json
 from .misc.formathelper import bcolors
+from .misc.deprecated import deprecated
 
 
 def normed(v):
@@ -323,7 +324,6 @@ class ModelNumbered(ModelDense):
 class Model_Levi(ModelNumbered):
     def load_from_dir(self, path):
         self.name = "Levi_" + os.path.basename(os.path.normpath(path))
-        # m=vsmlib.model.Model_dense()
         self.matrix = np.load(os.path.join(path, "sgns.contexts.npy"))
         self.vocabulary = vsmlib.vocabulary.Vocabulary_simple()
         self.vocabulary.dir_root = path
@@ -399,6 +399,11 @@ class Model_glove(ModelNumbered):
                 self.load_from_text(os.path.join(path, f))
 
 
+def detect_and_load():
+    pass
+
+
+@deprecated
 def load_from_dir(path):
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
         print("this is sparse explicit in hdf5")
