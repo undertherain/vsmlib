@@ -12,7 +12,7 @@ class Tests(unittest.TestCase):
         self.assertIsInstance(model, object)
 
     def test_load(self):
-        path = "/mnt/storage/Data/Embeddings/wikicorp/"
+        path = "./test/data/embeddings/text/plain/"
         # path = "/storage/embeddings/explicit_BNC_m100_w2_svd_d200"
         model = vsmlib.model.load_from_dir(path)
         self.assertIsInstance(model, object)
