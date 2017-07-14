@@ -5,11 +5,7 @@ This module implements skip-gram model and continuous-bow model.
 
 """
 import argparse
-import collections
-
 import numpy as np
-import six
-
 import chainer
 from chainer import cuda
 import chainer.functions as F
@@ -69,8 +65,7 @@ class ContinuousBoW(chainer.Chain):
         super(ContinuousBoW, self).__init__()
 
         with self.init_scope():
-            self.embed = L.EmbedID(
-                n_vocab, n_units, initialW=I.Uniform(1. / n_units))
+            self.embed = L.EmbedID(n_vocab, n_units, initialW=I.Uniform(1. / n_units))
             self.loss_func = loss_func
 
     def __call__(self, x, context):
@@ -87,8 +82,7 @@ class SkipGram(chainer.Chain):
         super(SkipGram, self).__init__()
 
         with self.init_scope():
-            self.embed = L.EmbedID(
-                n_vocab, n_units, initialW=I.Uniform(1. / n_units))
+            self.embed = L.EmbedID(n_vocab, n_units, initialW=I.Uniform(1. / n_units))
             self.loss_func = loss_func
 
     def __call__(self, x, context):
@@ -173,7 +167,7 @@ def convert(batch, device):
     return center, context
 
 
-def save(args, model):
+def save(args, model, index2word):
     with open('word2vec.model', 'w') as f:
         f.write('%d %d\n' % (len(index2word), args.unit))
         w = cuda.to_cpu(model.embed.W.data)
@@ -190,21 +184,18 @@ def get_data(path, vocab):
 
 
 def run(args):
-    global index2word
     if args.gpu >= 0:
         chainer.cuda.get_device_from_id(args.gpu).use()
         cuda.check_cuda_available()
 
-    v = Vocabulary()
-    v.load(args.path_vocab)
-    vocab = v.dic_words_ids
-    index2word = {wid: word for word, wid in six.iteritems(vocab)}
-    train, val = get_data(args.path_text, v)
+    vocab = Vocabulary()
+    vocab.load(args.path_vocab)
+    train, val = get_data(args.path_text, vocab)
 
-    word_counts = v.lst_frequencies
-    n_vocab = v.cnt_words
+    word_counts = vocab.lst_frequencies
+    n_vocab = vocab.cnt_words
 
-    #if args.test:
+    # if args.test:
     #    train = train[:100]
     #    val = val[:100]
 
@@ -245,7 +236,7 @@ def run(args):
     trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss']))
     trainer.extend(extensions.ProgressBar())
     trainer.run()
-    save(args, model)
+    save(args, model, vocab.lst_words)
 
 
 def main():
