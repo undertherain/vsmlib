@@ -434,6 +434,7 @@ def load_from_dir(path):
         if f.endswith(".gz") or f.endswith(".bz"):
             print("this is text")
             m.load_from_text(os.path.join(path, f))
+            break
     # m.load_from_dir(path)
     # m.load_provenance(path)
 

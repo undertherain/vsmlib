@@ -23,4 +23,3 @@ class Tests(unittest.TestCase):
         path = "/mnt/storage/Data/Embeddings/wikicorp/wikicorp.201004-pdc-iter-20-alpha-0.05-window-10-dim-50-neg-10-subsample-0.0001.txt.bz2"
         model.load_from_text(path)
         print(model.matrix.shape)
-
