@@ -193,7 +193,6 @@ def run(args):
     train, val = get_data(args.path_text, vocab)
 
     word_counts = vocab.lst_frequencies
-    n_vocab = vocab.cnt_words
 
     # if args.test:
     #    train = train[:100]
@@ -209,14 +208,14 @@ def run(args):
         loss_func = L.NegativeSampling(args.unit, cs, args.negative_size)
         loss_func.W.data[...] = 0
     elif args.out_type == 'original':
-        loss_func = SoftmaxCrossEntropyLoss(args.unit, n_vocab)
+        loss_func = SoftmaxCrossEntropyLoss(args.unit, vocab.cnt_words)
     else:
         raise Exception('Unknown output type: {}'.format(args.out_type))
 
     if args.model == 'skipgram':
-        model = SkipGram(n_vocab, args.unit, loss_func)
+        model = SkipGram(vocab.cnt_words, args.unit, loss_func)
     elif args.model == 'cbow':
-        model = ContinuousBoW(n_vocab, args.unit, loss_func)
+        model = ContinuousBoW(vocab.cnt_words, args.unit, loss_func)
     else:
         raise Exception('Unknown model type: {}'.format(args.model))
 

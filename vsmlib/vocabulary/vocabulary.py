@@ -2,6 +2,7 @@ import os
 import numpy as np
 import time
 from vsmlib.misc.formathelper import countof_fmt
+from vsmlib.misc.data import save_json
 from vsmlib.corpus import DirTokenIterator
 
 
@@ -34,6 +35,8 @@ class Vocabulary(object):
         f.write("#word\tfrequency\n")
         for i in range(len(self.lst_words)):
             f.write("{}\t{}\n".format(self.lst_words[i], self.lst_frequencies[i]))
+        self.metadata = {}
+        save_json(self.metadata, os.path.join(path, "metadata.json"))
 
     def load(self, path):
         pos = 0
