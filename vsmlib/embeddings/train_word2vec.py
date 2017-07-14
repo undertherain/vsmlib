@@ -183,13 +183,9 @@ def save(args, model):
 
 
 def get_data(path, vocab):
-    train, val, _ = chainer.datasets.get_ptb_words()
-    # doc = load_file_as_ids(path, vocab)
+    doc = load_file_as_ids(path, vocab)
     # doc = doc[doc >= 0]
-    # train, val = doc[:-100], doc[-100:]
-    print(train.shape)
-    print("min", train.min())
-    print("max", train.max())
+    train, val = doc[:300], doc[-100:]
     return train, val
 
 
@@ -201,22 +197,16 @@ def run(args):
 
     v = Vocabulary()
     v.load(args.path_vocab)
-    # vocab = v.dic_words_ids
-    vocab = chainer.datasets.get_ptb_words_vocabulary()
+    vocab = v.dic_words_ids
+    index2word = {wid: word for word, wid in six.iteritems(vocab)}
     train, val = get_data(args.path_text, v)
 
-    index2word = {wid: word for word, wid in six.iteritems(vocab)}
-    word_counts = collections.Counter(train)
-    word_counts.update(collections.Counter(val))
-    n_vocab = max(train) + 1
+    word_counts = v.lst_frequencies
+    n_vocab = v.cnt_words
 
-    if args.test:
-        train = train[:100]
-        val = val[:100]
-
-    # print("word counts:", word_counts)
-    print('n_vocab: %d' % n_vocab)
-    print('data length: %d' % len(train))
+    #if args.test:
+    #    train = train[:100]
+    #    val = val[:100]
 
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
