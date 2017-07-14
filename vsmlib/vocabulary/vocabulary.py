@@ -9,9 +9,10 @@ from vsmlib.corpus import DirTokenIterator
 class Vocabulary(object):
 
     def __init__(self):
-        # todo: check if ternary tree is available
+        # todo: check if our ternary tree module is available
         self.dic_words_ids = {}
         self.lst_words = []
+        self.metadata = {}
 
     def get_id(self, w):
         try:
@@ -35,7 +36,6 @@ class Vocabulary(object):
         f.write("#word\tfrequency\n")
         for i in range(len(self.lst_words)):
             f.write("{}\t{}\n".format(self.lst_words[i], self.lst_frequencies[i]))
-        self.metadata = {}
         save_json(self.metadata, os.path.join(path, "metadata.json"))
 
     def load(self, path):
@@ -148,4 +148,5 @@ def create_from_dir(path, min_frequency=0):
         v.lst_frequencies.append(frequency)
         v.lst_words.append(word)
         v.dic_words_ids[word] = i
+    v.metadata["path_source"] = path
     return v
