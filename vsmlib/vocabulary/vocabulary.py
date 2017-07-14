@@ -46,7 +46,7 @@ class Vocabulary(object):
                 continue
             word, frequency = line.split("\t")
             self.lst_words.append(word)
-            self.lst_frequencies.append(frequency)
+            self.lst_frequencies.append(int(frequency))
             self.dic_words_ids[word] = pos
             pos += 1
         f.close()
