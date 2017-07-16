@@ -1,3 +1,3 @@
-"""Version of system_query package."""
+"""Version of vsmlib package."""
 
 VERSION = "0.1.5"
