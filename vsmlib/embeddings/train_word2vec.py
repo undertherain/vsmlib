@@ -180,6 +180,7 @@ def save(args, model, index2word):
 def create_model(args, net, vocab):
     model = ModelNumbered()
     model.vocabulary = vocab
+    model.metadata["vocabulary"] = vocab.metadata
     model.matrix = cuda.to_cpu(net.embed.W.data)
     model.save_to_dir(args.path_out)
 

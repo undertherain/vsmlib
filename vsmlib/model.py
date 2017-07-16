@@ -3,7 +3,7 @@ import vsmlib.matrix
 import numpy as np
 import scipy
 from scipy import sparse
-#from scipy.spatial.distance import cosine
+# from scipy.spatial.distance import cosine
 import scipy.sparse.linalg
 import math
 from matplotlib import pyplot as plt
@@ -15,6 +15,7 @@ import tables
 import json
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
+from .misc.data import save_json, load_json
 
 
 def normed(v):
@@ -30,8 +31,11 @@ def detect_archive_format_and_open(path):
 
 
 class Model(object):
-    provenance = ""
-    name = ""
+
+    def __init__(self):
+        self.provenance = ""
+        self.name = ""
+        self.metadata = {}
 
     def get_x_label(self, i):
         return self.vocabulary.get_word_by_id(i)
@@ -162,7 +166,6 @@ class Model_explicit(Model):
             return 0
         return c
 
-
     def load_from_hdf5(self, path):
         self.load_provenance(path)
         f = tables.open_file(os.path.join(path, 'cooccurrence_csr.h5p'), 'r')
@@ -220,6 +223,7 @@ class ModelDense(Model):
         # self.matrix.tofile(os.path.join(path,"vectors.bin"))
         # np.save(os.path.join(path, "vectors.npy"), self.matrix)
         self.save_matr_to_hdf5(path)
+        save_json(self.metadata, os.path.join(path, "metadata.json"))
 
     def load_with_alpha(self, path, power=0.6, verbose=False):
         self.load_provenance(path)
@@ -238,8 +242,7 @@ class ModelDense(Model):
         f.close()
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
-        self.name += os.path.basename(os.path.normpath(path)
-                                      ) + "_a" + str(power)
+        self.name += os.path.basename(os.path.normpath(path)) + "_a" + str(power)
 
     def load_from_dir(self, path):
         #        self.matrix = np.fromfile(open(os.path.join(path,"vectors.bin")),dtype=np.float32)
