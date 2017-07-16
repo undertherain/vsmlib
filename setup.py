@@ -51,6 +51,14 @@ def clean(build_directory_name: str = 'build') -> None:
         shutil.rmtree(build_directory_path)
 
 
+def find_version(
+        package_name: str, version_module_name: str = '_version',
+        version_variable_name: str = 'VERSION') -> str:
+    """Simulate behaviour of "from package_name._version import VERSION", and return VERSION."""
+    version_module = importlib.import_module('{}.{}'.format(package_name, version_module_name))
+    return getattr(version_module, version_variable_name)
+
+
 def setup():
     setuptools.setup(
         name='vsmlib',
