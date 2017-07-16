@@ -21,6 +21,7 @@ classifiers = [
 ]
 
 description = "toolbox for various tasks in the area of vector space models of computational linguistic"
+name = "vsmlib"
 
 
 def parse_requirements(requirements_path: str = 'requirements.txt') -> t.List[str]:
@@ -61,7 +62,6 @@ def find_version(
 
 
 def setup():
-    name = "vsmlib"
     setuptools.setup(
         name=name,
         version=find_version(name.replace('-', '_')),
