@@ -2,7 +2,7 @@ import os
 import numpy as np
 import time
 from vsmlib.misc.formathelper import countof_fmt
-from vsmlib.misc.data import save_json
+from vsmlib.misc.data import save_json, load_json
 from vsmlib.corpus import DirTokenIterator
 
 
@@ -55,6 +55,7 @@ class Vocabulary(object):
             pos += 1
         f.close()
         self.cnt_words = len(self.lst_words)
+        self.metadata = load_json(os.path.join(path, "metadata.json"))
 
 
 class Vocabulary_simple(Vocabulary):
