@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import time
+from vsmlib._version import VERSION
 from vsmlib.misc.formathelper import countof_fmt
 from vsmlib.misc.data import save_json, load_json
 from vsmlib.corpus import DirTokenIterator
@@ -152,4 +153,5 @@ def create_from_dir(path, min_frequency=0):
         v.dic_words_ids[word] = i
     v.metadata["path_source"] = path
     v.metadata["min_frequency"] = min_frequency
+    v.metadata["vsmlib_version"] = VERSION
     return v
