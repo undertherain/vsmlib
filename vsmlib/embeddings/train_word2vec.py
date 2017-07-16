@@ -16,6 +16,7 @@ from chainer import training
 from chainer.training import extensions
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
+from vsmlib.model import ModelNumbered
 
 
 def parse_args():
@@ -176,6 +177,13 @@ def save(args, model, index2word):
             f.write('%s %s\n' % (index2word[i], v))
 
 
+def create_model(args, net, vocab):
+    model = ModelNumbered()
+    model.vocabulary = vocab
+    model.matrix = cuda.to_cpu(net.embed.W.data)
+    model.save_to_dir(args.path_out)
+
+
 def get_data(path, vocab):
     doc = load_file_as_ids(path, vocab)
     # doc = doc[doc >= 0]
@@ -228,14 +236,15 @@ def run(args):
     train_iter = WindowIterator(train, args.window, args.batchsize)
     val_iter = WindowIterator(val, args.window, args.batchsize, repeat=False)
     updater = training.StandardUpdater(train_iter, optimizer, converter=convert, device=args.gpu)
-    trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=args.out)
+    trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=args.path_out)
 
     trainer.extend(extensions.Evaluator(val_iter, model, converter=convert, device=args.gpu))
     trainer.extend(extensions.LogReport())
     trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss']))
     trainer.extend(extensions.ProgressBar())
     trainer.run()
-    save(args, model, vocab.lst_words)
+    # save(args, model, vocab.lst_words)
+    create_model(args, model, vocab)
 
 
 def main():

@@ -36,6 +36,7 @@ class Vocabulary(object):
         f.write("#word\tfrequency\n")
         for i in range(len(self.lst_words)):
             f.write("{}\t{}\n".format(self.lst_words[i], self.lst_frequencies[i]))
+        f.close()
         save_json(self.metadata, os.path.join(path, "metadata.json"))
 
     def load(self, path):

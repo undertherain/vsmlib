@@ -24,7 +24,7 @@ class Tests(unittest.TestCase):
         args.window = 5
         args.batchsize = 1000
         args.epoch = 20
-        args.out = "/tmp"
+        args.path_out = "/tmp/w2v"
         args.path_vocab = path_vocab
         args.path_text = path_text
         vsmlib.embeddings.train_word2vec.run(args)

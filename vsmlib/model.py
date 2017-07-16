@@ -217,19 +217,20 @@ class ModelDense(Model):
         if not os.path.exists(path):
             os.makedirs(path)
         # self.matrix.tofile(os.path.join(path,"vectors.bin"))
-        np.save(os.path.join(path, "vectors.npy"), self.matrix)
+        # np.save(os.path.join(path, "vectors.npy"), self.matrix)
         self.save_matr_to_hdf5(path)
-        text_file = open(os.path.join(path, "provenance.txt"), "w")
-        text_file.write(self.provenance)
-        text_file.close()
+        # text_file = open(os.path.join(path, "provenance.txt"), "w")
+        # text_file.write(self.provenance)
+        # text_file.close()
         # todo: move this to vocabulary
-        text_file = open(os.path.join(path, "ids"), "w")
-        for i in range(len(self.vocabulary.lst_words)):
-            text_file.write("{}\t{}\n".format(self.vocabulary.lst_words[i], i))
-        text_file.close()
+        # text_file = open(os.path.join(path, "ids"), "w")
+        # for i in range(len(self.vocabulary.lst_words)):
+        #     text_file.write("{}\t{}\n".format(self.vocabulary.lst_words[i], i))
+        # text_file.close()
+        self.vocabulary.save_to_dir(path)
         # todo: vocabulary should be saving itself
-        self.vocabulary.lst_frequencies.tofile(
-            open(os.path.join(path, "freq_per_id"), "w"))
+        # self.vocabulary.lst_frequencies.tofile(
+        #    open(os.path.join(path, "freq_per_id"), "w"))
 
     def load_with_alpha(self, path, power=0.6, verbose=False):
         self.load_provenance(path)
