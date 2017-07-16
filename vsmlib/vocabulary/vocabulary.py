@@ -150,4 +150,5 @@ def create_from_dir(path, min_frequency=0):
         v.lst_words.append(word)
         v.dic_words_ids[word] = i
     v.metadata["path_source"] = path
+    v.metadata["min_frequency"] = min_frequency
     return v
