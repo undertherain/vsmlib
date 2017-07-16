@@ -54,7 +54,7 @@ def clean(build_directory_name: str = 'build') -> None:
 def setup():
     setuptools.setup(
         name='vsmlib',
-        version='0.1.4',
+        version='0.1.5',
         url='http://vsm.blackbird.pw/',
         classifiers=classifiers,
         keywords=['NLP', 'linguistics', 'language'],
