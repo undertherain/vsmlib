@@ -1,1 +1,4 @@
-{}
+{
+    "min_frequency": 10,
+    "source_path": "test/data/corpora/small"
+}
