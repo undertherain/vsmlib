@@ -2,6 +2,7 @@ import setuptools
 import typing as t
 import os
 import shutil
+import importlib
 
 
 _HERE = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
@@ -60,9 +61,10 @@ def find_version(
 
 
 def setup():
+    name = "vsmlib"
     setuptools.setup(
-        name='vsmlib',
-        version='0.1.5',
+        name=name,
+        version=find_version(name.replace('-', '_')),
         url='http://vsm.blackbird.pw/',
         classifiers=classifiers,
         keywords=['NLP', 'linguistics', 'language'],

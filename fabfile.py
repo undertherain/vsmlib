@@ -8,4 +8,4 @@ def clean():
 
 
 def make():
-    pass
+    local("python3 setup.py bdist_wheel")
