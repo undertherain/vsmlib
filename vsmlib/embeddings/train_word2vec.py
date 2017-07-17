@@ -14,6 +14,7 @@ import chainer.links as L
 from chainer import reporter
 from chainer import training
 from chainer.training import extensions
+import vsmlib
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
@@ -182,6 +183,7 @@ def create_model(args, net, vocab):
     model.vocabulary = vocab
     model.metadata["vocabulary"] = vocab.metadata
     model.metadata["embeddings"] = vars(args)
+    model.metadata["embeddings"]["vsmlib_version"] = vsmlib.__version__
     model.matrix = cuda.to_cpu(net.embed.W.data)
     model.save_to_dir(args.path_out)
 

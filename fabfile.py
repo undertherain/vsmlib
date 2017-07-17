@@ -4,7 +4,8 @@ from fabric.api import local, lcd
 
 def clean():
     with lcd(os.path.dirname(__file__)):
-        local('python3.6 setup.py clean --all')
+        local("python3.6 setup.py clean --all")
+        local("find . | grep -E \"(__pycache__|\.pyc$)\" | xargs rm -rf")
 
 
 def make():
