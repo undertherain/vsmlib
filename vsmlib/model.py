@@ -275,8 +275,9 @@ class ModelDense(Model):
                     cnt_words = int(tokens[0])
                     size_embedding = int(tokens[1])
                     continue
-#                word = tokens[0].decode('ascii',errors="ignore")
-                word = tokens[0].decode('UTF-8', errors="ignore")
+                # word = tokens[0].decode('ascii',errors="ignore")
+                # word = tokens[0].decode('UTF-8', errors="ignore")
+                word = tokens[0]
                 self.vocabulary.dic_words_ids[word] = i
                 self.vocabulary.lst_words.append(word)
                 str_vec = tokens[1:]
@@ -423,13 +424,12 @@ def load_from_dir(path):
     m = ModelNumbered()
     files = os.listdir(path)
     for f in files:
-        if f.endswith(".gz") or f.endswith(".bz"):
+        if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
             print("this is text")
             m.load_from_text(os.path.join(path, f))
-            break
+            return m
+
     # m.load_from_dir(path)
     # m.load_provenance(path)
-
-    return m
 
     print("Ahtung!! can not load anything!")
