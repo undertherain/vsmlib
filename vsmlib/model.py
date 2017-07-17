@@ -216,6 +216,11 @@ class ModelDense(Model):
         ds.flush()
         f.close()
 
+    def load_hdf5(self, path):
+        f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'r')
+        self.matrix = f.root.vectors.read()
+        f.close()
+
     def save_to_dir(self, path):
         if not os.path.exists(path):
             os.makedirs(path)
@@ -420,6 +425,11 @@ def load_from_dir(path):
         m = vsmlib.ModelNumbered()
         m.load_from_dir(path)
         print("this is dense ")
+        return m
+    if os.path.isfile(os.path.join(path, "vectors.h5p")):
+        m = vsmlib.ModelNumbered()
+        m.load_hdf5(path)
+        print("this is vsmlib format ")
         return m
 
     m = ModelNumbered()

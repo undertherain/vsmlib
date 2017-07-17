@@ -26,4 +26,7 @@ class Tests(unittest.TestCase):
     def test_save(self):
         path = "./test/data/embeddings/text/plain/"
         model = vsmlib.model.load_from_dir(path)
-        model.save_to_dir("/tmp/vsmlib/saved")
+        path_save = "/tmp/vsmlib/saved"
+        model.save_to_dir(path_save)
+        model = vsmlib.model.load_from_dir(path_save)
+        print(model.matrix.shape)
