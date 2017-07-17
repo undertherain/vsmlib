@@ -10,3 +10,7 @@ def clean():
 
 def make():
     local("python3.6 setup.py bdist_wheel")
+
+
+def deploy():
+    local("twine upload dist/*")
