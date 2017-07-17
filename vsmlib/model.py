@@ -291,6 +291,7 @@ class ModelDense(Model):
         self.matrix = np.vstack(rows)
         if header:
             assert size_embedding == self.matrix.shape[1]
+        self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words))
         # self.name += "_{}".format(len(rows[0]))
 
 
