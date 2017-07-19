@@ -1,4 +1,14 @@
 import json
+import gzip
+import bz2
+
+
+def detect_archive_format_and_open(path):
+    if path.endswith(".bz2"):
+        return bz2.open(path)
+    if path.endswith(".gz"):
+        return gzip.open(path)
+    return open(path)
 
 
 def save_json(data, path):

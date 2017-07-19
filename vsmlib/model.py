@@ -8,26 +8,16 @@ import scipy.sparse.linalg
 import math
 from matplotlib import pyplot as plt
 import os
-import gzip
-import bz2
 import brewer2mpl
 import tables
 import json
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
-from .misc.data import save_json, load_json
+from .misc.data import save_json, load_json, detect_archive_format_and_open
 
 
 def normed(v):
     return v / np.linalg.norm(v)
-
-
-def detect_archive_format_and_open(path):
-    if path.endswith(".bz2"):
-        return bz2.open(path)
-    if path.endswith(".gz"):
-        return gzip.open(path)
-    return open(path)
 
 
 class Model(object):

@@ -1,6 +1,7 @@
 import numpy as np
 import fnmatch
 import os
+from vsmlib.misc.data import detect_archive_format_and_open
 
 
 class FileTokenIterator:
@@ -12,7 +13,7 @@ class FileTokenIterator:
         return self.next()
 
     def next(self):
-        with open(self.path) as f:
+        with detect_archive_format_and_open(self.path) as f:
             for line in f:
                 for token in line.split():
                     yield token
