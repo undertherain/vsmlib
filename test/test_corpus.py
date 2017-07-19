@@ -7,6 +7,7 @@ from vsmlib.vocabulary import Vocabulary
 # todo: use local vocab
 path_vocab = "./test/data/vocab"
 path_text = "./test/data/corpora/plain"
+path_gzipped = "./test/data/corpora/gzipped"
 path_text_file = "./test/data/corpora/plain/sense_small.txt"
 
 
@@ -30,3 +31,9 @@ class Tests(unittest.TestCase):
         doc = load_file_as_ids(path_text_file, v)
         print(doc.shape)
         print(doc[:10])
+
+    def test_dir_iter_gzipped(self):
+        cnt = 0
+        for w in (DirTokenIterator(path_gzipped)):
+            cnt += 1
+        print(cnt, "words read")
