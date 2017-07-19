@@ -6,8 +6,8 @@ from vsmlib.vocabulary import Vocabulary
 
 # todo: use local vocab
 path_vocab = "./test/data/vocab"
-path_text = "./test/data/corpora/small"
-path_text_file = "./test/data/corpora/small/sense_small.txt"
+path_text = "./test/data/corpora/plain"
+path_text_file = "./test/data/corpora/plain/sense_small.txt"
 
 
 class Tests(unittest.TestCase):

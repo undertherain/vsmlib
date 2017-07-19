@@ -7,7 +7,7 @@ import argparse
 # from vsmlib.vocabulary import Vocabulary
 
 
-path_text = "./test/data/corpora/small/sense_small.txt"
+path_text = "./test/data/corpora/plain/sense_small.txt"
 path_vocab = "./test/data/vocab"
 
 
