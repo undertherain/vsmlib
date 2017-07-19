@@ -3,7 +3,6 @@ import vsmlib.matrix
 import numpy as np
 import scipy
 from scipy import sparse
-# from scipy.spatial.distance import cosine
 import scipy.sparse.linalg
 import math
 from matplotlib import pyplot as plt
@@ -70,7 +69,6 @@ class Model(object):
         # width=min(xdim,max_width)
         vert = None  # np.empty((rows.shape[0],0))
         cols = self.get_most_informative_columns(rows, width)
-        # print (cols)
         for i in cols:
             if vert is None:
                 vert = (rows[:, i])
@@ -80,10 +78,8 @@ class Model(object):
         return rows, vert.T, labels
 
     def get_most_similar_vectors(self, u, cnt=10):
-        # scores = []
         scores = np.zeros(self.matrix.shape[0], dtype=np.float32)
         for i in range(self.matrix.shape[0]):
-            # scores.append([self.cmp_vectors(u, self.matrix[i]), i])
             scores[i] = self.cmp_vectors(u, self.matrix[i])
         ids = np.argsort(scores)[::-1]
         ids = ids[:cnt]
@@ -240,9 +236,8 @@ class ModelDense(Model):
         self.name += os.path.basename(os.path.normpath(path)) + "_a" + str(power)
 
     def load_from_dir(self, path):
-        #        self.matrix = np.fromfile(open(os.path.join(path,"vectors.bin")),dtype=np.float32)
         self.matrix = np.load(os.path.join(path, "vectors.npy"))
-#       self.load_with_alpha(0.6)
+        # self.load_with_alpha(0.6)
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
         self.name += os.path.basename(os.path.normpath(path))
@@ -301,11 +296,9 @@ class ModelNumbered(ModelDense):
             row = self.get_row(i)
             row = row / np.linalg.norm(row)
             if colored:
-                plt.bar(range(0, len(row)), row,
-                        color=colors[cnt], linewidth=0, alpha=0.6, label=i)
+                plt.bar(range(0, len(row)), row, color=colors[cnt], linewidth=0, alpha=0.6, label=i)
             else:
-                plt.bar(range(0, len(row)), row, color="black",
-                        linewidth=0, alpha=1 / len(wl), label=i)
+                plt.bar(range(0, len(row)), row, color="black", linewidth=0, alpha=1 / len(wl), label=i)
             cnt += 1
         if show_legend:
             plt.legend()
@@ -430,7 +423,4 @@ def load_from_dir(path):
             m.load_from_text(os.path.join(path, f))
             return m
 
-    # m.load_from_dir(path)
-    # m.load_provenance(path)
-
-    print("Ahtung!! can not load anything!")
+    raise RuntimeError("can not detect embeddings format")
