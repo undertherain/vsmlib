@@ -10,7 +10,7 @@ path_vocab = "./test/data/vocab"
 class Tests(unittest.TestCase):
 
     def test_create_from_dir(self):
-        vocab = create_from_dir(path_text, min_frequency=1)
+        vocab = create_from_dir(path_text, min_frequency=10)
         print("the:", vocab.get_id("the"))
         vocab.save_to_dir("/tmp/vsmlib/vocab")
 
