@@ -16,6 +16,8 @@ class Tests(unittest.TestCase):
     def test_file_iter(self):
         cnt = 0
         for w in (FileTokenIterator(path_text_file)):
+            if cnt < 10:
+                print(w)
             cnt += 1
         print(cnt, "words read")
 
