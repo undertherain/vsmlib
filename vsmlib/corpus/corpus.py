@@ -34,18 +34,17 @@ class DirTokenIterator:
 
 
 def load_file_as_ids(path, vocabulary, gzipped=None, downcase=True):
-    # user proper tokenizer from cooc
+    # use proper tokenizer from cooc
     # options to ignore sentence bounbdaries
     # specify what to do with missing words
     # replace numbers with special tokens
     result = []
-    with open(path) as f:
-        for line in f:
-            for token in line.split():
-                w = token
-                if downcase:
-                    w = w.lower()
-                result.append(vocabulary.get_id(w))
+    tf = FileTokenIterator(path)
+    for token in tf:
+        w = token    # specify what to do with missing words
+        if downcase:
+            w = w.lower()
+        result.append(vocabulary.get_id(w))
     return np.array(result, dtype=np.int32)
 
 
