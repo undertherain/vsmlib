@@ -137,6 +137,8 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
 
 def create_from_dir(path, min_frequency=0):
     dic_freqs = {}
+    if not os.path.isdir(path):
+        raise RuntimeError("source directory does not exist")
     for w in DirTokenIterator(path):
         if w in dic_freqs:
             dic_freqs[w] += 1
@@ -151,7 +153,9 @@ def create_from_dir(path, min_frequency=0):
         v.lst_frequencies.append(frequency)
         v.lst_words.append(word)
         v.dic_words_ids[word] = i
+    v.cnt_words = len(v.lst_words)
     v.metadata["path_source"] = path
     v.metadata["min_frequency"] = min_frequency
     v.metadata["vsmlib_version"] = VERSION
+    v.metadata["cnt_words"] = v.cnt_words
     return v
