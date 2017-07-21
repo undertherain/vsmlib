@@ -22,6 +22,7 @@ classifiers = [
 
 description = "toolbox for various tasks in the area of vector space models of computational linguistic"
 name = "vsmlib"
+url = "http://vsm.blackbird.pw/"
 
 
 def parse_requirements(requirements_path: str = 'requirements.txt') -> t.List[str]:
@@ -65,7 +66,7 @@ def setup():
     setuptools.setup(
         name=name,
         version=find_version(name.replace('-', '_')),
-        url='http://vsm.blackbird.pw/',
+        url=url,
         classifiers=classifiers,
         keywords=['NLP', 'linguistics', 'language'],
         install_requires=parse_requirements(),
