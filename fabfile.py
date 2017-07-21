@@ -14,3 +14,7 @@ def make():
 
 def deploy():
     local("twine upload dist/*")
+
+
+def test():
+    local("python3 -m unittest")
