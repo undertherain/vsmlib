@@ -17,4 +17,4 @@ def deploy():
 
 
 def test():
-    local("python3 -m unittest")
+    local("python3.6 -m unittest")
