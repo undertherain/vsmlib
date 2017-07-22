@@ -11,21 +11,25 @@ parser = argparse.ArgumentParser()
 parser.add_argument('corenlp_path',
                     help='Directory to stanford corenlp') # /home/lbf/Documents/stanford-corenlp-full-2017-06-09/
 parser.add_argument('--max_block_size', '-mbs', default=1000000, type=int,
-                    help='indicate how much lines a parser deals at one time, bigger max_block_size will consume more memeory, but should be faster.')
+                    help='indicate how much charactors a parser deals at one time, bigger max_block_size will consume more memeory, but should be faster.')
 parser.add_argument('--corpus_path', default='./news.toy.txt',
                     help='Directory to corpus')
 parser.add_argument('--annotated_corpus_path', default='./news.toy.annotated.txt',
                     help='Directory to annotated corpus')
+parser.add_argument('--parser_model', '-o', choices=['edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz', 'edu/stanford/nlp/models/parser/nndep/english_UD.gz'],
+                    default='edu/stanford/nlp/models/parser/nndep/english_UD.gz',
+                    help='stanford parser model')
+
 args = parser.parse_args()
 
 class dependency_parser():
     def __init__(self, path_to_jar, path_to_models_jar, model_path):
-        if 'parser/nndep/english_UD.gz' in model_path:
+        if 'nndep/' in model_path:
             self.parser = StanfordNeuralDependencyParser(  #StanfordNeuralDependencyParser
                 path_to_jar=path_to_jar,
                 path_to_models_jar=path_to_models_jar,
                 model_path=model_path, java_options='-mx5g') # , corenlp_options='-model modelOutputFile.txt.gz'
-        if 'lexparser/englishPCFG.ser.gz' in model_path:
+        if 'lexparser/' in model_path:
             self.parser = StanfordDependencyParser(
                 path_to_jar=path_to_jar,
                 path_to_models_jar=path_to_models_jar,
@@ -67,7 +71,7 @@ class dependency_parser():
 dependency_parser = dependency_parser(
     path_to_jar=os.path.join(args.corenlp_path, "stanford-corenlp-3.8.0.jar"),
     path_to_models_jar=os.path.join(args.corenlp_path, "stanford-corenlp-3.8.0-models.jar"),
-    model_path="edu/stanford/nlp/models/parser/nndep/english_UD.gz")
+    model_path=args.parser_model)
     # edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz
     # edu/stanford/nlp/models/parser/nndep/english_UD.gz
 
@@ -87,6 +91,8 @@ with open(args.corpus_path, "r") as corpus_file, open(args.annotated_corpus_path
             annotated_corpus_file.write(out)
             block_size = 0
             text = ''
+    out = dependency_parser.parse(text)
+    annotated_corpus_file.write(out)
 
 end_time = time.time()
 print('spend {} minutes'.format((end_time - start_time) / 60))
