@@ -1,16 +1,19 @@
 import os
 import numpy as np
 import time
+from vsmlib._version import VERSION
 from vsmlib.misc.formathelper import countof_fmt
+from vsmlib.misc.data import save_json, load_json
 from vsmlib.corpus import DirTokenIterator
 
 
 class Vocabulary(object):
 
     def __init__(self):
-        # todo: check if ternary tree is available
+        # todo: check if our ternary tree module is available
         self.dic_words_ids = {}
         self.lst_words = []
+        self.metadata = {}
 
     def get_id(self, w):
         try:
@@ -34,6 +37,26 @@ class Vocabulary(object):
         f.write("#word\tfrequency\n")
         for i in range(len(self.lst_words)):
             f.write("{}\t{}\n".format(self.lst_words[i], self.lst_frequencies[i]))
+        f.close()
+        save_json(self.metadata, os.path.join(path, "metadata.json"))
+
+    def load(self, path):
+        pos = 0
+        f = open(os.path.join(path, "vocab.tsv"))
+        self.lst_frequencies = []
+        self.dic_words_ids = {}
+        self.lst_words = []
+        for line in f:
+            if line.startswith("#"):
+                continue
+            word, frequency = line.split("\t")
+            self.lst_words.append(word)
+            self.lst_frequencies.append(int(frequency))
+            self.dic_words_ids[word] = pos
+            pos += 1
+        f.close()
+        self.cnt_words = len(self.lst_words)
+        self.metadata = load_json(os.path.join(path, "metadata.json"))
 
 
 class Vocabulary_simple(Vocabulary):
@@ -112,8 +135,10 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
 
         # most_frequent = np.argsort(l_frequencies)[-10:]
 
-def create_from_dir(path):
+def create_from_dir(path, min_frequency=0):
     dic_freqs = {}
+    if not os.path.isdir(path):
+        raise RuntimeError("source directory does not exist")
     for w in DirTokenIterator(path):
         if w in dic_freqs:
             dic_freqs[w] += 1
@@ -122,7 +147,15 @@ def create_from_dir(path):
     v = Vocabulary_simple()
     v.lst_frequencies = []
     for i, word in enumerate(sorted(dic_freqs, key=dic_freqs.get, reverse=True)):
-        v.lst_frequencies.append(dic_freqs[word])
+        frequency = dic_freqs[word]
+        if frequency < min_frequency:
+            break
+        v.lst_frequencies.append(frequency)
         v.lst_words.append(word)
         v.dic_words_ids[word] = i
+    v.cnt_words = len(v.lst_words)
+    v.metadata["path_source"] = path
+    v.metadata["min_frequency"] = min_frequency
+    v.metadata["vsmlib_version"] = VERSION
+    v.metadata["cnt_words"] = v.cnt_words
     return v

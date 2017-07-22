@@ -1,3 +1,4 @@
+scipy
 brewer2mpl
 tables
-scipy
+matplotlib

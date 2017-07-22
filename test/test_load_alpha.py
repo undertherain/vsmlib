@@ -1,6 +1,3 @@
-import sys
-sys.path.append("..")
-
 import vsmlib
 
 m = vsmlib.model.ModelNumbered()

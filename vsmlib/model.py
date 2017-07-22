@@ -3,16 +3,16 @@ import vsmlib.matrix
 import numpy as np
 import scipy
 from scipy import sparse
-#from scipy.spatial.distance import cosine
 import scipy.sparse.linalg
 import math
 from matplotlib import pyplot as plt
 import os
-import gzip
 import brewer2mpl
 import tables
 import json
 from .misc.formathelper import bcolors
+from .misc.deprecated import deprecated
+from .misc.data import save_json, load_json, detect_archive_format_and_open
 
 
 def normed(v):
@@ -20,8 +20,11 @@ def normed(v):
 
 
 class Model(object):
-    provenance = ""
-    name = ""
+
+    def __init__(self):
+        self.provenance = ""
+        self.name = ""
+        self.metadata = {}
 
     def get_x_label(self, i):
         return self.vocabulary.get_word_by_id(i)
@@ -66,7 +69,6 @@ class Model(object):
         # width=min(xdim,max_width)
         vert = None  # np.empty((rows.shape[0],0))
         cols = self.get_most_informative_columns(rows, width)
-        # print (cols)
         for i in cols:
             if vert is None:
                 vert = (rows[:, i])
@@ -76,10 +78,8 @@ class Model(object):
         return rows, vert.T, labels
 
     def get_most_similar_vectors(self, u, cnt=10):
-        # scores = []
         scores = np.zeros(self.matrix.shape[0], dtype=np.float32)
         for i in range(self.matrix.shape[0]):
-            # scores.append([self.cmp_vectors(u, self.matrix[i]), i])
             scores[i] = self.cmp_vectors(u, self.matrix[i])
         ids = np.argsort(scores)[::-1]
         ids = ids[:cnt]
@@ -152,7 +152,6 @@ class Model_explicit(Model):
             return 0
         return c
 
-
     def load_from_hdf5(self, path):
         self.load_provenance(path)
         f = tables.open_file(os.path.join(path, 'cooccurrence_csr.h5p'), 'r')
@@ -187,7 +186,7 @@ class Model_explicit(Model):
         self.normalized = True
 
 
-class Model_dense(Model):
+class ModelDense(Model):
 
     def cmp_vectors(self, r1, r2):
         c = normed(r1) @ normed(r2)
@@ -203,23 +202,19 @@ class Model_dense(Model):
         ds.flush()
         f.close()
 
+    def load_hdf5(self, path):
+        f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'r')
+        self.matrix = f.root.vectors.read()
+        f.close()
+
     def save_to_dir(self, path):
         if not os.path.exists(path):
             os.makedirs(path)
+        self.vocabulary.save_to_dir(path)
         # self.matrix.tofile(os.path.join(path,"vectors.bin"))
-        np.save(os.path.join(path, "vectors.npy"), self.matrix)
+        # np.save(os.path.join(path, "vectors.npy"), self.matrix)
         self.save_matr_to_hdf5(path)
-        text_file = open(os.path.join(path, "provenance.txt"), "w")
-        text_file.write(self.provenance)
-        text_file.close()
-        # todo: move this to vocabulary
-        text_file = open(os.path.join(path, "ids"), "w")
-        for i in range(len(self.vocabulary.lst_words)):
-            text_file.write("{}\t{}\n".format(self.vocabulary.lst_words[i], i))
-        text_file.close()
-        # todo: vocabulary should be saving itself
-        self.vocabulary.lst_frequencies.tofile(
-            open(os.path.join(path, "freq_per_id"), "w"))
+        save_json(self.metadata, os.path.join(path, "metadata.json"))
 
     def load_with_alpha(self, path, power=0.6, verbose=False):
         self.load_provenance(path)
@@ -238,13 +233,11 @@ class Model_dense(Model):
         f.close()
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
-        self.name += os.path.basename(os.path.normpath(path)
-                                      ) + "_a" + str(power)
+        self.name += os.path.basename(os.path.normpath(path)) + "_a" + str(power)
 
     def load_from_dir(self, path):
-        #        self.matrix = np.fromfile(open(os.path.join(path,"vectors.bin")),dtype=np.float32)
         self.matrix = np.load(os.path.join(path, "vectors.npy"))
-#       self.load_with_alpha(0.6)
+        # self.load_with_alpha(0.6)
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
         self.name += os.path.basename(os.path.normpath(path))
@@ -258,32 +251,41 @@ class Model_dense(Model):
         self.provenance += "\ntransform : normalized"
         self.props["normalized"] = True
 
-    def load_from_text(self, path, ungzip=True):
+    def load_from_text(self, path):
         i = 0
         # self.name+="_"+os.path.basename(os.path.normpath(path))
-        self.vocabulary = vsmlib.Vocabulary()
+        self.vocabulary = vsmlib.vocabulary.Vocabulary()
         rows = []
-        with gzip.open(path) if ungzip else open(path) as f:
+        header = False
+        with detect_archive_format_and_open(path) as f:
             for line in f:
                 tokens = line.split()
-#                word = tokens[0].decode('ascii',errors="ignore")
-                word = tokens[0].decode('UTF-8', errors="ignore")
+                if i == 0 and len(tokens) == 2:
+                    header = True
+                    cnt_words = int(tokens[0])
+                    size_embedding = int(tokens[1])
+                    continue
+                # word = tokens[0].decode('ascii',errors="ignore")
+                # word = tokens[0].decode('UTF-8', errors="ignore")
+                word = tokens[0]
                 self.vocabulary.dic_words_ids[word] = i
                 self.vocabulary.lst_words.append(word)
                 str_vec = tokens[1:]
-                # print (str_vec)
                 row = np.zeros(len(str_vec), dtype=np.float32)
                 for j in range(len(str_vec)):
                     row[j] = float(str_vec[j])
                 rows.append(row)
                 i += 1
-        self.matrix = np.zeros((len(rows), len(rows[0])), dtype=np.float32)
-        self.name += "_{}".format(len(rows[0]))
-        for i in (range(len(rows))):
-            self.matrix[i] = rows[i]
+        if header:
+            assert cnt_words == len(rows)
+        self.matrix = np.vstack(rows)
+        if header:
+            assert size_embedding == self.matrix.shape[1]
+        self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words))
+        # self.name += "_{}".format(len(rows[0]))
 
 
-class ModelNumbered(Model_dense):
+class ModelNumbered(ModelDense):
     def get_x_label(self, i):
         return i
 
@@ -294,20 +296,17 @@ class ModelNumbered(Model_dense):
             row = self.get_row(i)
             row = row / np.linalg.norm(row)
             if colored:
-                plt.bar(range(0, len(row)), row,
-                        color=colors[cnt], linewidth=0, alpha=0.6, label=i)
+                plt.bar(range(0, len(row)), row, color=colors[cnt], linewidth=0, alpha=0.6, label=i)
             else:
-                plt.bar(range(0, len(row)), row, color="black",
-                        linewidth=0, alpha=1 / len(wl), label=i)
+                plt.bar(range(0, len(row)), row, color="black", linewidth=0, alpha=1 / len(wl), label=i)
             cnt += 1
         if show_legend:
             plt.legend()
 
 
-class Model_Levi(Model_dense):
+class Model_Levi(ModelNumbered):
     def load_from_dir(self, path):
         self.name = "Levi_" + os.path.basename(os.path.normpath(path))
-        # m=vsmlib.model.Model_dense()
         self.matrix = np.load(os.path.join(path, "sgns.contexts.npy"))
         self.vocabulary = vsmlib.vocabulary.Vocabulary_simple()
         self.vocabulary.dir_root = path
@@ -370,6 +369,7 @@ class Model_w2v(ModelNumbered):
         self.load_provenance(path)
 
 
+@deprecated
 class Model_glove(ModelNumbered):
     def __init__(self):
         self.name = "glove"
@@ -409,11 +409,18 @@ def load_from_dir(path):
         m.load_from_dir(path)
         print("this is dense ")
         return m
-    # must be glove
-    m = Model_glove()
-    m.load_from_dir(path)
-    m.load_provenance(path)
+    if os.path.isfile(os.path.join(path, "vectors.h5p")):
+        m = vsmlib.ModelNumbered()
+        m.load_hdf5(path)
+        print("this is vsmlib format ")
+        return m
 
-    return m
+    m = ModelNumbered()
+    files = os.listdir(path)
+    for f in files:
+        if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
+            print("this is text")
+            m.load_from_text(os.path.join(path, f))
+            return m
 
-    print("Ahtung!! can not load anything!")
+    raise RuntimeError("can not detect embeddings format")
