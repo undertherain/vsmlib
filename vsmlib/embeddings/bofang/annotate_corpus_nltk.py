@@ -71,6 +71,7 @@ dependency_parser = dependency_parser(
     # edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz
     # edu/stanford/nlp/models/parser/nndep/english_UD.gz
 
+
 start_time = time.time()
 
 # dependency_parser.parse('Information about the stages 50km to 80km), booking for food and accommodation (R450-38 per night) and downloadable maps are on the Freedom Challenge website  call 00 27 84 567 4152 ')
