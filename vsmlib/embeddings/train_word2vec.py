@@ -161,7 +161,8 @@ def run(args):
 
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
-        tree = HSM.create_huffman_tree(word_counts)
+        d_counts = {i: word_counts[i] for i in range(len(word_counts))}
+        tree = HSM.create_huffman_tree(d_counts)
         loss_func = HSM(args.unit, tree)
         loss_func.W.data[...] = 0
     elif args.out_type == 'ns':
