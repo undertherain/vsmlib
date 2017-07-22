@@ -191,7 +191,8 @@ def create_model(args, net, vocab):
 def get_data(path, vocab):
     doc = load_file_as_ids(path, vocab)
     # doc = doc[doc >= 0]
-    train, val = doc[:300], doc[-100:]
+    # smart split 
+    train, val = doc[:-1000], doc[-1000:]
     return train, val
 
 
@@ -206,9 +207,9 @@ def run(args):
 
     word_counts = vocab.lst_frequencies
 
-    # if args.test:
-    #    train = train[:100]
-    #    val = val[:100]
+    if args.test:
+        train = train[:100]
+        val = val[:100]
 
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
