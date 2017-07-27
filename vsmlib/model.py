@@ -18,6 +18,7 @@ from .misc.data import save_json, load_json, detect_archive_format_and_open
 
 logger = logging.getLogger(__name__)
 
+
 def normed(v):
     return v / np.linalg.norm(v)
 
@@ -208,6 +209,8 @@ class ModelDense(Model):
     def load_hdf5(self, path):
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'r')
         self.matrix = f.root.vectors.read()
+        self.vocabulary = Vocabulary()
+        self.vocabulary.load(path)
         f.close()
 
     def save_to_dir(self, path):
@@ -282,7 +285,7 @@ class ModelDense(Model):
         self.matrix = np.vstack(rows)
         if header:
             assert size_embedding == self.matrix.shape[1]
-        self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words))
+        self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words), dtype=np.int32)
         # self.name += "_{}".format(len(rows[0]))
 
 
