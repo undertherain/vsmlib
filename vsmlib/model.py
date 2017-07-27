@@ -10,10 +10,13 @@ import os
 import brewer2mpl
 import tables
 import json
+import logging
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
 from .misc.data import save_json, load_json, detect_archive_format_and_open
 
+
+logger = logging.getLogger(__name__)
 
 def normed(v):
     return v / np.linalg.norm(v)
@@ -122,7 +125,7 @@ class Model(object):
                 str_props = myfile.read()
                 self.props = json.loads(str_props)
         except FileNotFoundError:
-            print(bcolors.FAIL + "props.json not found" + bcolors.ENDC)
+            logger.warning("props.json not found")
             self.props = {}
             # exit(-1)
 
@@ -131,7 +134,7 @@ class Model(object):
             with open(os.path.join(path, "provenance.txt"), "r") as myfile:
                 self.provenance = myfile.read()
         except FileNotFoundError:
-            print("provenance not found")
+            logger.warning("provenance not found")
         self.load_props(path)
 
 
@@ -216,18 +219,16 @@ class ModelDense(Model):
         self.save_matr_to_hdf5(path)
         save_json(self.metadata, os.path.join(path, "metadata.json"))
 
-    def load_with_alpha(self, path, power=0.6, verbose=False):
+    def load_with_alpha(self, path, power=0.6):
         self.load_provenance(path)
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'r')
 #        left = np.nan_to_num(f.root.vectors.read())
         left = f.root.vectors.read()
         sigma = f.root.sigma.read()
-        if verbose:
-            print("loaded left singulat vectors and sigma")
+        logger.info("loaded left singular vectors and sigma")
         sigma = np.power(sigma, power)
         self.matrix = np.dot(left, np.diag(sigma))
-        if verbose:
-            print("computed the product")
+        logger.info("computed the product")
         self.props["pow_sigma"] = power
         self.props["size_dimensions"] = self.matrix.shape[1]
         f.close()
@@ -350,11 +351,10 @@ class Model_w2v(ModelNumbered):
         size_row = int(header[1])
         self.name += "_{}".format(size_row)
         self.matrix = np.zeros((cnt_rows, size_row), dtype=np.float32)
-        print("cnt rows = {}, size row = {}".format(cnt_rows, size_row))
+        logger.debug("cnt rows = {}, size row = {}".format(cnt_rows, size_row))
         for i in range(cnt_rows):
             word = Model_w2v.load_word(f).decode(
                 'UTF-8', errors="ignore").strip()
-            # print (word)
             self.vocabulary.dic_words_ids[word] = i
             self.vocabulary.lst_words.append(word)
             s_row = f.read(size_row * 4)
@@ -379,47 +379,47 @@ class Model_glove(ModelNumbered):
         files = os.listdir(path)
         for f in files:
             if f.endswith(".gz"):
-                print("this is Glove")
+                logger.info("this is Glove")
                 self.load_from_text(os.path.join(path, f))
 
 
 def load_from_dir(path):
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
-        print("this is sparse explicit in hdf5")
+        logger.info("this is sparse explicit in hdf5")
         m = vsmlib.Model_explicit()
         m.load_from_hdf5(path)
         return m
     if os.path.isfile(os.path.join(path, "bigrams.data.bin")):
-        print("this is sparse explicit")
+        logger.info("this is sparse explicit")
         m = vsmlib.Model_explicit()
         m.load(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.bin")):
-        print("this is w2v")
+        logger.info("this is w2v")
         m = vsmlib.Model_w2v()
         m.load_from_dir(path)
         return m
     if os.path.isfile(os.path.join(path, "sgns.words.npy")):
         m = Model_Levi()
         m.load_from_dir(path)
-        print("this is Levi ")
+        logger.info("this is Levi")
         return m
     if os.path.isfile(os.path.join(path, "vectors.npy")):
         m = vsmlib.ModelNumbered()
         m.load_from_dir(path)
-        print("this is dense ")
+        logger.info("detected is dense ")
         return m
     if os.path.isfile(os.path.join(path, "vectors.h5p")):
         m = vsmlib.ModelNumbered()
         m.load_hdf5(path)
-        print("this is vsmlib format ")
+        logger.info("detected vsmlib format ")
         return m
 
     m = ModelNumbered()
     files = os.listdir(path)
     for f in files:
         if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
-            print("this is text")
+            logger.info(path, "detected as text")
             m.load_from_text(os.path.join(path, f))
             return m
 
