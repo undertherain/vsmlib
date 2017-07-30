@@ -10,6 +10,7 @@ from chainer import cuda
 import chainer.functions as F
 import chainer.initializers as I
 import chainer.links as L
+from timeit import default_timer as timer
 from chainer import reporter
 from chainer import training
 from chainer.training import extensions
@@ -133,18 +134,19 @@ def create_model(args, net, vocab):
     model.metadata["embeddings"] = vars(args)
     model.metadata["embeddings"]["vsmlib_version"] = vsmlib.__version__
     model.matrix = cuda.to_cpu(net.embed.W.data)
-    model.save_to_dir(args.path_out)
+    return model
 
 
 def get_data(path, vocab):
     doc = load_file_as_ids(path, vocab)
     # doc = doc[doc >= 0]
-    # smart split 
+    # smart split
     train, val = doc[:-1000], doc[-1000:]
     return train, val
 
 
 def run(args):
+    time_start = timer()
     if args.gpu >= 0:
         chainer.cuda.get_device_from_id(args.gpu).use()
         cuda.check_cuda_available()
@@ -198,7 +200,10 @@ def run(args):
     trainer.extend(extensions.ProgressBar())
     trainer.run()
     # save(args, model, vocab.lst_words)
-    create_model(args, model, vocab)
+    model = create_model(args, model, vocab)
+    time_end = timer()
+    model.metadata["embeddings"]["execution_time"] = time_end - time_start
+    model.save_to_dir(args.path_out)
 
 
 def main():
