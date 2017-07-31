@@ -14,11 +14,15 @@ from timeit import default_timer as timer
 from chainer import reporter
 from chainer import training
 from chainer.training import extensions
+import logging
 import vsmlib
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
 from .iter_simple import WindowIterator
+
+
+logger = logging.getLogger(__name__)
 
 
 def parse_args():
@@ -196,7 +200,7 @@ def run(args):
 
     trainer.extend(extensions.Evaluator(val_iter, model, converter=convert, device=args.gpu))
     trainer.extend(extensions.LogReport())
-    trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss']))
+    trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss', 'time']))
     trainer.extend(extensions.ProgressBar())
     trainer.run()
     # save(args, model, vocab.lst_words)
@@ -204,6 +208,7 @@ def run(args):
     time_end = timer()
     model.metadata["embeddings"]["execution_time"] = time_end - time_start
     model.save_to_dir(args.path_out)
+    logger.info("model saved to " + args.path_out)
 
 
 def main():
