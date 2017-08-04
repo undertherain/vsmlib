@@ -28,6 +28,9 @@ except NameError:
 
 
 options = {}
+options["name_method"] = "3CosAdd"
+options["exclude"] = True
+
 
 do_top5 = True
 normalize = True
@@ -591,7 +594,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     file_out = open(name_file_out, "w", errors="replace")
     file_out.write(str_results)
     file_out.close()
-    
+
 
 def get_pairs(fname):
     pairs = []
@@ -631,7 +634,7 @@ def run_all(name_dataset):
         print("using ", options["name_method"])
     dir_tests = os.path.join(options["dir_root_dataset"], name_dataset)
     if not os.path.exists(dir_tests):
-        raise Exception("test dataset dir does not exist")
+        raise Exception("test dataset dir does not exist:" + dir_tests)
     for root, dirnames, filenames in os.walk(dir_tests):
         for filename in fnmatch.filter(sorted(filenames), '*'):
             print(filename)
