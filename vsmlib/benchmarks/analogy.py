@@ -166,19 +166,19 @@ class PairWise:
         return result
 
     def collect_stats(self, result, vec_a, vec_a_prime, vec_b, vec_b_prime, vec_b_prime_predicted):
-        if not vec_b_prime_predicted is None:
-            result["similarity predicted to b_prime cosine"]=m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
-        
-        result["similarity a to a_prime cosine"]=m.cmp_vectors(vec_a, vec_a_prime)
-        result["similarity a_prime to b_prime cosine"]=m.cmp_vectors(vec_a_prime, vec_b_prime)
-        result["similarity b to b_prime cosine"]=m.cmp_vectors(vec_b, vec_b_prime)
-        result["similarity a to b_prime cosine"]=m.cmp_vectors(vec_a, vec_b_prime)
-        
-        result["distance a to a_prime euclidean"] = scipy.spatial.distance.euclidean(vec_a, vec_a_prime)
-        result["distance a_prime to b_prime euclidean"] = scipy.spatial.distance.euclidean(vec_a_prime, vec_b_prime)
-        result["distance b to b_prime euclidean"] = scipy.spatial.distance.euclidean(vec_b, vec_b_prime)
-        result["distance a to b_prime euclidean"] = scipy.spatial.distance.euclidean(vec_a, vec_b_prime)
-        
+        if vec_b_prime_predicted is not None:
+            result["similarity predicted to b_prime cosine"] = float(m.cmp_vectors(vec_b_prime_predicted, vec_b_prime))
+
+        result["similarity a to a_prime cosine"] = float(m.cmp_vectors(vec_a, vec_a_prime))
+        result["similarity a_prime to b_prime cosine"] = float(m.cmp_vectors(vec_a_prime, vec_b_prime))
+        result["similarity b to b_prime cosine"] = float(m.cmp_vectors(vec_b, vec_b_prime))
+        result["similarity a to b_prime cosine"] = float(m.cmp_vectors(vec_a, vec_b_prime))
+
+        result["distance a to a_prime euclidean"] = float(scipy.spatial.distance.euclidean(vec_a, vec_a_prime))
+        result["distance a_prime to b_prime euclidean"] = float(scipy.spatial.distance.euclidean(vec_a_prime, vec_b_prime))
+        result["distance b to b_prime euclidean"] = float(scipy.spatial.distance.euclidean(vec_b, vec_b_prime))
+        result["distance a to b_prime euclidean"] = float(scipy.spatial.distance.euclidean(vec_a, vec_b_prime))
+
         result["crowdedness of b_prime"] = get_crowndedness(vec_b_prime)
 
 
@@ -590,7 +590,6 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     out["experiment setup"]["embeddings"] = m.name
     out["experiment setup"]["category"] = name_category
     str_results = json.dumps(out, indent=4, separators=(',', ': '), sort_keys=True)
-    #print(str_results) 
     file_out = open(name_file_out, "w", errors="replace")
     file_out.write(str_results)
     file_out.close()
