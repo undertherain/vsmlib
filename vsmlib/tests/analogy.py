@@ -12,13 +12,15 @@ import datetime
 import json
 import csv
 import sys
-sys.path.append("..")
 import vsmlib
 import yaml
 from itertools import product
 
+
 def profile_trivial(a):
     return a
+
+
 try:
     profile
 except NameError:
@@ -28,8 +30,7 @@ except NameError:
 options = {}
 
 do_top5 = True
-
-normalize=True
+normalize = True
 
 # this are some hard-coded bits which will be implemented later
 need_subsample = False
@@ -60,7 +61,6 @@ def get_most_similar_fast(v):
     scores = normed(v) @ m_normed.T
     scores = (scores + 1) / 2
     return scores
-
 
 
 def get_most_collinear_fast(a, ap, b):
@@ -224,27 +224,28 @@ class SimilarToAny(PairWise):
 
 class SimilarToB():
     def __call__(self, pairs_train, pairs_test):
-        results=[]
-        for p_test in  pairs_test:
-            if is_pair_missing([p_test]): continue
+        results = []
+        for p_test in pairs_test:
+            if is_pair_missing([p_test]):
+                continue
             result = self.do_on_two_pairs(p_test)
-            result["b in neighbourhood of b_prime"] = get_rank(p_test[0],p_test[1][0])
-            result["b_prime in neighbourhood of b"] = get_rank(p_test[1],p_test[0])
+            result["b in neighbourhood of b_prime"] = get_rank(p_test[0], p_test[1][0])
+            result["b_prime in neighbourhood of b"] = get_rank(p_test[1], p_test[0])
             results.append(result)
         return results
 
     def do_on_two_pairs(self, pair_test):
         #print ("pre ",pair_test)
         if is_pair_missing([pair_test]):
-            result=result_miss
+            result = result_miss
         else:
             vec_b = m.get_row(pair_test[0])
             vec_b_prime = m.get_row(pair_test[1][0])
             scores = get_most_similar_fast(vec_b)
             result = process_prediction(pair_test, scores, None, None)
-            result["similarity to correct cosine"]=m.cmp_vectors(vec_b,vec_b_prime)
+            result["similarity to correct cosine"] = m.cmp_vectors(vec_b,vec_b_prime)
         return result
-   
+
 
 def do_test_on_pair_3CosAvg(p_train, p_test):
     cnt_total = 0
@@ -252,12 +253,12 @@ def do_test_on_pair_3CosAvg(p_train, p_test):
     vecs_a = []
     vecs_a_prime = []
     for p in p_train:
-        vecs_a_prime_local=[]
+        vecs_a_prime_local = []
         for t in p[1]:
             if m.vocabulary.get_id(t) >= 0:
                 vecs_a_prime_local.append(m.get_row(t))
             break
-        if len(vecs_a_prime_local)>0:
+        if len(vecs_a_prime_local) > 0:
             vecs_a.append(m.get_row(p[0]))
             vecs_a_prime.append(np.vstack(vecs_a_prime_local).mean(axis=0))
     if len(vecs_a_prime) == 0:
@@ -267,7 +268,7 @@ def do_test_on_pair_3CosAvg(p_train, p_test):
     vec_a = np.vstack(vecs_a).mean(axis=0)
     vec_a_prime = np.vstack(vecs_a_prime).mean(axis=0)
 
-    results=[]
+    results = []
     for p_test_one in p_test:
         if is_pair_missing(p_test_one):
             continue
@@ -277,7 +278,7 @@ def do_test_on_pair_3CosAvg(p_train, p_test):
         # oh crap, why are we not normalizing here? 
         scores = get_most_similar_fast(vec_b_prime_predicted)
         result = process_prediction(p_test_one, scores, None, None)
-        result["distances to correct cosine"]=m.cmp_vectors(vec_b_prime_predicted,vec_b_prime)
+        result["distances to correct cosine"] = m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
         results.append(result)
     return results
 
@@ -288,15 +289,17 @@ def create_list_test_right(pairs):
     a_prime = [i for sublist in a_prime for i in sublist]
     set_aprimes_test = set(a_prime)
 
-def get_distance_closest_words(center,cnt_words=1):
+
+def get_distance_closest_words(center, cnt_words=1):
     scores = get_most_similar_fast(center)
     ids_max = np.argsort(scores)[::-1]
     distances = np.zeros(cnt_words)
     for i in range(cnt_words):
-        distances[i] = scores[ids_max[i+1]]
+        distances[i] = scores[ids_max[i + 1]]
     return distances.mean()
 
-def get_rank(source,center):
+
+def get_rank(source, center):
     if isinstance(center, str):
         #print ("getting rank for ",center)
         center = m.get_row(center)
@@ -310,15 +313,16 @@ def get_rank(source,center):
     rank = i
     return rank
 
+
 def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exclude=True):
     ids_max = np.argsort(scores)[::-1]
     id_question = m.vocabulary.get_id(p_test_one[0])
     result = dict()
-    cnt_answers_to_report=6
+    cnt_answers_to_report = 6
     extr = ""
     if len(p_train) == 1:
         extr = "as {} is to {}".format(p_train[0][1], p_train[0][0])
-        set_exclude = set([p_train[0][0]]) | set(p_train[0][1] ) 
+        set_exclude = set([p_train[0][0]]) | set(p_train[0][1])
     else:
         set_exclude = set()
     set_exclude.add(p_test_one[0])
@@ -333,12 +337,12 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
         if exclude and (ans in set_exclude):
             continue
         cnt_reported += 1
-        prediction["score"]=float(scores[i])
-        prediction["answer"]=ans
+        prediction["score"] = float(scores[i])
+        prediction["answer"] = ans
         if ans in p_test_one[1]:
-            prediction["hit"]=True
+            prediction["hit"] = True
         else:
-            prediction["hit"]=False
+            prediction["hit"] = False
         result["predictions"].append(prediction)
         if cnt_reported >= cnt_answers_to_report:
             break
@@ -347,8 +351,9 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
         ans = m.vocabulary.get_word_by_id(ids_max[i])
         if exclude and (ans in set_exclude):
             continue
-        if ans in p_test_one[1]: break
-        rank+=1
+        if ans in p_test_one[1]:
+            break
+        rank += 1
     result["rank"] = rank
  
     #vec_b_prime = m.get_row(p_test_one[1][0])
@@ -357,29 +362,29 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
     #where prediction lands:
     ans = m.vocabulary.get_word_by_id(ids_max[0])
     if ans == p_test_one[0]: 
-        result["landing_b"]=True 
+        result["landing_b"] = True 
     else:
-        result["landing_b"]=False 
+        result["landing_b"] = False 
 
     if ans in p_test_one[1]: 
-        result["landing_b_prime"]=True 
+        result["landing_b_prime"] = True 
     else:
-        result["landing_b_prime"]=False 
+        result["landing_b_prime"] = False 
 
     all_a = [i[0] for i in p_train]
 
     all_a_prime = [item for sublist in p_train for item in sublist[1]]
 #    print("all_a",all_a)
-    #print("all_a_prime",all_a_prime)
-    if ans in all_a: 
-        result["landing_a"]=True 
+    # print("all_a_prime",all_a_prime)
+    if ans in all_a:
+        result["landing_a"] = True
     else:
-        result["landing_a"]=False 
+        result["landing_a"] = False
 
-    if ans in all_a_prime: 
-        result["landing_a_prime"]=True 
+    if ans in all_a_prime:
+        result["landing_a_prime"] = True
     else:
-        result["landing_a_prime"]=False 
+        result["landing_a_prime"] = False
 
     return result
 
@@ -416,7 +421,7 @@ def do_test_on_pair_regr_old(p_train, p_test):
         # scores=score_sim*np.sqrt(score_reg)
         scores = score_sim * score_reg
         result = process_prediction(p_test_one, scores, score_reg, score_sim)
-        result["similarity b to b_prime cosine"]=m.cmp_vectors(vec_b, vec_b_prime)
+        result["similarity b to b_prime cosine"] = m.cmp_vectors(vec_b, vec_b_prime)
         results.append(result)
     return results
 
@@ -467,6 +472,7 @@ def do_test_on_pair_regr(p_train, p_test, file_out):
 
 
 do_test_on_pairs = None
+
 
 def register_test_func():
     global do_test_on_pairs
@@ -527,9 +533,9 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     print("saving to", name_file_out)
     if not os.path.exists(os.path.dirname(name_file_out)):
         os.makedirs(os.path.dirname(name_file_out))
-    #loo = sklearn.cross_validation.LeaveOneOut(len(pairs))
+    # loo = sklearn.cross_validation.LeaveOneOut(len(pairs))
     kf = sklearn.model_selection.KFold(n_splits=len(pairs) // size_cv_test)
-    cnt_splits=kf.get_n_splits(pairs)
+    cnt_splits = kf.get_n_splits(pairs)
     loo = kf.split(pairs)
     if need_subsample:
         file_out = open("/dev/null", "a", errors="replace")
@@ -572,8 +578,8 @@ def run_category(pairs, name_dataset, name_category="not yet"):
             "correct": cnt_correct}
         props_experiment.update(m.props)
     out = dict()
-    out["results"]=results
-    out["experiment setup"]=dict()
+    out["results"] = results
+    out["experiment setup"] = dict()
     out["experiment setup"]["method"] = options["name_method"]
     if not options["exclude"]:
         out["experiment setup"]["method"] += "_honest"
@@ -702,8 +708,6 @@ def main():
     # check if all pathes exist
     options["path_dataset"] = cfg["path_dataset"]
     options["name_dataset"] = os.path.basename(options["path_dataset"])
-
-
     options["dir_root_dataset"] = os.path.dirname(options["path_dataset"])
     options["path_results"] = cfg["path_results"]
     global m
@@ -718,7 +722,7 @@ def main():
         if normalize:
             # m.clip_negatives()  #make this configurable
             m.normalize()
-        
+
         print(m.name)
         name_model = m.name
         make_normalized_copy()
