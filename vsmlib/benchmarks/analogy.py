@@ -396,12 +396,11 @@ def do_test_on_pair_regr_old(p_train, p_test):
     results = []
     # create_list_test_right(p_test)
 
-
     X_train, Y_train = gen_vec_single(p_train)
     # print(Y_train)
     if options["name_method"].startswith("LRCos"):
         #        model_regression = LogisticRegression(class_weight = 'balanced')
-        #model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
+        # model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
         model_regression = LogisticRegression(
             class_weight='balanced',
             C=inverse_regularization_strength)
@@ -424,7 +423,7 @@ def do_test_on_pair_regr_old(p_train, p_test):
         # scores=score_sim*np.sqrt(score_reg)
         scores = score_sim * score_reg
         result = process_prediction(p_test_one, scores, score_reg, score_sim)
-        result["similarity b to b_prime cosine"] = m.cmp_vectors(vec_b, vec_b_prime)
+        result["similarity b to b_prime cosine"] = float(m.cmp_vectors(vec_b, vec_b_prime))
         results.append(result)
     return results
 
