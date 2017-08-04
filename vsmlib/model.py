@@ -234,7 +234,7 @@ class ModelDense(Model):
         self.matrix = np.dot(left, np.diag(sigma))
         logger.info("computed the product")
         self.metadata["pow_sigma"] = power
-        self.matadata["size_dimensions"] = self.matrix.shape[1]
+        self.matadata["size_dimensions"] = int(self.matrix.shape[1])
         f.close()
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
