@@ -233,8 +233,8 @@ class ModelDense(Model):
         sigma = np.power(sigma, power)
         self.matrix = np.dot(left, np.diag(sigma))
         logger.info("computed the product")
-        self.props["pow_sigma"] = power
-        self.props["size_dimensions"] = self.matrix.shape[1]
+        self.metadata["pow_sigma"] = power
+        self.matadata["size_dimensions"] = self.matrix.shape[1]
         f.close()
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
@@ -253,8 +253,7 @@ class ModelDense(Model):
         nrm[nrm == 0] = 1
         self.matrix /= nrm[:, np.newaxis]
         self.name += "_normalized"
-        self.provenance += "\ntransform : normalized"
-        self.props["normalized"] = True
+        self.metadata["normalized"] = True
 
     def load_from_text(self, path):
         i = 0
