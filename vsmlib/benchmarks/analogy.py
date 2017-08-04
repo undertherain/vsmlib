@@ -615,7 +615,6 @@ def get_pairs(fname):
                 print("in file", fname)
                 print("in line", id_line, line)
                 exit(-1)
-
     return pairs
 
 
@@ -686,17 +685,11 @@ def make_normalized_copy():
 
 
 def main():
-    # chech args and print error if needed
     global options
-    #print("here we go!")
-#    ParseOptions()
     if len(sys.argv) > 1:
         path_config = sys.argv[1]
     else:
         path_config = "config_sample.yaml"
-
-        #print ("config file name required")
-        # exit()
 
     with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
@@ -704,8 +697,6 @@ def main():
     dirs = cfg["path_vectors"]
     options["name_method"] = cfg["method"]
     options["exclude"] = cfg["exclude"]
-    # return
-    # check if all pathes exist
     options["path_dataset"] = cfg["path_dataset"]
     options["name_dataset"] = os.path.basename(options["path_dataset"])
     options["dir_root_dataset"] = os.path.dirname(options["path_dataset"])
