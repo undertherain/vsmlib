@@ -42,15 +42,31 @@ set_aprimes_test = None
 inverse_regularization_strength = 1.0
 
 result_miss = {
-    "rank": -1,
-    "reason": "missing words"
-    }
+        "rank": -1,
+        "reason": "missing words"
+        }
+
 
 # options["degree"]=3
 # name_method="SVMCos"
 # name_kernel="linear"
 # name_kernel="poly"
 # name_kernel='rbf'
+
+
+def jsonify(data):
+    json_data = dict()
+    for key, value in data.items():
+        if isinstance(value, list):  # for lists
+            value = [jsonify(item) if isinstance(item, dict) else item for item in value]
+        if isinstance(value, dict):  # for nested lists
+            value = jsonify(value)
+        if isinstance(key, int):  # if key is integer: > to string
+            key = str(key)
+        if type(value).__module__ == 'numpy':  # if value is numpy.*: > to python list
+            value = value.tolist()
+        json_data[key] = value
+    return json_data
 
 
 def normed(v):
@@ -588,6 +604,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     out["experiment setup"]["dataset"] = name_dataset
     out["experiment setup"]["embeddings"] = m.name
     out["experiment setup"]["category"] = name_category
+    jsonify(out)
     str_results = json.dumps(out, indent=4, separators=(',', ': '), sort_keys=True)
     file_out = open(name_file_out, "w", errors="replace")
     file_out.write(str_results)
