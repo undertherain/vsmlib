@@ -576,7 +576,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
             "category": name_category,
             "total": cnt_total,
             "correct": cnt_correct}
-        props_experiment.update(m.props)
+        props_experiment.update(m.metadata)
     out = dict()
     out["results"] = results
     out["experiment setup"] = dict()
