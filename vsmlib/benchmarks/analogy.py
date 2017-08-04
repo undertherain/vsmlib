@@ -604,7 +604,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     out["experiment setup"]["dataset"] = name_dataset
     out["experiment setup"]["embeddings"] = m.name
     out["experiment setup"]["category"] = name_category
-    jsonify(out)
+    out = jsonify(out)
     str_results = json.dumps(out, indent=4, separators=(',', ': '), sort_keys=True)
     file_out = open(name_file_out, "w", errors="replace")
     file_out.write(str_results)
