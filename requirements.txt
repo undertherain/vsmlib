@@ -2,3 +2,6 @@ scipy
 brewer2mpl
 tables
 matplotlib
+tqdm
+sklearn
+pyyaml
