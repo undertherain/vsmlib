@@ -525,6 +525,8 @@ def run_category_subsample(pairs, name_dataset, name_category="not yet"):
     if options["name_method"] == "SVMCos":
         name_file += "_" + name_kernel
     name_file_out += "/" + m.name + "/" + name_category
+    #if name_file_out.endswith(".txt"):
+    name_file_out = name_file_out[:-4] + ".json"
     print("saving to", name_file_out)
     if not os.path.exists(os.path.dirname(name_file_out)):
         os.makedirs(os.path.dirname(name_file_out))
@@ -548,6 +550,8 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     if not options["exclude"]:
         name_file_out += "_honest"
     name_file_out += "/" + m.name + "/" + name_category
+    if name_file_out.endswith(".txt"):  # todo don't duplicate with subsample
+        name_file_out = name_file_out[:-4] + ".json"
     print("saving to", name_file_out)
     if not os.path.exists(os.path.dirname(name_file_out)):
         os.makedirs(os.path.dirname(name_file_out))
