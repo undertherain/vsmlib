@@ -15,6 +15,7 @@ import sys
 import vsmlib
 import yaml
 from itertools import product
+import logging
 
 
 def profile_trivial(a):
@@ -30,10 +31,10 @@ except NameError:
 options = {}
 options["name_method"] = "3CosAdd"
 options["exclude"] = True
+options["normalize"] = True
 
 
 do_top5 = True
-normalize = True
 
 # this are some hard-coded bits which will be implemented later
 need_subsample = False
@@ -70,7 +71,7 @@ def jsonify(data):
 
 
 def normed(v):
-    if normalize:
+    if options["normalize"]:
         return v
     else:
         return v / np.linalg.norm(v)
@@ -589,7 +590,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
         for train, test in loo:
             p_test = [pairs[i] for i in test]
             p_train = [pairs[i] for i in train]
-            #p_train = [x for x in p_train if not is_pair_missing(x)]
+            # p_train = [x for x in p_train if not is_pair_missing(x)]
             my_prog.update()
             results += do_test_on_pairs(p_train, p_test)
 
@@ -672,7 +673,7 @@ def subsample_dims(newdim):
 
 def make_normalized_copy():
     global m_normed
-    if normalize:
+    if options["normalize"]:
         m_normed = m.matrix
     else:
         m_normed = m.matrix.copy()
