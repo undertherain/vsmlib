@@ -225,18 +225,19 @@ class ThreeCosMul(PairWise):
 class ThreeCosMul2(PairWise):
     def compute_scores(self, vec_a, vec_a_prime, vec_b):
         epsilon = 0.001
-        #sim_a = get_most_similar_fast(vec_a)
-        #sim_a_prime = get_most_similar_fast(vec_a_prime)
-        #sim_b = get_most_similar_fast(vec_b)
-        #   scores = (sim_a_prime * sim_b) / (sim_a + epsilon)
-        predicted = ( ((vec_a_prime+0.5) /2) * ((vec_b+0.5)/2)) / (((vec_a+0.5)/2) + epsilon)
+        # sim_a = get_most_similar_fast(vec_a)
+        # sim_a_prime = get_most_similar_fast(vec_a_prime)
+        # sim_b = get_most_similar_fast(vec_b)
+        # scores = (sim_a_prime * sim_b) / (sim_a + epsilon)
+        predicted = (((vec_a_prime+0.5) /2) * ((vec_b+0.5)/2)) / (((vec_a+0.5)/2) + epsilon)
         scores = get_most_similar_fast(predicted)
         return scores, predicted
+
 
 class SimilarToAny(PairWise):
     def compute_scores(self, vectors):
         scores = get_most_similar_fast(vectors)
-        #print("scores shape:", scores.shape)
+        # print("scores shape:", scores.shape)
         best = scores.max(axis=0)
         return best
 
@@ -254,7 +255,7 @@ class SimilarToB():
         return results
 
     def do_on_two_pairs(self, pair_test):
-        #print ("pre ",pair_test)
+        # print ("pre ",pair_test)
         if is_pair_missing([pair_test]):
             result = result_miss
         else:
@@ -262,7 +263,7 @@ class SimilarToB():
             vec_b_prime = m.get_row(pair_test[1][0])
             scores = get_most_similar_fast(vec_b)
             result = process_prediction(pair_test, scores, None, None)
-            result["similarity to correct cosine"] = m.cmp_vectors(vec_b,vec_b_prime)
+            result["similarity to correct cosine"] = m.cmp_vectors(vec_b, vec_b_prime)
         return result
 
 
@@ -320,15 +321,16 @@ def get_distance_closest_words(center, cnt_words=1):
 
 def get_rank(source, center):
     if isinstance(center, str):
-        #print ("getting rank for ",center)
+        # print ("getting rank for ",center)
         center = m.get_row(center)
     if isinstance(source, str):
         source = [source]
     scores = get_most_similar_fast(center)
     ids_max = np.argsort(scores)[::-1]
     for i in range(ids_max.shape[0]):
-        #print("\t try ", m.vocabulary.get_word_by_id(ids_max[i]))
-        if m.vocabulary.get_word_by_id(ids_max[i]) in source: break
+        # print("\t try ", m.vocabulary.get_word_by_id(ids_max[i]))
+        if m.vocabulary.get_word_by_id(ids_max[i]) in source:
+            break
     rank = i
     return rank
 
@@ -380,15 +382,15 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
     #result["closest words to answer 5"] = get_distance_closest_words(vec_b_prime,5)
     #where prediction lands:
     ans = m.vocabulary.get_word_by_id(ids_max[0])
-    if ans == p_test_one[0]: 
-        result["landing_b"] = True 
+    if ans == p_test_one[0]:
+        result["landing_b"] = True
     else:
-        result["landing_b"] = False 
+        result["landing_b"] = False
 
-    if ans in p_test_one[1]: 
-        result["landing_b_prime"] = True 
+    if ans in p_test_one[1]:
+        result["landing_b_prime"] = True
     else:
-        result["landing_b_prime"] = False 
+        result["landing_b_prime"] = False
 
     all_a = [i[0] for i in p_train]
 
@@ -660,7 +662,7 @@ def run_all(name_dataset):
             pairs = get_pairs(os.path.join(root, filename))
             # print(pairs)
             run_category(pairs, name_dataset, name_category=filename)
-    #print("total accuracy: {:.4f}".format(cnt_total_correct/(cnt_total_total+1)))
+    # print("total accuracy: {:.4f}".format(cnt_total_correct/(cnt_total_total+1)))
 
 
 def subsample_dims(newdim):
@@ -698,7 +700,7 @@ def make_normalized_copy():
 #        m.load_with_alpha("/home/blackbird/data/scratch/explicit/English/_factorized/explicit_combined2_m100_w5_svd_d2000",alpha)
     #  m.load_with_alpha("/home/blackbird/data/scratch/explicit/English/_factorized/explicit_combined2_m100_w5_svd_d2000",alpha)
     # m.normalize()
-    #m_normed =  m.matrix.copy()
+    # m_normed =  m.matrix.copy()
     # m_normed/=np.linalg.norm(m_normed,axis=1)[:,None]
 
     # subsample_dims(dims)
