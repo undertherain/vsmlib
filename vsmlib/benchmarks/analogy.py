@@ -538,8 +538,8 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     global cnt_total_total
     global cnt_total_correct
 
-    if name_dataset.endswith("_D") or name_dataset.endswith("_I") or name_dataset.endswith("_E") or name_dataset.endswith("_L"):
-        name_dataset = name_dataset[:-2]
+    # if name_dataset.endswith("_D") or name_dataset.endswith("_I") or name_dataset.endswith("_E") or name_dataset.endswith("_L"):
+       # name_dataset = name_dataset[:-2]
 
     results = []
     name_file_out = os.path.join(options["path_results"], name_dataset, options["name_method"])
