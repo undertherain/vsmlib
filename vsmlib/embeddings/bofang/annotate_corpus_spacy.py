@@ -36,6 +36,7 @@ def annotate_to_file(textList, annotated_corpus_file):
             annotated_corpus_file.write(out)
             annotated_corpus_file.write("\n")
 
+
 textList = []
 with open(args.corpus_path, "r") as corpus_file, open(args.annotated_corpus_path, "w") as annotated_corpus_file:
     for line in corpus_file:
