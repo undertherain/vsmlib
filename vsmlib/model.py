@@ -9,10 +9,14 @@ from matplotlib import pyplot as plt
 import os
 import brewer2mpl
 import tables
-import json
+# import json
+import logging
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
 from .misc.data import save_json, load_json, detect_archive_format_and_open
+
+
+logger = logging.getLogger(__name__)
 
 
 def normed(v):
@@ -116,23 +120,24 @@ class Model(object):
             return 0
         return self.cmp_rows(id1, id2)
 
-    def load_props(self, path):
-        try:
-            with open(os.path.join(path, "props.json"), "r") as myfile:
-                str_props = myfile.read()
-                self.props = json.loads(str_props)
-        except FileNotFoundError:
-            print(bcolors.FAIL + "props.json not found" + bcolors.ENDC)
-            self.props = {}
+    # def load_props(self, path):
+        # try:
+            # with open(os.path.join(path, "props.json"), "r") as myfile:
+                # str_props = myfile.read()
+                # self.props = json.loads(str_props)
+        # except FileNotFoundError:
+            # logger.warning("props.json not found")
+            # self.props = {}
             # exit(-1)
 
-    def load_provenance(self, path):
+    def load_metadata(self, path):
+        self.metadata = load_json(os.path.join(path, "metadata.json"))
         try:
             with open(os.path.join(path, "provenance.txt"), "r") as myfile:
                 self.provenance = myfile.read()
         except FileNotFoundError:
-            print("provenance not found")
-        self.load_props(path)
+            logger.warning("provenance not found")
+        # self.load_props(path)
 
 
 def normalize(m):
@@ -153,7 +158,7 @@ class Model_explicit(Model):
         return c
 
     def load_from_hdf5(self, path):
-        self.load_provenance(path)
+        self.load_metadata(path)
         f = tables.open_file(os.path.join(path, 'cooccurrence_csr.h5p'), 'r')
         row_ptr = np.nan_to_num(f.root.row_ptr.read())
         col_ind = np.nan_to_num(f.root.col_ind.read())
@@ -167,7 +172,7 @@ class Model_explicit(Model):
         self.name += os.path.basename(os.path.normpath(path))
 
     def load(self, path):
-        self.load_provenance(path)
+        # self.load_provenance(path)
         self.vocabulary = Vocabulary_cooccurrence()
         self.vocabulary.load(path)
         self.name += os.path.basename(os.path.normpath(path))
@@ -205,6 +210,8 @@ class ModelDense(Model):
     def load_hdf5(self, path):
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'r')
         self.matrix = f.root.vectors.read()
+        self.vocabulary = Vocabulary()
+        self.vocabulary.load(path)
         f.close()
 
     def save_to_dir(self, path):
@@ -216,20 +223,18 @@ class ModelDense(Model):
         self.save_matr_to_hdf5(path)
         save_json(self.metadata, os.path.join(path, "metadata.json"))
 
-    def load_with_alpha(self, path, power=0.6, verbose=False):
-        self.load_provenance(path)
+    def load_with_alpha(self, path, power=0.6):
+        # self.load_provenance(path)
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'r')
 #        left = np.nan_to_num(f.root.vectors.read())
         left = f.root.vectors.read()
         sigma = f.root.sigma.read()
-        if verbose:
-            print("loaded left singulat vectors and sigma")
+        logger.info("loaded left singular vectors and sigma")
         sigma = np.power(sigma, power)
         self.matrix = np.dot(left, np.diag(sigma))
-        if verbose:
-            print("computed the product")
-        self.props["pow_sigma"] = power
-        self.props["size_dimensions"] = self.matrix.shape[1]
+        logger.info("computed the product")
+        self.metadata["pow_sigma"] = power
+        self.matadata["size_dimensions"] = int(self.matrix.shape[1])
         f.close()
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
@@ -241,15 +246,14 @@ class ModelDense(Model):
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
         self.name += os.path.basename(os.path.normpath(path))
-        self.load_provenance(path)
+        # self.load_provenance(path)
 
     def normalize(self):
         nrm = np.linalg.norm(self.matrix, axis=1)
         nrm[nrm == 0] = 1
         self.matrix /= nrm[:, np.newaxis]
         self.name += "_normalized"
-        self.provenance += "\ntransform : normalized"
-        self.props["normalized"] = True
+        self.metadata["normalized"] = True
 
     def load_from_text(self, path):
         i = 0
@@ -281,7 +285,7 @@ class ModelDense(Model):
         self.matrix = np.vstack(rows)
         if header:
             assert size_embedding == self.matrix.shape[1]
-        self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words))
+        self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words), dtype=np.int32)
         # self.name += "_{}".format(len(rows[0]))
 
 
@@ -350,11 +354,10 @@ class Model_w2v(ModelNumbered):
         size_row = int(header[1])
         self.name += "_{}".format(size_row)
         self.matrix = np.zeros((cnt_rows, size_row), dtype=np.float32)
-        print("cnt rows = {}, size row = {}".format(cnt_rows, size_row))
+        logger.debug("cnt rows = {}, size row = {}".format(cnt_rows, size_row))
         for i in range(cnt_rows):
             word = Model_w2v.load_word(f).decode(
                 'UTF-8', errors="ignore").strip()
-            # print (word)
             self.vocabulary.dic_words_ids[word] = i
             self.vocabulary.lst_words.append(word)
             s_row = f.read(size_row * 4)
@@ -366,7 +369,7 @@ class Model_w2v(ModelNumbered):
     def load_from_dir(self, path):
         self.name += "w2v_" + os.path.basename(os.path.normpath(path))
         self.load_from_file(os.path.join(path, "vectors.bin"))
-        self.load_provenance(path)
+        # self.load_provenance(path)
 
 
 @deprecated
@@ -379,47 +382,47 @@ class Model_glove(ModelNumbered):
         files = os.listdir(path)
         for f in files:
             if f.endswith(".gz"):
-                print("this is Glove")
+                logger.info("this is Glove")
                 self.load_from_text(os.path.join(path, f))
 
 
 def load_from_dir(path):
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
-        print("this is sparse explicit in hdf5")
+        logger.info("this is sparse explicit in hdf5")
         m = vsmlib.Model_explicit()
         m.load_from_hdf5(path)
         return m
     if os.path.isfile(os.path.join(path, "bigrams.data.bin")):
-        print("this is sparse explicit")
+        logger.info("this is sparse explicit")
         m = vsmlib.Model_explicit()
         m.load(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.bin")):
-        print("this is w2v")
+        logger.info("this is w2v")
         m = vsmlib.Model_w2v()
         m.load_from_dir(path)
         return m
     if os.path.isfile(os.path.join(path, "sgns.words.npy")):
         m = Model_Levi()
         m.load_from_dir(path)
-        print("this is Levi ")
+        logger.info("this is Levi")
         return m
     if os.path.isfile(os.path.join(path, "vectors.npy")):
         m = vsmlib.ModelNumbered()
         m.load_from_dir(path)
-        print("this is dense ")
+        logger.info("detected is dense ")
         return m
     if os.path.isfile(os.path.join(path, "vectors.h5p")):
         m = vsmlib.ModelNumbered()
         m.load_hdf5(path)
-        print("this is vsmlib format ")
+        logger.info("detected vsmlib format ")
         return m
 
     m = ModelNumbered()
     files = os.listdir(path)
     for f in files:
         if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
-            print("this is text")
+            logger.info(path, "detected as text")
             m.load_from_text(os.path.join(path, f))
             return m
 

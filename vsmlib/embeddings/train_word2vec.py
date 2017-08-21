@@ -5,19 +5,24 @@ This module implements skip-gram model and continuous-bow model.
 
 """
 import argparse
-import numpy as np
 import chainer
 from chainer import cuda
 import chainer.functions as F
 import chainer.initializers as I
 import chainer.links as L
+from timeit import default_timer as timer
 from chainer import reporter
 from chainer import training
 from chainer.training import extensions
+import logging
 import vsmlib
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
+from .iter_simple import WindowIterator
+
+
+logger = logging.getLogger(__name__)
 
 
 def parse_args():
@@ -109,58 +114,6 @@ class SoftmaxCrossEntropyLoss(chainer.Chain):
         return F.softmax_cross_entropy(self.out(x), t)
 
 
-class WindowIterator(chainer.dataset.Iterator):
-
-    def __init__(self, dataset, window, batch_size, repeat=True):
-        self.dataset = np.array(dataset, np.int32)
-        self.window = window
-        self.batch_size = batch_size
-        self._repeat = repeat
-
-        self.order = np.random.permutation(
-            len(dataset) - window * 2).astype(np.int32)
-        self.order += window
-        self.current_position = 0
-        self.epoch = 0
-        self.is_new_epoch = False
-
-    def __next__(self):
-        if not self._repeat and self.epoch > 0:
-            raise StopIteration
-
-        i = self.current_position
-        i_end = i + self.batch_size
-        position = self.order[i: i_end]
-        w = np.random.randint(self.window - 1) + 1
-        offset = np.concatenate([np.arange(-w, 0), np.arange(1, w + 1)])
-        pos = position[:, None] + offset[None, :]
-        context = self.dataset.take(pos)
-        center = self.dataset.take(position)
-
-        if i_end >= len(self.order):
-            np.random.shuffle(self.order)
-            self.epoch += 1
-            self.is_new_epoch = True
-            self.current_position = 0
-        else:
-            self.is_new_epoch = False
-            self.current_position = i_end
-
-        return center, context
-
-    @property
-    def epoch_detail(self):
-        return self.epoch + float(self.current_position) / len(self.order)
-
-    def serialize(self, serializer):
-        self.current_position = serializer('current_position',
-                                           self.current_position)
-        self.epoch = serializer('epoch', self.epoch)
-        self.is_new_epoch = serializer('is_new_epoch', self.is_new_epoch)
-        if self._order is not None:
-            serializer('_order', self._order)
-
-
 def convert(batch, device):
     center, context = batch
     if device >= 0:
@@ -185,18 +138,19 @@ def create_model(args, net, vocab):
     model.metadata["embeddings"] = vars(args)
     model.metadata["embeddings"]["vsmlib_version"] = vsmlib.__version__
     model.matrix = cuda.to_cpu(net.embed.W.data)
-    model.save_to_dir(args.path_out)
+    return model
 
 
 def get_data(path, vocab):
     doc = load_file_as_ids(path, vocab)
     # doc = doc[doc >= 0]
-    # smart split 
+    # smart split
     train, val = doc[:-1000], doc[-1000:]
     return train, val
 
 
 def run(args):
+    time_start = timer()
     if args.gpu >= 0:
         chainer.cuda.get_device_from_id(args.gpu).use()
         cuda.check_cuda_available()
@@ -213,7 +167,8 @@ def run(args):
 
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
-        tree = HSM.create_huffman_tree(word_counts)
+        d_counts = {i: word_counts[i] for i in range(len(word_counts))}
+        tree = HSM.create_huffman_tree(d_counts)
         loss_func = HSM(args.unit, tree)
         loss_func.W.data[...] = 0
     elif args.out_type == 'ns':
@@ -245,11 +200,15 @@ def run(args):
 
     trainer.extend(extensions.Evaluator(val_iter, model, converter=convert, device=args.gpu))
     trainer.extend(extensions.LogReport())
-    trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss']))
+    trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss', 'time']))
     trainer.extend(extensions.ProgressBar())
     trainer.run()
     # save(args, model, vocab.lst_words)
-    create_model(args, model, vocab)
+    model = create_model(args, model, vocab)
+    time_end = timer()
+    model.metadata["embeddings"]["execution_time"] = time_end - time_start
+    model.save_to_dir(args.path_out)
+    logger.info("model saved to " + args.path_out)
 
 
 def main():

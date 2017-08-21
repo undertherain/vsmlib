@@ -1,8 +1,10 @@
 """Tests for model module."""
 
 import unittest
+import logging
 import vsmlib
 from vsmlib.model import Model, ModelDense
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Tests(unittest.TestCase):
