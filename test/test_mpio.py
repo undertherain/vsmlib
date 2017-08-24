@@ -1,5 +1,5 @@
-from mpi4py import MPI
-import h5py
+#from mpi4py import MPI
+#import h5py
 
 # 4 mpi ranks are assumed
 
@@ -10,3 +10,4 @@ import h5py
 #dset[rank] = rank
 
 #f.close()
+print(hi)
