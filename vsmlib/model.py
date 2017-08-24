@@ -410,7 +410,7 @@ def load_from_dir(path):
     if os.path.isfile(os.path.join(path, "vectors.npy")):
         m = vsmlib.ModelNumbered()
         m.load_from_dir(path)
-        logger.info("detected is dense ")
+        logger.info("detected as dense ")
         return m
     if os.path.isfile(os.path.join(path, "vectors.h5p")):
         m = vsmlib.ModelNumbered()
