@@ -10,4 +10,4 @@
 #dset[rank] = rank
 
 #f.close()
-print(hi)
+print("hi")
