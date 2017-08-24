@@ -422,7 +422,7 @@ def load_from_dir(path):
     files = os.listdir(path)
     for f in files:
         if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
-            logger.info(path, "detected as text")
+            logger.info(path + " detected as text")
             m.load_from_text(os.path.join(path, f))
             return m
 
