@@ -12,3 +12,6 @@ os:
 script:
   - python -m unittest discover
 
+ notifications:
+    slack: nlp-tokyo:36Xqey7o4uILHvshIdBZepUS
+    email: false
