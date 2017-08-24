@@ -8,3 +8,7 @@ python:
 
 os:
     - linux
+
+script:
+  - python -m unittest discover
+
