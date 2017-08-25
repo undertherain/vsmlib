@@ -735,7 +735,7 @@ def main():
         else:
             m = vsmlib.model.load_from_dir(d)
 
-        if normalize:
+        if options["normalize"]:
             # m.clip_negatives()  #make this configurable
             m.normalize()
 
