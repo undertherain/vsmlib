@@ -32,7 +32,7 @@ options = {}
 options["name_method"] = "3CosAdd"
 options["exclude"] = True
 options["normalize"] = True
-
+stats = {}
 
 do_top5 = True
 
@@ -519,28 +519,25 @@ def register_test_func():
         raise Exception("method name not recognized")
 
 
-def run_category_subsample(pairs, name_dataset, name_category="not yet"):
-    name_file_out = os.path.join(
-        ".",
-        options["path_results"],
-        name_dataset,
-        options["name_method"])
-    if options["name_method"] == "SVMCos":
-        name_file += "_" + name_kernel
-    name_file_out += "/" + m.name + "/" + name_category
-    #if name_file_out.endswith(".txt"):
-    name_file_out = name_file_out[:-4] + ".json"
-    print("saving to", name_file_out)
-    if not os.path.exists(os.path.dirname(name_file_out)):
-        os.makedirs(os.path.dirname(name_file_out))
-    file_out = open(name_file_out, "w", errors="replace")
-    file_out.close()
+# def run_category_subsample(pairs, name_dataset, name_category="not yet"):
+#    name_file_out = os.path.join(
+#        ".",
+#        options["path_results"],
+#        name_dataset,
+#        options["name_method"])
+#    if options["name_method"] == "SVMCos":
+#        name_file += "_" + name_kernel
+#    name_file_out += "/" + m.name + "/" + name_category
+#    #if name_file_out.endswith(".txt"):
+#    name_file_out = name_file_out[:-4] + ".json"
+#    print("saving to", name_file_out)
+#    if not os.path.exists(os.path.dirname(name_file_out)):
+#        os.makedirs(os.path.dirname(name_file_out))
+#    file_out = open(name_file_out, "w", errors="replace")
+#    file_out.close()
 
 
 def run_category(pairs, name_dataset, name_category="not yet"):
-    global cnt_total_total
-    global cnt_total_correct
-
     # if name_dataset.endswith("_D") or name_dataset.endswith("_I") or name_dataset.endswith("_E") or name_dataset.endswith("_L"):
        # name_dataset = name_dataset[:-2]
 
@@ -604,7 +601,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
         props_experiment.update(m.metadata)
     out = dict()
     out["results"] = results
-    out["experiment setup"] = dict()
+    out["experiment setup"] = props_experiment
     out["experiment setup"]["method"] = options["name_method"]
     if not options["exclude"]:
         out["experiment setup"]["method"] += "_honest"
