@@ -13,6 +13,8 @@ def make():
 
 
 def deploy():
+    test()
+    make()
     local("twine upload dist/*")
 
 

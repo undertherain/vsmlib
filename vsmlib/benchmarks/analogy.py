@@ -463,8 +463,8 @@ def do_test_on_pair_regr_filtered(p_train, p_test, file_out):
 
     X_train, Y_train = gen_vec_single(p_train)
     if options["name_method"] == "LRCosF":
-        #        model_regression = LogisticRegression(class_weight = 'balanced')
-        #model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
+        # model_regression = LogisticRegression(class_weight = 'balanced')
+        # model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
         model_regression = LogisticRegression(
             class_weight='balanced',
             C=inverse_regularization_strength)
