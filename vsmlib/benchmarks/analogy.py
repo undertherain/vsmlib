@@ -33,6 +33,8 @@ options["name_method"] = "3CosAdd"
 options["exclude"] = True
 options["normalize"] = True
 stats = {}
+cnt_total_correct = 0
+cnt_total_total = 0
 
 do_top5 = True
 
@@ -128,7 +130,7 @@ def is_pair_missing(pairs):
 def gen_vec_single(pairs):
     a, a_prime = zip(*pairs)
     a_prime = [i[0] for i in a_prime]
-    #a_prime=[i for sublist in a_prime for i in sublist]
+    # a_prime=[i for sublist in a_prime for i in sublist]
     a_prime = [i for i in a_prime if m.vocabulary.get_id(i) >= 0]
     a = [i for i in a if m.vocabulary.get_id(i) >= 0]
     noise = [random.choice(m.vocabulary.lst_words) for i in range(len(a))]
@@ -337,6 +339,8 @@ def get_rank(source, center):
 
 
 def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exclude=True):
+    global cnt_total_correct
+    global cnt_total_total
     ids_max = np.argsort(scores)[::-1]
     id_question = m.vocabulary.get_id(p_test_one[0])
     result = dict()
@@ -377,7 +381,9 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
             break
         rank += 1
     result["rank"] = rank
- 
+    if rank==0:
+        cnt_total_correct += 1
+    cnt_total_total += 1
     #vec_b_prime = m.get_row(p_test_one[1][0])
     #result["closest words to answer 1"] = get_distance_closest_words(vec_b_prime,1)
     #result["closest words to answer 5"] = get_distance_closest_words(vec_b_prime,5)
@@ -394,10 +400,8 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
         result["landing_b_prime"] = False
 
     all_a = [i[0] for i in p_train]
-
     all_a_prime = [item for sublist in p_train for item in sublist[1]]
-#    print("all_a",all_a)
-    # print("all_a_prime",all_a_prime)
+
     if ans in all_a:
         result["landing_a"] = True
     else:
@@ -418,7 +422,7 @@ def do_test_on_pair_regr_old(p_train, p_test):
     X_train, Y_train = gen_vec_single(p_train)
     # print(Y_train)
     if options["name_method"].startswith("LRCos"):
-        #        model_regression = LogisticRegression(class_weight = 'balanced')
+        # model_regression = LogisticRegression(class_weight = 'balanced')
         # model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
         model_regression = LogisticRegression(
             class_weight='balanced',
@@ -439,7 +443,6 @@ def do_test_on_pair_regr_old(p_train, p_test):
         vec_b_prime = m.get_row(p_test_one[1][0])
         v = vec_b / np.linalg.norm(vec_b)
         score_sim = v @ m_normed.T
-        # scores=score_sim*np.sqrt(score_reg)
         scores = score_sim * score_reg
         result = process_prediction(p_test_one, scores, score_reg, score_sim)
         result["similarity b to b_prime cosine"] = float(m.cmp_vectors(vec_b, vec_b_prime))
@@ -447,7 +450,7 @@ def do_test_on_pair_regr_old(p_train, p_test):
     return results
 
 
-def do_test_on_pair_regr(p_train, p_test, file_out):
+def do_test_on_pair_regr_filtered(p_train, p_test, file_out):
     cnt_total = 0
     cnt_correct = 0
     # create_list_test_right(p_test)
@@ -514,7 +517,7 @@ def register_test_func():
     elif options["name_method"] == "LRCos" or options["name_method"] == "SVMCos":
         do_test_on_pairs = do_test_on_pair_regr_old
     elif options["name_method"] == "LRCosF":
-        do_test_on_pairs = do_test_on_pair_regr
+        do_test_on_pairs = do_test_on_pair_regr_filtered
     else:
         raise Exception("method name not recognized")
 
@@ -582,8 +585,6 @@ def run_category(pairs, name_dataset, name_category="not yet"):
 
     else:
         my_prog = tqdm(0, total=cnt_splits, desc=name_category)
-        cnt_total = 0
-        cnt_correct = 0
         for train, test in loo:
             p_test = [pairs[i] for i in test]
             p_train = [pairs[i] for i in train]
@@ -596,8 +597,9 @@ def run_category(pairs, name_dataset, name_category="not yet"):
             "dataset": name_dataset,
             "method": options["name_method"],
             "category": name_category,
-            "total": cnt_total,
-            "correct": cnt_correct}
+            "cnt_questions_total": cnt_total_total,
+            "cnt_correct": cnt_total_correct,
+            "score_overall": cnt_total_correct / cnt_total_total}
         props_experiment.update(m.metadata)
     out = dict()
     out["results"] = results
@@ -644,8 +646,6 @@ def run_all(name_dataset):
     global cnt_total_correct
     global cnt_total_total
     register_test_func()
-    cnt_total_correct = 0
-    cnt_total_total = 0
     print("doing all for ", name_dataset)
     if options["name_method"] == "SVMCos":
         print("using ", options["name_method"] + "_" + name_kernel)
@@ -715,7 +715,6 @@ def main():
 
     with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
-    print(cfg)
     dirs = cfg["path_vectors"]
     options["name_method"] = cfg["method"]
     options["exclude"] = cfg["exclude"]
@@ -741,6 +740,7 @@ def main():
         make_normalized_copy()
 
         run_all(options["name_dataset"])
+        print("\noverall score: {}".format(cnt_total_correct / cnt_total_total))
 
 
 if __name__ == "__main__":
