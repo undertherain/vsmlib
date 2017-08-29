@@ -711,7 +711,9 @@ def main():
     if len(sys.argv) > 1:
         path_config = sys.argv[1]
     else:
-        path_config = "config_sample.yaml"
+        print("usage: python3 -m vsmlib.benchmarls.analogy <config file>")
+        print("config file example can be found at ")
+        return
 
     with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)

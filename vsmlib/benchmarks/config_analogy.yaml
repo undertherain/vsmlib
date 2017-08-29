@@ -1,0 +1,22 @@
+path_vectors: [
+    "/path/to/embeddings",
+    "/path/to/other/embeddings"
+   ]
+
+alpha: 0.6
+# this is the exponent for Sigma values of SVD embeddings
+
+normalize: true
+# specifies if embeddings should be normalized
+
+method: LRCos
+# allowed values are 3CosAdd, 3CosAvg, SimilarToB, PairDistance, LRCos and LRCosF
+
+exclude: True
+# epcifies if question words should be excluded from possible answers 
+
+path_dataset: "/work/alex/data/linguistic/datasets/analogies/BATS_3.0"
+# path to dataset. last segment of the path would be interpreted as dataset name
+
+path_results: "/work/alex/data/linguistic/outputs/test"
+# specifies where to save results. subfolders for datasets and embeddings would be created automatically
