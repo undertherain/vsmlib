@@ -28,7 +28,7 @@ class Tests(unittest.TestCase):
         args.epoch = 10
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
-        args.path_text = path_text
+        args.path_corpus = path_text
         vsmlib.embeddings.train_word2vec.run(args)
 
     def test_hsm(self):
@@ -44,7 +44,7 @@ class Tests(unittest.TestCase):
         args.epoch = 10
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
-        args.path_text = path_text
+        args.path_corpus = path_text
         vsmlib.embeddings.train_word2vec.run(args)
 
     def test_iterator(self):

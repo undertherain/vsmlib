@@ -48,8 +48,10 @@ def parse_args():
                         '"ns": negative sampling, "original": no approximation)')
     parser.add_argument('--out', default='result',
                         help='Directory to output the result')
-    parser.add_argument('--test', dest='test', action='store_true')
-    parser.set_defaults(test=False)
+    parser.add_argument('--path_corpus', help='path to the corpus', required=True)
+    parser.add_argument('--path_vocab', help='path to the vocabulary', required=True)
+    parser.add_argument('--path_out', help='path to save embeddings', required=True)
+    parser.add_argument('--test', dest='test', default=False, action='store_true')
 
     args = parser.parse_args()
     return args
@@ -157,7 +159,7 @@ def run(args):
 
     vocab = Vocabulary()
     vocab.load(args.path_vocab)
-    train, val = get_data(args.path_text, vocab)
+    train, val = get_data(args.path_corpus, vocab)
 
     word_counts = vocab.lst_frequencies
 
