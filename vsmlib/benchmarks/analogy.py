@@ -110,12 +110,12 @@ def is_pair_missing(pairs):
             return True
         if m.vocabulary.get_id(pair[1][0]) < 0:
             return True
-        #if not is_at_least_one_word_present(pair[1]):
-            #return True
+        # if not is_at_least_one_word_present(pair[1]):
+            # return True
     return False
 
 
-#def is_quad_missing(quad):
+# def is_quad_missing(quad):
 #    if m.vocabulary.get_id(quad[0]) < 0:
 #        return True
 #    if m.vocabulary.get_id(quad[2]) < 0:
@@ -232,7 +232,7 @@ class ThreeCosMul2(PairWise):
         # sim_a_prime = get_most_similar_fast(vec_a_prime)
         # sim_b = get_most_similar_fast(vec_b)
         # scores = (sim_a_prime * sim_b) / (sim_a + epsilon)
-        predicted = (((vec_a_prime+0.5) /2) * ((vec_b+0.5)/2)) / (((vec_a+0.5)/2) + epsilon)
+        predicted = (((vec_a_prime + 0.5) / 2) * ((vec_b + 0.5) / 2)) / (((vec_a + 0.5) / 2) + epsilon)
         scores = get_most_similar_fast(predicted)
         return scores, predicted
 
@@ -298,7 +298,7 @@ def do_test_on_pair_3CosAvg(p_train, p_test):
         vec_b_prime = m.get_row(p_test_one[1][0])
         vec_b = m.get_row(p_test_one[0])
         vec_b_prime_predicted = vec_a_prime - vec_a + vec_b
-        # oh crap, why are we not normalizing here? 
+        # oh crap, why are we not normalizing here?
         scores = get_most_similar_fast(vec_b_prime_predicted)
         result = process_prediction(p_test_one, scores, None, None)
         result["distances to correct cosine"] = m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
@@ -381,13 +381,13 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
             break
         rank += 1
     result["rank"] = rank
-    if rank==0:
+    if rank == 0:
         cnt_total_correct += 1
     cnt_total_total += 1
-    #vec_b_prime = m.get_row(p_test_one[1][0])
-    #result["closest words to answer 1"] = get_distance_closest_words(vec_b_prime,1)
-    #result["closest words to answer 5"] = get_distance_closest_words(vec_b_prime,5)
-    #where prediction lands:
+    # vec_b_prime = m.get_row(p_test_one[1][0])
+    # result["closest words to answer 1"] = get_distance_closest_words(vec_b_prime,1)
+    # result["closest words to answer 5"] = get_distance_closest_words(vec_b_prime,5)
+    # where prediction lands:
     ans = m.vocabulary.get_word_by_id(ids_max[0])
     if ans == p_test_one[0]:
         result["landing_b"] = True
