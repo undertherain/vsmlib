@@ -608,7 +608,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     if not options["exclude"]:
         out["experiment setup"]["method"] += "_honest"
     out["experiment setup"]["dataset"] = name_dataset
-    out["experiment setup"]["embeddings"] = m.name
+    out["experiment setup"]["embeddings"] = m.metadata
     out["experiment setup"]["category"] = name_category
     out = jsonify(out)
     str_results = json.dumps(out, indent=4, separators=(',', ': '), sort_keys=True)

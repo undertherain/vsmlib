@@ -130,14 +130,12 @@ class Model(object):
             # self.props = {}
             # exit(-1)
 
+
     def load_metadata(self, path):
-        self.metadata = load_json(os.path.join(path, "metadata.json"))
         try:
-            with open(os.path.join(path, "provenance.txt"), "r") as myfile:
-                self.provenance = myfile.read()
+            self.metadata = load_json(os.path.join(path, "metadata.json"))
         except FileNotFoundError:
-            logger.warning("provenance not found")
-        # self.load_props(path)
+            logger.warning("metadata not found")
 
 
 def normalize(m):
@@ -424,6 +422,8 @@ def load_from_dir(path):
         if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
             logger.info(path + " detected as text")
             m.load_from_text(os.path.join(path, f))
+            m.load_metadata(path)
+
             return m
 
     raise RuntimeError("can not detect embeddings format")
