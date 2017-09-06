@@ -9,7 +9,6 @@ from matplotlib import pyplot as plt
 import os
 import brewer2mpl
 import tables
-# import json
 import logging
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
@@ -17,7 +16,6 @@ from .misc.data import save_json, load_json, detect_archive_format_and_open
 
 
 logger = logging.getLogger(__name__)
-
 
 def normed(v):
     return v / np.linalg.norm(v)
@@ -136,7 +134,8 @@ class Model(object):
             self.metadata = load_json(os.path.join(path, "metadata.json"))
         except FileNotFoundError:
             logger.warning("metadata not found")
-
+        if not "dimensions" in self.metadata:
+            self.metadata["dimensions"] = self.matrix.shape[1]
 
 def normalize(m):
     for i in (range(m.shape[0] - 1)):
@@ -185,8 +184,7 @@ class Model_explicit(Model):
     def normalize(self):
         normalize(self.matrix)
         self.name += "_normalized"
-        self.provenance += "\ntransform : normalize"
-        self.normalized = True
+        self.metadata["normalized"] = True
 
 
 class ModelDense(Model):
@@ -389,31 +387,37 @@ def load_from_dir(path):
         logger.info("this is sparse explicit in hdf5")
         m = vsmlib.Model_explicit()
         m.load_from_hdf5(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "bigrams.data.bin")):
         logger.info("this is sparse explicit")
         m = vsmlib.Model_explicit()
         m.load(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.bin")):
         logger.info("this is w2v")
         m = vsmlib.Model_w2v()
         m.load_from_dir(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "sgns.words.npy")):
         m = Model_Levi()
-        m.load_from_dir(path)
         logger.info("this is Levi")
+        m.load_from_dir(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.npy")):
         m = vsmlib.ModelNumbered()
-        m.load_from_dir(path)
         logger.info("detected as dense ")
+        m.load_from_dir(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.h5p")):
         m = vsmlib.ModelNumbered()
-        m.load_hdf5(path)
         logger.info("detected vsmlib format ")
+        m.load_hdf5(path)
+        m.load_metadata(path)
         return m
 
     m = ModelNumbered()
