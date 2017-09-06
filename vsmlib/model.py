@@ -184,8 +184,7 @@ class Model_explicit(Model):
     def normalize(self):
         normalize(self.matrix)
         self.name += "_normalized"
-        self.provenance += "\ntransform : normalize"
-        self.normalized = True
+        self.metadata["normalized"] = True
 
 
 class ModelDense(Model):
@@ -388,31 +387,37 @@ def load_from_dir(path):
         logger.info("this is sparse explicit in hdf5")
         m = vsmlib.Model_explicit()
         m.load_from_hdf5(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "bigrams.data.bin")):
         logger.info("this is sparse explicit")
         m = vsmlib.Model_explicit()
         m.load(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.bin")):
         logger.info("this is w2v")
         m = vsmlib.Model_w2v()
         m.load_from_dir(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "sgns.words.npy")):
         m = Model_Levi()
-        m.load_from_dir(path)
         logger.info("this is Levi")
+        m.load_from_dir(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.npy")):
         m = vsmlib.ModelNumbered()
-        m.load_from_dir(path)
         logger.info("detected as dense ")
+        m.load_from_dir(path)
+        m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.h5p")):
         m = vsmlib.ModelNumbered()
-        m.load_hdf5(path)
         logger.info("detected vsmlib format ")
+        m.load_hdf5(path)
+        m.load_metadata(path)
         return m
 
     m = ModelNumbered()
