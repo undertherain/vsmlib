@@ -9,7 +9,6 @@ from matplotlib import pyplot as plt
 import os
 import brewer2mpl
 import tables
-# import json
 import logging
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
