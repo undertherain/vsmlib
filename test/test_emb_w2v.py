@@ -20,7 +20,7 @@ class Tests(unittest.TestCase):
         args.test = True
         args.gpu = -1
         args.out_type = "ns"
-        args.unit = 100
+        args.dimensions = 100
         args.negative_size = 5
         args.model = "skipgram"
         args.window = 4
@@ -36,7 +36,7 @@ class Tests(unittest.TestCase):
         args.test = True
         args.gpu = -1
         args.out_type = "hsm"
-        args.unit = 100
+        args.dimensions = 100
         args.negative_size = 5
         args.model = "skipgram"
         args.window = 4

@@ -29,8 +29,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', '-g', default=-1, type=int,
                         help='GPU ID (negative value indicates CPU)')
-    parser.add_argument('--unit', '-u', default=100, type=int,
-                        help='number of units')
+    parser.add_argument('--dimensions', '-d', default=100, type=int,
+                        help='number of dimensions')
     parser.add_argument('--window', '-w', default=5, type=int,
                         help='window size')
     parser.add_argument('--batchsize', '-b', type=int, default=1000,
@@ -58,7 +58,7 @@ def parse_args():
 
 def print_params(args):
     print('GPU: {}'.format(args.gpu))
-    print('# unit: {}'.format(args.unit))
+    print('dimensions: {}'.format(args.dimensions))
     print('Window: {}'.format(args.window))
     print('Minibatch-size: {}'.format(args.batchsize))
     print('# epoch: {}'.format(args.epoch))
@@ -125,7 +125,7 @@ def convert(batch, device):
 
 def save_w2v_legacy(args, model, index2word):
     with open('word2vec.model', 'w') as f:
-        f.write('%d %d\n' % (len(index2word), args.unit))
+        f.write('%d %d\n' % (len(index2word), args.dimensions))
         w = cuda.to_cpu(model.embed.W.data)
         for i, wi in enumerate(w):
             v = ' '.join(map(str, wi))
@@ -136,8 +136,8 @@ def create_model(args, net, vocab):
     model = ModelNumbered()
     model.vocabulary = vocab
     model.metadata["vocabulary"] = vocab.metadata
-    model.metadata["embeddings"] = vars(args)
-    model.metadata["embeddings"]["vsmlib_version"] = vsmlib.__version__
+    model.metadata.update(vars(args))
+    model.metadata["vsmlib_version"] = vsmlib.__version__
     model.matrix = cuda.to_cpu(net.embed.W.data)
     return model
 
@@ -170,21 +170,21 @@ def run(args):
         HSM = L.BinaryHierarchicalSoftmax
         d_counts = {i: word_counts[i] for i in range(len(word_counts))}
         tree = HSM.create_huffman_tree(d_counts)
-        loss_func = HSM(args.unit, tree)
+        loss_func = HSM(args.dimensions, tree)
         loss_func.W.data[...] = 0
     elif args.out_type == 'ns':
         cs = [word_counts[w] for w in range(len(word_counts))]
-        loss_func = L.NegativeSampling(args.unit, cs, args.negative_size)
+        loss_func = L.NegativeSampling(args.dimensions, cs, args.negative_size)
         loss_func.W.data[...] = 0
     elif args.out_type == 'original':
-        loss_func = SoftmaxCrossEntropyLoss(args.unit, vocab.cnt_words)
+        loss_func = SoftmaxCrossEntropyLoss(args.dimensions, vocab.cnt_words)
     else:
         raise Exception('Unknown output type: {}'.format(args.out_type))
 
     if args.model == 'skipgram':
-        model = SkipGram(vocab.cnt_words, args.unit, loss_func)
+        model = SkipGram(vocab.cnt_words, args.dimensions, loss_func)
     elif args.model == 'cbow':
-        model = ContinuousBoW(vocab.cnt_words, args.unit, loss_func)
+        model = ContinuousBoW(vocab.cnt_words, args.dimensions, loss_func)
     else:
         raise Exception('Unknown model type: {}'.format(args.model))
 
@@ -207,7 +207,7 @@ def run(args):
     # save(args, model, vocab.lst_words)
     model = create_model(args, model, vocab)
     time_end = timer()
-    model.metadata["embeddings"]["execution_time"] = time_end - time_start
+    model.metadata["execution_time"] = time_end - time_start
     model.save_to_dir(args.path_out)
     logger.info("model saved to " + args.path_out)
 
