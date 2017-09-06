@@ -592,24 +592,20 @@ def run_category(pairs, name_dataset, name_category="not yet"):
             my_prog.update()
             results += do_test_on_pairs(p_train, p_test)
 
-        props_experiment = {
-            "vectors": m.name,
-            "dataset": name_dataset,
-            "method": options["name_method"],
-            "category": name_category,
-            "cnt_questions_total": cnt_total_total,
-            "cnt_correct": cnt_total_correct,
-            "score_overall": cnt_total_correct / cnt_total_total}
-        props_experiment.update(m.metadata)
-    out = dict()
-    out["results"] = results
-    out["experiment setup"] = props_experiment
-    out["experiment setup"]["method"] = options["name_method"]
+    experiment_setup = {
+        "cnt_questions_total": cnt_total_total,
+        "cnt_correct": cnt_total_correct,
+        "score_overall": cnt_total_correct / cnt_total_total}
+    experiment_setup["embeddings"] = m.metadata
+    experiment_setup["category"] = name_category
+    experiment_setup["dataset"] = name_dataset
+    experiment_setup["method"] = options["name_method"]
     if not options["exclude"]:
-        out["experiment setup"]["method"] += "_honest"
-    out["experiment setup"]["dataset"] = name_dataset
-    out["experiment setup"]["embeddings"] = m.metadata
-    out["experiment setup"]["category"] = name_category
+        experiment_setup["method"] += "_honest"
+
+    out = dict()
+    out["experiment setup"] = experiment_setup
+    out["results"] = results
     out = jsonify(out)
     str_results = json.dumps(out, indent=4, separators=(',', ': '), sort_keys=True)
     file_out = open(name_file_out, "w", errors="replace")

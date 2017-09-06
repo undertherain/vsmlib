@@ -123,7 +123,7 @@ def convert(batch, device):
     return center, context
 
 
-def save(args, model, index2word):
+def save_w2v_legacy(args, model, index2word):
     with open('word2vec.model', 'w') as f:
         f.write('%d %d\n' % (len(index2word), args.unit))
         w = cuda.to_cpu(model.embed.W.data)
