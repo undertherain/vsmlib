@@ -134,7 +134,8 @@ class Model(object):
             self.metadata = load_json(os.path.join(path, "metadata.json"))
         except FileNotFoundError:
             logger.warning("metadata not found")
-
+        if not "dimensions" in self.metadata:
+            self.metadata["dimensions"] = self.matrix.shape[1]
 
 def normalize(m):
     for i in (range(m.shape[0] - 1)):
