@@ -54,7 +54,7 @@ parser.add_argument('--out-type', '-o', choices=['hsm', 'ns', 'original'],
                     '"ns": negative sampling, "original": no approximation)')
 parser.add_argument('--out', default='result',
                     help='Directory to output the result')
-parser.add_argument('--path_corpus', default="/home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/toy/",
+parser.add_argument('--path_corpus', default="/home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/600/",
                     help='path corpus, /home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/toy/')
 parser.add_argument('--test', dest='test', action='store_true')
 parser.set_defaults(test=False)
@@ -105,13 +105,26 @@ class RNN(chainer.Chain):
         self.mid.reset_state()
 
     def charRNN(self, context):  # input a list of word ids, output a list of word embeddings
-        context_char = index2charIds[context]
+        contexts2charIds = index2charIds[context]
+
+        #sorting the context_char, make sure length in descing order
+        # ref: https://docs.chainer.org/en/stable/reference/generated/chainer.links.LSTM.html?highlight=Variable-length
+        context_char_length = np.array([len(t) for t in contexts2charIds])
+        contexts2charIds = contexts2charIds[context_char_length.argsort()[::-1]]
+
+        #transpose a 2D list/numpy array
+        rnn_inputs = [[] for i in range(len(contexts2charIds[0]))]
+        for j in range(len(contexts2charIds)) :
+            for i in range(len(contexts2charIds[j])):
+                rnn_inputs[i].append(contexts2charIds[j][i])
+
         self.reset_state()
-        for i in range(context_char.shape[1]):
-            y = self(context_char[:, i])
+        for i in range(len(rnn_inputs)):
+            y_ = self(np.array(rnn_inputs[i], np.int32))
+        y = self.out(self.mid.h)
         return y
 
-    def __call__(self, cur_word, y_):
+    def __call__(self, cur_word):
         # Given the current word ID, predict the next word.
         x = self.embed(cur_word)
         h = self.mid(x)
@@ -271,8 +284,8 @@ else:
 
 
 if args.test:
-    train = train[:100]
-    val = val[:100]
+    train = train[:1000]
+    val = val[:1000]
 
 if args.subword == "rnn":
     index2charIds, vocab_char = get_chars(index2word, args.maxWordLength)
@@ -296,7 +309,10 @@ else:
     raise Exception('Unknown output type: {}'.format(args.out_type))
 
 if args.model == 'skipgram':
-    model = SkipGram(n_vocab, args.unit, loss_func, n_vocab_char)
+    if args.subword == 'none':
+        model = SkipGram(n_vocab, args.unit, loss_func)
+    if args.subword == "rnn":
+        model = SkipGram(n_vocab, args.unit, loss_func, n_vocab_char)
 elif args.model == 'cbow':
     model = ContinuousBoW(n_vocab, args.unit, loss_func)
 else:
@@ -323,7 +339,10 @@ trainer.extend(extensions.PrintReport(
 trainer.extend(extensions.ProgressBar())
 trainer.run()
 
-with open('./result/word2vec.' + args.subword, 'w') as f:
+temp_dir = os.path.join('./result/' , args.subword)
+if not os.path.isdir(temp_dir):
+    os.mkdir()
+with open(os.path.join('./result/' , args.subword, 'vec.txt'), 'w') as f:
     f.write('%d %d\n' % (len(index2word), args.unit))
     w = cuda.to_cpu(model.getEmbeddings())
     for i, wi in enumerate(w):
