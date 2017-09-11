@@ -52,3 +52,14 @@ class WindowIterator(chainer.dataset.Iterator):
         self.is_new_epoch = serializer('is_new_epoch', self.is_new_epoch)
         if self._order is not None:
             serializer('_order', self._order)
+
+
+class SimpleIterator:
+    def __init__(self, token_iter, window_size, batch_size, repeat=True):
+        self.token_iter = token_iter
+        self.window_size = window_size
+        self.batch_size = batch_size
+        self._repeat = repeat
+        self.current_position = 0
+        self.epoch = 0
+        self.is_new_epoch = False
