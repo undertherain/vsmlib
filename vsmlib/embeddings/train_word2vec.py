@@ -45,8 +45,6 @@ def parse_args():
                         default='hsm',
                         help='output model type ("hsm": hierarchical softmax, '
                         '"ns": negative sampling, "original": no approximation)')
-    parser.add_argument('--out', default='result',
-                        help='Directory to output the result')
     parser.add_argument('--path_corpus', help='path to the corpus', required=True)
     parser.add_argument('--path_vocab', help='path to the vocabulary', required=True)
     parser.add_argument('--path_out', help='path to save embeddings', required=True)
