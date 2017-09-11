@@ -1,5 +1,6 @@
 import numpy as np
 import chainer
+from vsmlib.corpus import DirTokenIterator
 
 
 class WindowIterator(chainer.dataset.Iterator):
@@ -54,9 +55,9 @@ class WindowIterator(chainer.dataset.Iterator):
             serializer('_order', self._order)
 
 
-class SimpleIterator:
-    def __init__(self, token_iter, window_size, batch_size, repeat=True):
-        self.token_iter = token_iter
+class DirWindowIterator:
+    def __init__(self, path, window_size, batch_size, repeat=True):
+        self.token_iter = DirTokenIterator(path)
         self.window_size = window_size
         self.batch_size = batch_size
         self._repeat = repeat
