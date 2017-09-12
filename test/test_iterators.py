@@ -9,7 +9,7 @@ import vsmlib.embeddings.iter_simple
 from timeit import default_timer as timer
 
 
-path_corpus = "./test/data/corpora/multiple_files"
+path_corpus = "./test/data/corpora/multiple_small"
 path_vocab = "./test/data/vocab"
 
 
@@ -39,10 +39,7 @@ class Tests(unittest.TestCase):
     def test_dir_iterator_debug_print(self):
         iter = vsmlib.embeddings.iter_simple.DirWindowIterator(path=path_corpus, window_size=2, batch_size=4)
         print("batch from dir:")
-        sample = next(iter)
-        for i in sample:
-            print(i)
-
-        sample = next(iter)
-        for i in sample:
-            print(i)
+        for i in range(15):
+            sample = next(iter)
+            for i in sample:
+                print(i)
