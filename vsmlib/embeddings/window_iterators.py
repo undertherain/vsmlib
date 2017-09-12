@@ -60,13 +60,13 @@ class DirWindowIterator:
         self.path = path
         self.vocab = vocab
         self.token_iter = DirTokenIterator(path)
-        self.window_size = window_size
+        self.window_size = window_size - 1
         self.batch_size = batch_size
         self._repeat = repeat
         self.current_position = 0
         self.epoch = 0
         self.is_new_epoch = False
-        self.context_left = []
+        self.context_left = [0] * window_size
         self.context_right = []
         self.center = None
 
@@ -100,4 +100,4 @@ class DirWindowIterator:
             center, context = self.next_single_sample()
             centers.append(center)
             contexts.append(context)
-        return centers, contexts
+        return np.array(centers, dtype=np.int32), np.array(contexts, dtype=np.int32)
