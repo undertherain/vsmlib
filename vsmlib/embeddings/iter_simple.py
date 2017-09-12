@@ -64,8 +64,20 @@ class DirWindowIterator:
         self.current_position = 0
         self.epoch = 0
         self.is_new_epoch = False
+        self.context_left = []
+        self.context_right = []
+        self.center = None
 
     def __next__(self):
         if not self._repeat and self.epoch > 0:
             raise StopIteration
-        return next(self.token_iter)
+        while True:
+            self.context_right.append(next(self.token_iter))
+            if len(self.context_right) > self.window_size:
+                break
+        if self.center is not None:
+            self.context_left.append(self.center)
+
+        self.center = self.context_right[0]
+        self.context_right = self.context_right[1:] 
+        return self.center, self.context_left + self.context_right

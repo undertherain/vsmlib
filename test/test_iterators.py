@@ -16,7 +16,7 @@ path_vocab = "./test/data/vocab"
 class Tests(unittest.TestCase):
 
     def test_iterator_legacy_debug_print(self):
-        dataset = np.arange(10000)
+        dataset = np.arange(1000)
         it = vsmlib.embeddings.iter_simple.WindowIterator(dataset, window=3, batch_size=2)
         sample = next(it)
         print("batch fro legacy:")
@@ -38,7 +38,11 @@ class Tests(unittest.TestCase):
 
     def test_dir_iterator_debug_print(self):
         iter = vsmlib.embeddings.iter_simple.DirWindowIterator(path=path_corpus, window_size=2, batch_size=4)
-        sample = next(iter)
         print("batch from dir:")
+        sample = next(iter)
+        for i in sample:
+            print(i)
+
+        sample = next(iter)
         for i in sample:
             print(i)
