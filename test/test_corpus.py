@@ -5,7 +5,7 @@ from vsmlib.corpus import load_file_as_ids, FileTokenIterator, DirTokenIterator
 from vsmlib.vocabulary import Vocabulary
 
 # todo: use local vocab
-path_vocab = "./test/data/vocab"
+path_vocab = "./test/data/vocabs/plain"
 path_text = "./test/data/corpora/plain"
 path_gzipped = "./test/data/corpora/gzipped"
 path_text_file = "./test/data/corpora/plain/sense_small.txt"

@@ -5,12 +5,12 @@ import numpy as np
 import vsmlib
 import vsmlib.embeddings
 import vsmlib.embeddings.iter_simple
-#from vsmlib.corpus import DirTokenIterator
+from vsmlib.vocabulary import Vocabulary
 from timeit import default_timer as timer
 
 
 path_corpus = "./test/data/corpora/multiple_small"
-path_vocab = "./test/data/vocab"
+path_vocab = "./test/data/vocabs/numbers"
 
 
 class Tests(unittest.TestCase):
@@ -37,7 +37,9 @@ class Tests(unittest.TestCase):
         print("time: ", time_end - time_start)
 
     def test_dir_iterator_debug_print(self):
-        iter = vsmlib.embeddings.iter_simple.DirWindowIterator(path=path_corpus, window_size=2, batch_size=4)
+        vocab = Vocabulary()
+        vocab.load(path_vocab)
+        iter = vsmlib.embeddings.iter_simple.DirWindowIterator(path=path_corpus, vocab=vocab, window_size=2, batch_size=4)
         print("batch from dir:")
         for i in range(15):
             sample = next(iter)

@@ -7,7 +7,7 @@ import argparse
 
 
 path_text = "./test/data/corpora/plain/sense_small.txt"
-path_vocab = "./test/data/vocab"
+path_vocab = "./test/data/vocabs/plain"
 
 
 class Tests(unittest.TestCase):
