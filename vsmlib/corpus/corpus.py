@@ -27,11 +27,15 @@ class FileTokenIterator:
 class DirTokenIterator:
     def __init__(self, path):
         self.path = path
-
+        self.__gen__ = self.gen()
+    
     def __iter__(self):
-        return self.next()
+        return self
 
-    def next(self):
+    def __next__(self):
+        return next(self.__gen__)
+
+    def gen(self):
         for root, dir, files in os.walk(self.path, followlinks=True):
             for items in fnmatch.filter(files, "*"):
                 for token in FileTokenIterator(os.path.join(root, items)):

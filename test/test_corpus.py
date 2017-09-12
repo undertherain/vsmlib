@@ -25,7 +25,8 @@ class Tests(unittest.TestCase):
 
     def test_dir_iter(self):
         cnt = 0
-        for w in (DirTokenIterator(path_text)):
+        it = DirTokenIterator(path_text)
+        for w in it:
             cnt += 1
         print(cnt, "words read")
 

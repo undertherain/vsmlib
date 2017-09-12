@@ -64,3 +64,8 @@ class DirWindowIterator:
         self.current_position = 0
         self.epoch = 0
         self.is_new_epoch = False
+
+    def __next__(self):
+        if not self._repeat and self.epoch > 0:
+            raise StopIteration
+        return next(self.token_iter)

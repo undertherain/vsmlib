@@ -15,21 +15,30 @@ path_vocab = "./test/data/vocab"
 
 class Tests(unittest.TestCase):
 
-    def test_iterator_legacy(self):
-        dataset = np.arange(10000000)
+    def test_iterator_legacy_debug_print(self):
+        dataset = np.arange(10000)
+        it = vsmlib.embeddings.iter_simple.WindowIterator(dataset, window=3, batch_size=2)
+        sample = next(it)
+        print("batch fro legacy:")
+        for i in sample:
+            print(i)
+
+    def test_iterator_legacy_timing(self):
+        cnt_tokens = 1000000
+        dataset = np.arange(cnt_tokens)
         time_start = timer()
         cnt = 0
-        it = vsmlib.embeddings.iter_simple.WindowIterator(dataset, window=5, batch_size=100)
-        for i in range(2):
+        batch_size = 100
+        it = vsmlib.embeddings.iter_simple.WindowIterator(dataset, window=3, batch_size=batch_size)
+        for i in range(cnt_tokens // batch_size):
             sample = next(it)
-            # print(sample)
             cnt += len(sample)
         time_end = timer()
         print("time: ", time_end - time_start)
 
-    def test_dir_iterator(self):
+    def test_dir_iterator_debug_print(self):
         iter = vsmlib.embeddings.iter_simple.DirWindowIterator(path=path_corpus, window_size=2, batch_size=4)
-        cnt = 0
-        for w in iter.token_iter:
-            cnt += 1
-        print(cnt, "words read")
+        sample = next(iter)
+        print("batch from dir:")
+        for i in sample:
+            print(i)
