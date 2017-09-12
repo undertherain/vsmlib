@@ -19,7 +19,7 @@ import vsmlib
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
-from .iter_simple import WindowIterator
+from .window_iterators import WindowIterator
 
 
 logger = logging.getLogger(__name__)

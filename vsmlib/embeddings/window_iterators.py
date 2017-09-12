@@ -71,7 +71,6 @@ class DirWindowIterator:
         self.center = None
 
     def next_single_sample(self):
-        self.is_new_epoch = False
         if not self._repeat and self.epoch > 0:
             raise StopIteration
         while True:
@@ -94,4 +93,5 @@ class DirWindowIterator:
         return self.center, self.context_left + self.context_right
 
     def __next__(self):
+        self.is_new_epoch = False
         return self.next_single_sample()
