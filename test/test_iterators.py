@@ -17,7 +17,7 @@ class Tests(unittest.TestCase):
 
     def test_iterator_legacy_debug_print(self):
         dataset = np.arange(1000)
-        it = vsmlib.embeddings.window_iterators.WindowIterator(dataset, window=3, batch_size=2)
+        it = vsmlib.embeddings.window_iterators.WindowIterator(dataset, window=2, batch_size=2)
         sample = next(it)
         print("batch fro legacy:")
         for i in sample:
@@ -29,7 +29,7 @@ class Tests(unittest.TestCase):
         time_start = timer()
         cnt = 0
         batch_size = 100
-        it = vsmlib.embeddings.window_iterators.WindowIterator(dataset, window=3, batch_size=batch_size)
+        it = vsmlib.embeddings.window_iterators.WindowIterator(dataset, window=2, batch_size=batch_size)
         for i in range(cnt_tokens // batch_size):
             sample = next(it)
             cnt += len(sample)
@@ -41,7 +41,7 @@ class Tests(unittest.TestCase):
         vocab.load(path_vocab)
         iter = vsmlib.embeddings.window_iterators.DirWindowIterator(path=path_corpus, vocab=vocab, window_size=2, batch_size=4)
         print("batch from dir:")
-        for i in range(15):
+        for i in range(2):
             sample = next(iter)
             for i in sample:
                 print(i)

@@ -94,4 +94,10 @@ class DirWindowIterator:
 
     def __next__(self):
         self.is_new_epoch = False
-        return self.next_single_sample()
+        centers = []
+        contexts = []
+        for i in range(self.batch_size):
+            center, context = self.next_single_sample()
+            centers.append(center)
+            contexts.append(context)
+        return centers, contexts
