@@ -34,7 +34,7 @@ parser.add_argument('--unit', '-u', default=100, type=int,
                     help='number of units')
 parser.add_argument('--window', '-w', default=5, type=int,
                     help='window size')
-parser.add_argument('--batchsize', '-b', type=int, default=1000,
+parser.add_argument('--batchsize', '-b', type=int, default=2000,
                     help='learning minibatch size')
 parser.add_argument('--epoch', '-e', default=1, type=int,
                     help='number of epochs to learn')
@@ -54,7 +54,7 @@ parser.add_argument('--out-type', '-o', choices=['hsm', 'ns', 'original'],
                     '"ns": negative sampling, "original": no approximation)')
 parser.add_argument('--out', default='result',
                     help='Directory to output the result')
-parser.add_argument('--path_corpus', default="/home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/600/",
+parser.add_argument('--path_corpus', default="/home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/900/",
                     help='path corpus, /home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/toy/')
 parser.add_argument('--test', dest='test', action='store_true')
 parser.set_defaults(test=False)
@@ -107,9 +107,13 @@ class RNN(chainer.Chain):
     def charRNN(self, context):  # input a list of word ids, output a list of word embeddings
         contexts2charIds = index2charIds[context]
 
-        #sorting the context_char, make sure length in descing order
+        #sorting the context_char, make sure array length in descending order
         # ref: https://docs.chainer.org/en/stable/reference/generated/chainer.links.LSTM.html?highlight=Variable-length
         context_char_length = np.array([len(t) for t in contexts2charIds])
+        argsort = context_char_length.argsort()[::-1] # descending order
+        argsort_reverse = np.zeros(len(argsort), dtype=np.int32)  # this is used to restore the original order
+        for i in range(len(argsort)):
+            argsort_reverse[argsort[i]] = i
         contexts2charIds = contexts2charIds[context_char_length.argsort()[::-1]]
 
         #transpose a 2D list/numpy array
@@ -122,6 +126,7 @@ class RNN(chainer.Chain):
         for i in range(len(rnn_inputs)):
             y_ = self(np.array(rnn_inputs[i], np.int32))
         y = self.out(self.mid.h)
+        y = y[argsort_reverse] # restore the original order
         return y
 
     def __call__(self, cur_word):
@@ -162,27 +167,6 @@ class SkipGram(chainer.Chain):
             e = self.embed(context)
             e = F.reshape(e, (e.shape[0] * e.shape[1], e.shape[2]))
 
-        loss = self.loss_func(e, x)
-        reporter.report({'loss': loss}, self)
-        return loss
-
-
-class SkipGram_RNN(chainer.Chain):
-
-    def __init__(self, n_vocab, n_units, loss_func):
-        super(SkipGram_RNN, self).__init__()
-
-        with self.init_scope():
-            self.embed_char = L.EmbedID(
-                n_vocab, n_units, initialW=I.Uniform(1. / n_units))
-            self.loss_func = loss_func
-
-    def __call__(self, x, context):
-        e = self.embed(context)
-        shape = e.shape
-        x = F.broadcast_to(x[:, None], (shape[0], shape[1]))
-        e = F.reshape(e, (shape[0] * shape[1], shape[2]))
-        x = F.reshape(x, (shape[0] * shape[1],))
         loss = self.loss_func(e, x)
         reporter.report({'loss': loss}, self)
         return loss
@@ -339,10 +323,10 @@ trainer.extend(extensions.PrintReport(
 trainer.extend(extensions.ProgressBar())
 trainer.run()
 
-temp_dir = os.path.join('./result/' , args.subword)
+temp_dir = os.path.join('./result/' , args.subword, os.path.basename(os.path.dirname(args.path_corpus)))
 if not os.path.isdir(temp_dir):
-    os.mkdir()
-with open(os.path.join('./result/' , args.subword, 'vec.txt'), 'w') as f:
+    os.mkdir(temp_dir)
+with open(os.path.join(temp_dir, 'vec.txt'), 'w') as f:
     f.write('%d %d\n' % (len(index2word), args.unit))
     w = cuda.to_cpu(model.getEmbeddings())
     for i, wi in enumerate(w):
