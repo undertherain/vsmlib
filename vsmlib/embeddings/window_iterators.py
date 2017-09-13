@@ -55,7 +55,7 @@ class WindowIterator(chainer.dataset.Iterator):
             serializer('_order', self._order)
 
 
-class DirWindowIterator:
+class DirWindowIterator(chainer.dataset.Iterator):
     def __init__(self, path, vocab, window_size, batch_size, repeat=True):
         self.path = path
         self.vocab = vocab
@@ -91,6 +91,11 @@ class DirWindowIterator:
         self.context_right = self.context_right[1:]
         self.context_left = self.context_left[-self.window_size:]
         return self.center, self.context_left + self.context_right
+
+    @property
+    def epoch_detail(self):
+        return 0.4
+        # return self.epoch + float(self.current_position) / len(self.order)
 
     def __next__(self):
         self.is_new_epoch = False

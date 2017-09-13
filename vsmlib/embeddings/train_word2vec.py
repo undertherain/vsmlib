@@ -15,6 +15,7 @@ from chainer import reporter
 from chainer import training
 from chainer.training import extensions
 import logging
+import os
 import vsmlib
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
@@ -187,11 +188,15 @@ def run(args):
     optimizer = chainer.optimizers.Adam()
     optimizer.setup(model)
 
-    train, val = get_data(args.path_corpus, vocab)
-    if args.test:
-        train = train[:100]
-        val = val[:100]
-    train_iter = WindowIterator(train, args.window, args.batchsize)
+    if os.path.isfile(args.path_corpus):
+        train, val = get_data(args.path_corpus, vocab)
+        if args.test:
+            train = train[:100]
+            val = val[:100]
+        train_iter = WindowIterator(train, args.window, args.batchsize)
+    else:
+        train_iter = DirWindowIterator(path=args.path_corpus, vocab=vocab, window_size=args.window, batch_size=args.batchsize)
+        return 
     # val_iter = WindowIterator(val, args.window, args.batchsize, repeat=False)
     updater = training.StandardUpdater(train_iter, optimizer, converter=convert, device=args.gpu)
     trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=args.path_out)
