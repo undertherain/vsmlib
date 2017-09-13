@@ -13,8 +13,8 @@ What functionality is included
 How do I get set up?
 --------------------
 
-* pip3 install vsmlib
-* pip3 install git+https://github.com/undertherain/vsmlib.git
+* ``pip3 install vsmlib`` for stable version
+* ``pip3 install git+https://github.com/undertherain/vsmlib.git`` for latest dev version
 * Python 3.5 or later is required
 
 Contribution guidelines

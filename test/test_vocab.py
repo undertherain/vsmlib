@@ -4,7 +4,7 @@ import unittest
 from vsmlib.vocabulary import create_from_dir, Vocabulary
 
 path_text = "./test/data/corpora/plain"
-path_vocab = "./test/data/vocab"
+path_vocab = "./test/data/vocabs/plain"
 
 
 class Tests(unittest.TestCase):

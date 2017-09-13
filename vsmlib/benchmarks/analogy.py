@@ -592,19 +592,21 @@ def run_category(pairs, name_dataset, name_category="not yet"):
             my_prog.update()
             results += do_test_on_pairs(p_train, p_test)
 
-    experiment_setup = {
-        "cnt_questions_total": cnt_total_total,
-        "cnt_correct": cnt_total_correct,
-        "score_overall": cnt_total_correct / cnt_total_total}
+    out = dict()
+    experiment_setup = dict() 
+    experiment_setup["cnt_questions_total"] = cnt_total_total
     experiment_setup["embeddings"] = m.metadata
     experiment_setup["category"] = name_category
     experiment_setup["dataset"] = name_dataset
     experiment_setup["method"] = options["name_method"]
     if not options["exclude"]:
         experiment_setup["method"] += "_honest"
-
-    out = dict()
     out["experiment setup"] = experiment_setup
+    
+    out["results_short"] = dict()
+    out["results_short"]["cnt_correct"] = cnt_total_correct
+    out["results_short"]["score_overall"] = cnt_total_correct / cnt_total_total
+
     out["results"] = results
     out = jsonify(out)
     str_results = json.dumps(out, indent=4, separators=(',', ': '), sort_keys=True)

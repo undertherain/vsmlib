@@ -15,11 +15,12 @@ from chainer import reporter
 from chainer import training
 from chainer.training import extensions
 import logging
+import os
 import vsmlib
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
-from .iter_simple import WindowIterator
+from .window_iterators import WindowIterator, DirWindowIterator
 
 
 logger = logging.getLogger(__name__)
@@ -45,8 +46,6 @@ def parse_args():
                         default='hsm',
                         help='output model type ("hsm": hierarchical softmax, '
                         '"ns": negative sampling, "original": no approximation)')
-    parser.add_argument('--out', default='result',
-                        help='Directory to output the result')
     parser.add_argument('--path_corpus', help='path to the corpus', required=True)
     parser.add_argument('--path_vocab', help='path to the vocabulary', required=True)
     parser.add_argument('--path_out', help='path to save embeddings', required=True)
@@ -158,13 +157,8 @@ def run(args):
 
     vocab = Vocabulary()
     vocab.load(args.path_vocab)
-    train, val = get_data(args.path_corpus, vocab)
 
     word_counts = vocab.lst_frequencies
-
-    if args.test:
-        train = train[:100]
-        val = val[:100]
 
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
@@ -194,12 +188,20 @@ def run(args):
     optimizer = chainer.optimizers.Adam()
     optimizer.setup(model)
 
-    train_iter = WindowIterator(train, args.window, args.batchsize)
-    val_iter = WindowIterator(val, args.window, args.batchsize, repeat=False)
+    if os.path.isfile(args.path_corpus):
+        train, val = get_data(args.path_corpus, vocab)
+        if args.test:
+            train = train[:100]
+            val = val[:100]
+        train_iter = WindowIterator(train, args.window, args.batchsize)
+    else:
+        train_iter = DirWindowIterator(path=args.path_corpus, vocab=vocab, window_size=args.window, batch_size=args.batchsize)
+        return 
+    # val_iter = WindowIterator(val, args.window, args.batchsize, repeat=False)
     updater = training.StandardUpdater(train_iter, optimizer, converter=convert, device=args.gpu)
     trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=args.path_out)
 
-    trainer.extend(extensions.Evaluator(val_iter, model, converter=convert, device=args.gpu))
+    # trainer.extend(extensions.Evaluator(val_iter, model, converter=convert, device=args.gpu))
     trainer.extend(extensions.LogReport())
     trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss', 'time']))
     trainer.extend(extensions.ProgressBar())
