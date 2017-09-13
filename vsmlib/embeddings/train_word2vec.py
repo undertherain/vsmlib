@@ -193,11 +193,11 @@ def run(args):
     optimizer.setup(model)
 
     train_iter = WindowIterator(train, args.window, args.batchsize)
-    val_iter = WindowIterator(val, args.window, args.batchsize, repeat=False)
+    # val_iter = WindowIterator(val, args.window, args.batchsize, repeat=False)
     updater = training.StandardUpdater(train_iter, optimizer, converter=convert, device=args.gpu)
     trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=args.path_out)
 
-    trainer.extend(extensions.Evaluator(val_iter, model, converter=convert, device=args.gpu))
+    # trainer.extend(extensions.Evaluator(val_iter, model, converter=convert, device=args.gpu))
     trainer.extend(extensions.LogReport())
     trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss', 'time']))
     trainer.extend(extensions.ProgressBar())
