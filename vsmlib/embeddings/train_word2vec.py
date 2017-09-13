@@ -19,7 +19,7 @@ import vsmlib
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
-from .window_iterators import WindowIterator
+from .window_iterators import WindowIterator, DirWindowIterator
 
 
 logger = logging.getLogger(__name__)
@@ -156,13 +156,8 @@ def run(args):
 
     vocab = Vocabulary()
     vocab.load(args.path_vocab)
-    train, val = get_data(args.path_corpus, vocab)
 
     word_counts = vocab.lst_frequencies
-
-    if args.test:
-        train = train[:100]
-        val = val[:100]
 
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
@@ -192,6 +187,10 @@ def run(args):
     optimizer = chainer.optimizers.Adam()
     optimizer.setup(model)
 
+    train, val = get_data(args.path_corpus, vocab)
+    if args.test:
+        train = train[:100]
+        val = val[:100]
     train_iter = WindowIterator(train, args.window, args.batchsize)
     # val_iter = WindowIterator(val, args.window, args.batchsize, repeat=False)
     updater = training.StandardUpdater(train_iter, optimizer, converter=convert, device=args.gpu)
