@@ -63,12 +63,13 @@ class DirWindowIterator(chainer.dataset.Iterator):
         self.window_size = window_size - 1
         self.batch_size = batch_size
         self._repeat = repeat
-        self.current_position = 0
         self.epoch = 0
         self.is_new_epoch = False
         self.context_left = [0] * window_size
         self.context_right = []
         self.center = None
+        self.cnt_words_total = 1
+        self.cnt_words_read = 0
 
     def next_single_sample(self):
         if not self._repeat and self.epoch > 0:
@@ -77,7 +78,9 @@ class DirWindowIterator(chainer.dataset.Iterator):
             try:
                 next_word = next(self.token_iter)
                 self.context_right.append(self.vocab.get_id(next_word))
-                self.current_position += 1
+                self.cnt_words_read += 1
+                if self.epoch == 0:
+                    self.cnt_words_total += 1
             except StopIteration:
                 self.epoch += 1
                 self.is_new_epoch = True
@@ -94,7 +97,7 @@ class DirWindowIterator(chainer.dataset.Iterator):
 
     @property
     def epoch_detail(self):
-        return 0.4
+        return self.cnt_words_read / self.cnt_words_total
         # return self.epoch + float(self.current_position) / len(self.order)
 
     def __next__(self):

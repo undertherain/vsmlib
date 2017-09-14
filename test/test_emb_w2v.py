@@ -8,7 +8,7 @@ import argparse
 
 path_text = "./test/data/corpora/plain/sense_small.txt"
 path_vocab = "./test/data/vocabs/plain"
-path_muliple = "./test/data/corpora/plain/corpora/multiple_files"
+path_muliple = "./test/data/corpora/multiple_files"
 
 
 class Tests(unittest.TestCase):
