@@ -2,7 +2,7 @@ VSMlib
 ======
 
 .. image:: https://api.travis-ci.org/undertherain/vsmlib.svg?branch=master
-    :target: https://travis-ci.org/undertherain/VSMlib
+    :target: https://travis-ci.org/undertherain/vsmlib
     :alt: build status from Travis CI
 
 VSMlibs helps to perform a range of task within a framework of vector space models of computational linguistics.
