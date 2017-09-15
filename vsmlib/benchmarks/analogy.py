@@ -212,7 +212,7 @@ class LinearOffset(PairWise):
 class PairDistance(PairWise):
     def compute_scores(self, vec_a, vec_a_prime, vec_b):
         scores = get_most_collinear_fast(vec_a, vec_a_prime, vec_b)
-        return scores, vec_b_prime_predicted
+        return scores, None
 
 
 class ThreeCosMul(PairWise):
