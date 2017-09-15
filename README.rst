@@ -9,6 +9,10 @@ VSMlib
     :target: https://coveralls.io/github/undertherain/vsmlib?branch=master
     :alt: coveralls badge
 
+.. image:: https://badge.fury.io/py/vsmlib.svg
+    :target: https://badge.fury.io/py/vsmlib
+    :alt: pypi version
+
 VSMlibs helps to perform a range of task within a framework of vector space models of computational linguistics.
 
 What functionality is included
