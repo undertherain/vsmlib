@@ -14,7 +14,8 @@ VSMlibs helps to perform a range of task within a framework of vector space mode
 What functionality is included
 ------------------------------
 
-* loading several popular formats of word embeddings and providing unified access to word-vectors
+* creating word embeddings by counting and neural-based methods, including sub-word-level models
+* importing and exporting from a banch of popular formats of word embeddings and providing unified access to word-vectors
 * perfroming simple tasks like estimating word similarity
 * visualising embeddings
 
