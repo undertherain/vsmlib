@@ -81,6 +81,9 @@ class DirWindowIterator(chainer.dataset.Iterator):
                 self.cnt_words_read += 1
                 if self.epoch == 0:
                     self.cnt_words_total += 1
+                else:
+                    if self.cnt_words_total < 2:
+                        raise StopIteration
             except StopIteration:
                 self.epoch += 1
                 self.is_new_epoch = True
