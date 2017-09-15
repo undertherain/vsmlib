@@ -5,6 +5,10 @@ VSMlib
     :target: https://travis-ci.org/undertherain/vsmlib
     :alt: build status from Travis CI
 
+.. image:: https://coveralls.io/repos/github/undertherain/vsmlib/badge.svg?branch=master
+    :target: https://coveralls.io/github/undertherain/vsmlib?branch=master
+    :alt: coveralls badge
+
 VSMlibs helps to perform a range of task within a framework of vector space models of computational linguistics.
 
 What functionality is included
