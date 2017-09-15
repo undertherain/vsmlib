@@ -60,3 +60,22 @@ class Tests(unittest.TestCase):
         args.path_vocab = path_vocab
         args.path_corpus = path_muliple
         vsmlib.embeddings.train_word2vec.run(args)
+
+    def test_empty_dir_iter(self):
+        args = argparse.Namespace()
+        args.test = True
+        args.gpu = -1
+        args.out_type = "ns"
+        args.dimensions = 100
+        args.negative_size = 5
+        args.model = "skipgram"
+        args.window = 4
+        args.batchsize = 1000
+        args.epoch = 10
+        args.path_out = "/tmp/vsmlib/w2v"
+        args.path_vocab = path_vocab
+        args.path_corpus = "./test/data/corpora/empty"
+        try:
+            vsmlib.embeddings.train_word2vec.run(args)
+        except RuntimeError:
+            print("corpus empty exception caught")
