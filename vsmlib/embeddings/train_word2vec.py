@@ -203,8 +203,10 @@ def run(args):
     if os.path.isfile(args.path_corpus):
         trainer.extend(extensions.Evaluator(val_iter, model, converter=convert, device=args.gpu))
     trainer.extend(extensions.LogReport())
-#    trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss', 'time']))
-    trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'elapsed_time']))
+    if os.path.isfile(args.path_corpus):
+        trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss', 'elapsed_time']))
+    else:
+        trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'elapsed_time']))
     trainer.extend(extensions.ProgressBar())
     trainer.run()
     # save(args, model, vocab.lst_words)
