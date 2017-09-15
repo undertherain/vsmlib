@@ -13,7 +13,7 @@ VSMlib
     :target: https://badge.fury.io/py/vsmlib
     :alt: pypi version
 
-VSMlibs helps to perform a range of task within a framework of vector space models of computational linguistics.
+VSMlibs helps to perform a range of tasks within a framework of vector space models of computational linguistics.
 
 What functionality is included
 ------------------------------
