@@ -81,13 +81,13 @@ class DirWindowIterator(chainer.dataset.Iterator):
                 self.cnt_words_read += 1
                 if self.epoch == 0:
                     self.cnt_words_total += 1
-                else:
-                    if self.cnt_words_total < 2:
-                        raise StopIteration
             except StopIteration:
                 self.epoch += 1
                 self.is_new_epoch = True
                 self.token_iter = DirTokenIterator(self.path)
+            if self.epoch > 0 and self.cnt_words_total < 3:
+                print("corpus empty")
+                raise RuntimeError("Corpus is empty")
             if len(self.context_right) > self.window_size:
                 break
         if self.center is not None:
