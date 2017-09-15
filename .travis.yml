@@ -10,6 +10,12 @@ python:
 os:
 - linux
 
+install:
+  - pip install -U coveralls
+  - pip install -U coverage
+  - pip install -U pylint
+  - pip install -U -r requirements.txt
+
 script:
 - python -m unittest discover
 
