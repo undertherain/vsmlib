@@ -209,7 +209,6 @@ def run(args):
         trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'elapsed_time']))
     # trainer.extend(extensions.ProgressBar())
     trainer.run()
-    # save(args, model, vocab.lst_words)
     model = create_model(args, model, vocab)
     time_end = timer()
     model.metadata["execution_time"] = time_end - time_start
