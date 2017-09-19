@@ -207,7 +207,7 @@ def run(args):
         trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'validation/main/loss', 'elapsed_time']))
     else:
         trainer.extend(extensions.PrintReport(['epoch', 'main/loss', 'elapsed_time']))
-    trainer.extend(extensions.ProgressBar())
+    # trainer.extend(extensions.ProgressBar())
     trainer.run()
     # save(args, model, vocab.lst_words)
     model = create_model(args, model, vocab)

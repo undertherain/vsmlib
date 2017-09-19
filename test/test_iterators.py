@@ -45,3 +45,12 @@ class Tests(unittest.TestCase):
             sample = next(iter)
             for i in sample:
                 print(i)
+
+    def test_dir_iterator_epoch_detail(self):
+        vocab = Vocabulary()
+        vocab.load(path_vocab)
+        iter = vsmlib.embeddings.window_iterators.DirWindowIterator(path=path_corpus, vocab=vocab, window_size=3, batch_size=2)
+        print("epoch status:")
+        for i in range(16):
+            next(iter)
+            print(i, iter.epoch, iter.epoch_detail)
