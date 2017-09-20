@@ -30,10 +30,10 @@ class Tests(unittest.TestCase):
 
     def test_iterator_dir_timing(self):
         time_start = timer()
-        batch_size = 30
+        batch_size = 100
         vocab = Vocabulary()
         vocab.load("./test/data/vocabs/plain")
-        iter = vsmlib.embeddings.window_iterators.DirWindowIterator(path="./test/data/corpora/multiple_files", vocab=vocab, window_size=3, batch_size=batch_size)
+        iter = vsmlib.embeddings.window_iterators.DirWindowIterator(path="./test/data/corpora/multiple_files", vocab=vocab, window_size=5, batch_size=batch_size)
         print("iterating from dir:")
         while iter.epoch < 1:
             next(iter)

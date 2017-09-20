@@ -9,6 +9,8 @@ class FileTokenIterator:
 
     def __init__(self, path):
         self.path = path
+        re_pattern = r"[\w\-']+|[.,!?…]"
+        self.re_token = re.compile(re_pattern)
 
     def __iter__(self):
         return self.next()
@@ -18,8 +20,7 @@ class FileTokenIterator:
             for line in f:
                 s = line.strip().lower()
                 # todo lower should be parameter
-                re_pattern = r"[\w\-']+|[.,!?…]"
-                tokens = re.findall(re_pattern, s)
+                tokens = self.re_token.findall(s)
                 for token in tokens:
                     yield token
 
@@ -28,7 +29,7 @@ class DirTokenIterator:
     def __init__(self, path):
         self.path = path
         self.__gen__ = self.gen()
-    
+
     def __iter__(self):
         return self
 

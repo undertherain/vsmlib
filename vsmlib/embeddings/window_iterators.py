@@ -66,8 +66,9 @@ class DirWindowIterator(chainer.dataset.Iterator):
         self.epoch = 0
         self.is_new_epoch = False
         self.context_left = [0] * window_size
+        # self.context_left = collections.deque(maxlen=window_size)
         self.context_right = []
-        self.center = None
+        self.center = 0
         self.cnt_words_total = 1
         self.cnt_words_read = 0
 
@@ -90,9 +91,8 @@ class DirWindowIterator(chainer.dataset.Iterator):
                 raise RuntimeError("Corpus is empty")
             if len(self.context_right) > self.window_size:
                 break
-        if self.center is not None:
-            self.context_left.append(self.center)
 
+        self.context_left.append(self.center)
         self.center = self.context_right[0]
         self.context_right = self.context_right[1:]
         self.context_left = self.context_left[-self.window_size:]
@@ -101,7 +101,6 @@ class DirWindowIterator(chainer.dataset.Iterator):
     @property
     def epoch_detail(self):
         return self.cnt_words_read / self.cnt_words_total
-        # return self.epoch + float(self.current_position) / len(self.order)
 
     def __next__(self):
         self.is_new_epoch = False
