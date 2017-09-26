@@ -1,3 +1,9 @@
+"""
+convert corpus to annotated corpus
+This script uses spacy for dependency parsing.
+This spacy implementation is about 35 times faster than NLTK one.
+"""
+
 import spacy
 import time
 import argparse

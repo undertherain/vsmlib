@@ -1,3 +1,7 @@
+"""
+Some essential functions for generating subword information
+"""
+
 import numpy as np
 
 

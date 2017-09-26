@@ -31,18 +31,22 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', '-g', default=-1, type=int,
                     help='GPU ID (negative value indicates CPU)')
 parser.add_argument('--unit', '-u', default=100, type=int,
-                    help='number of units')
+                    help='number of word vector units')
+parser.add_argument('--unit_char', '-uc', default=100, type=int,
+                    help='number of character vector units')
 parser.add_argument('--window', '-w', default=5, type=int,
                     help='window size')
 parser.add_argument('--batchsize', '-b', type=int, default=2000,
                     help='learning minibatch size')
 parser.add_argument('--epoch', '-e', default=1, type=int,
                     help='number of epochs to learn')
+parser.add_argument('--dropout', '-do', default=.2, type=int,
+                    help='dropout ratio, zero indicates no dropout')
 parser.add_argument('--model', '-m', choices=['skipgram'],
                     default='skipgram',
                     help='model type ("skipgram", "cbow")')
 parser.add_argument('--subword', '-sw', choices=['none', 'rnn'],
-                    default='rnn',
+                    default='none',
                     help='subword type ("none", "rnn")')
 parser.add_argument('--maxWordLength', default=20, type=int,
                     help='max word length (for char-level subword only)')
@@ -54,8 +58,8 @@ parser.add_argument('--out-type', '-o', choices=['hsm', 'ns', 'original'],
                     '"ns": negative sampling, "original": no approximation)')
 parser.add_argument('--out', default='result',
                     help='Directory to output the result')
-parser.add_argument('--path_corpus', default="/home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/900/",
-                    help='path corpus, /home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/toy/')
+parser.add_argument('--dir_corpora', default="/home/lbf/PycharmProjects/vsmlib/vsmlib/corpus/100/",
+                    help='dir corpora')
 parser.add_argument('--test', dest='test', action='store_true')
 parser.set_defaults(test=False)
 
@@ -93,18 +97,22 @@ class ContinuousBoW(chainer.Chain):
         return loss
 
 class RNN(chainer.Chain):
-    def __init__(self, n_vocab_char, n_units,):
+    def __init__(self, n_vocab_char, n_units, n_units_char):
         super(RNN, self).__init__()
         with self.init_scope():
             self.embed = L.EmbedID(
-                n_vocab_char, n_units, initialW=I.Uniform(1. / n_units))  # word embedding
-            self.mid = L.LSTM(n_units, n_units)  # the first LSTM layer
-            self.out = L.Linear(n_units, n_units)  # the feed-forward output layer
+                n_vocab_char, n_units_char, initialW=I.Uniform(1. / n_units_char))  # word embedding
+            self.mid = L.LSTM(n_units_char, n_units_char)  # the first LSTM layer
+            self.out = L.Linear(n_units_char, n_units)  # the feed-forward output layer
 
     def reset_state(self):
         self.mid.reset_state()
 
     def charRNN(self, context):  # input a list of word ids, output a list of word embeddings
+        # if chainer.config.train:
+        #     print("train")
+        # else:
+        #     print("test")
         contexts2charIds = index2charIds[context]
 
         #sorting the context_char, make sure array length in descending order
@@ -132,13 +140,18 @@ class RNN(chainer.Chain):
     def __call__(self, cur_word):
         # Given the current word ID, predict the next word.
         x = self.embed(cur_word)
+        # dropout. ref: https://docs.chainer.org/en/stable/reference/generated/chainer.functions.dropout.html?highlight=dropout
+        with chainer.using_config('train', True):
+            x = F.dropout(x, args.dropout)
         h = self.mid(x)
+        with chainer.using_config('train', True):
+            h = F.dropout(h, args.dropout)
         y = self.out(h)
         return y
 
 class SkipGram(chainer.Chain):
 
-    def __init__(self, n_vocab, n_units, loss_func, n_vocab_char=None):
+    def __init__(self, n_vocab, n_units, loss_func, n_vocab_char=None, n_units_char=None):
         super(SkipGram, self).__init__()
 
         with self.init_scope():
@@ -146,9 +159,10 @@ class SkipGram(chainer.Chain):
                 self.embed = L.EmbedID(
                     n_vocab, n_units, initialW=I.Uniform(1. / n_units))
             if args.subword == 'rnn':
-                self.rnn = RNN(n_vocab_char, n_units)
+                self.rnn = RNN(n_vocab_char, n_units, n_units_char)
             self.loss_func = loss_func
     def getEmbeddings(self):
+
         if args.subword == 'rnn':
             return self.rnn.charRNN(range(n_vocab)).data
         if args.subword == 'none':
@@ -244,7 +258,7 @@ def convert(batch, device):
 if args.gpu >= 0:
     cuda.get_device_from_id(args.gpu).use()
 
-if args.path_corpus is None :
+if args.dir_corpora is None :
     train, val, _ = chainer.datasets.get_ptb_words()
     counts = collections.Counter(train)
     counts.update(collections.Counter(val))
@@ -259,8 +273,8 @@ else:
         train, val = doc[:-1000], doc[-1000:]
         return train, val
 
-    vocab = create_from_dir(args.path_corpus, min_frequency=10)
-    train, val = get_data(os.path.join(args.path_corpus, "corpus"), vocab)
+    vocab = create_from_dir(args.dir_corpora, min_frequency=10)
+    train, val = get_data(os.path.join(args.dir_corpora, "corpus"), vocab)
     word_counts = vocab.lst_frequencies
     n_vocab = vocab.cnt_words
     counts = {i: word_counts[i] for i in range(len(word_counts))}
@@ -296,7 +310,7 @@ if args.model == 'skipgram':
     if args.subword == 'none':
         model = SkipGram(n_vocab, args.unit, loss_func)
     if args.subword == "rnn":
-        model = SkipGram(n_vocab, args.unit, loss_func, n_vocab_char)
+        model = SkipGram(n_vocab, args.unit, loss_func, n_vocab_char, args.unit_char)
 elif args.model == 'cbow':
     model = ContinuousBoW(n_vocab, args.unit, loss_func)
 else:
@@ -323,9 +337,9 @@ trainer.extend(extensions.PrintReport(
 trainer.extend(extensions.ProgressBar())
 trainer.run()
 
-temp_dir = os.path.join('./result/' , args.subword, os.path.basename(os.path.dirname(args.path_corpus)))
+temp_dir = os.path.join('./result/' , args.subword, str(args.unit_char), os.path.basename(os.path.dirname(args.dir_corpora)))
 if not os.path.isdir(temp_dir):
-    os.mkdir(temp_dir)
+    os.makedirs(temp_dir)
 with open(os.path.join(temp_dir, 'vec.txt'), 'w') as f:
     f.write('%d %d\n' % (len(index2word), args.unit))
     w = cuda.to_cpu(model.getEmbeddings())

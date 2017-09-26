@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
 convert corpus to annotated corpus
+This script uses nltk for dependency parsing, which is based on stanford corenlp.
 """
 import os
 from nltk.parse.stanford import *
