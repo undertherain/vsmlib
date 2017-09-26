@@ -63,12 +63,14 @@ class DirWindowIterator(chainer.dataset.Iterator):
         self.window_size = window_size - 1
         self.batch_size = batch_size
         self._repeat = repeat
-        self.current_position = 0
         self.epoch = 0
         self.is_new_epoch = False
         self.context_left = [0] * window_size
+        # self.context_left = collections.deque(maxlen=window_size)
         self.context_right = []
-        self.center = None
+        self.center = 0
+        self.cnt_words_total = 1
+        self.cnt_words_read = 0
 
     def next_single_sample(self):
         if not self._repeat and self.epoch > 0:
@@ -77,16 +79,20 @@ class DirWindowIterator(chainer.dataset.Iterator):
             try:
                 next_word = next(self.token_iter)
                 self.context_right.append(self.vocab.get_id(next_word))
-                self.current_position += 1
+                self.cnt_words_read += 1
+                if self.epoch == 0:
+                    self.cnt_words_total += 1
             except StopIteration:
                 self.epoch += 1
                 self.is_new_epoch = True
                 self.token_iter = DirTokenIterator(self.path)
+            if self.epoch > 0 and self.cnt_words_total < 3:
+                print("corpus empty")
+                raise RuntimeError("Corpus is empty")
             if len(self.context_right) > self.window_size:
                 break
-        if self.center is not None:
-            self.context_left.append(self.center)
 
+        self.context_left.append(self.center)
         self.center = self.context_right[0]
         self.context_right = self.context_right[1:]
         self.context_left = self.context_left[-self.window_size:]
@@ -94,8 +100,7 @@ class DirWindowIterator(chainer.dataset.Iterator):
 
     @property
     def epoch_detail(self):
-        return 0.4
-        # return self.epoch + float(self.current_position) / len(self.order)
+        return self.cnt_words_read / self.cnt_words_total
 
     def __next__(self):
         self.is_new_epoch = False

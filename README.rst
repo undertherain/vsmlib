@@ -1,12 +1,25 @@
 VSMlib
 ======
 
-VSMlibs helps to perform a range of task within a framework of vector space models of computational linguistics.
+.. image:: https://api.travis-ci.org/undertherain/vsmlib.svg?branch=master
+    :target: https://travis-ci.org/undertherain/vsmlib
+    :alt: build status from Travis CI
+
+.. image:: https://coveralls.io/repos/github/undertherain/vsmlib/badge.svg?branch=master
+    :target: https://coveralls.io/github/undertherain/vsmlib?branch=master
+    :alt: coveralls badge
+
+.. image:: https://badge.fury.io/py/vsmlib.svg
+    :target: https://badge.fury.io/py/vsmlib
+    :alt: pypi version
+
+VSMlibs helps to perform a range of tasks within a framework of vector space models of computational linguistics.
 
 What functionality is included
 ------------------------------
 
-* loading several popular formats of word embeddings and providing unified access to word-vectors
+* creating word embeddings by counting and neural-based methods, including sub-word-level models
+* importing and exporting from a banch of popular formats of word embeddings and providing unified access to word-vectors
 * perfroming simple tasks like estimating word similarity
 * visualising embeddings
 
