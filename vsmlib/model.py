@@ -92,7 +92,7 @@ class Model(object):
             else:            
                 str_warn = "\n\tthis method executes slow if embeddings are not normalized."
                 str_warn += "\n\tuse normalize() method to normalize your embeddings"
-                str_warn += "\n\tif you need your embeddings to be not normalized you can use .cache_normalized_copy() method to cache normalized copy of embeddings"
+                str_warn += "\n\tif for whatever reasons you need your embeddings to be not normalized, you can use .cache_normalized_copy() method to cache normalized copy of embeddings"
                 str_warn += "\n\tplease note that latter will consume additional memory\n"
                 warnings.warn(str_warn, RuntimeWarning)
                 for i in range(self.matrix.shape[0]):
@@ -147,10 +147,9 @@ class Model(object):
         return False
 
 
-def normalize(m):
-    for i in (range(m.shape[0] - 1)):
-        norm = np.linalg.norm(m.data[m.indptr[i]:m.indptr[i + 1]])
-        m.data[m.indptr[i]:m.indptr[i + 1]] /= norm
+def normalize_sparse(m):
+    norm = scipy.sparse.linalg.norm(m_normed, axis=1)[:, None]
+    m.data /= norm.repeat(np.diff(m.indptr))
 
 
 class Model_explicit(Model):
@@ -192,7 +191,7 @@ class Model_explicit(Model):
         self.provenance += "\ntransform : clip negative"
 
     def normalize(self):
-        normalize(self.matrix)
+        normalize_sparse(self.matrix)
         self.name += "_normalized"
         self.metadata["normalized"] = True
 
@@ -204,7 +203,6 @@ class ModelDense(Model):
         if math.isnan(c):
             return 0
         return (c + 1) / 2
-
 
     def save_matr_to_hdf5(self, path):
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'w')
@@ -263,6 +261,9 @@ class ModelDense(Model):
         self.metadata["normalized"] = True
 
     def cache_normalized_copy(self):
+        if self.normalized:
+            self._normalized_matrix = self.matrix
+        else:
             self._normalized_matrix = self.matrix.copy()
             self._normalized_matrix /= np.linalg.norm(self._normalized_matrix, axis=1)[:, None]
 

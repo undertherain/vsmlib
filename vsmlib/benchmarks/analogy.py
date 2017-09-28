@@ -80,7 +80,7 @@ def normed(v):
 
 
 def get_most_similar_fast(v):
-    scores = normed(v) @ m_normed.T
+    scores = normed(v) @ m._normalized_matrix.T
     scores = (scores + 1) / 2
     return scores
 
@@ -442,7 +442,7 @@ def do_test_on_pair_regr_old(p_train, p_test):
         vec_b = m.get_row(p_test_one[0])
         vec_b_prime = m.get_row(p_test_one[1][0])
         v = vec_b / np.linalg.norm(vec_b)
-        score_sim = v @ m_normed.T
+        score_sim = v @ m._normalized_matrix.T
         scores = score_sim * score_reg
         result = process_prediction(p_test_one, scores, score_reg, score_sim)
         result["similarity b to b_prime cosine"] = float(m.cmp_vectors(vec_b, vec_b_prime))
@@ -488,7 +488,7 @@ def do_test_on_pair_regr_filtered(p_train, p_test, file_out):
         v = m.get_row(p_test_one[0])
         v /= np.linalg.norm(v)
         v = v * cof
-        score_sim = v @ m_normed.T
+        score_sim = v @ m._normalized_matrix.T
         scores = score_sim * score_reg
         process_prediction(p_test_one, scores, score_reg, score_sim, file_out)
 
@@ -643,6 +643,8 @@ def get_pairs(fname):
 def run_all(name_dataset):
     global cnt_total_correct
     global cnt_total_total
+    m.cache_normalized_copy()
+
     register_test_func()
     print("doing all for ", name_dataset)
     if options["name_method"] == "SVMCos":
@@ -666,23 +668,22 @@ def subsample_dims(newdim):
     m.name = re.sub("_d(\d+)", "_d{}".format(newdim), m.name)
 
 
-def make_normalized_copy():
+#def make_normalized_copy():
     # todo use noramlization embedded in model
-    global m_normed
-    if options["normalize"]:
-        m_normed = m.matrix
-    else:
-        m_normed = m.matrix.copy()
-        print("created matrix copy for normalization, normalizing.... ")
+    #global m_normed
+    #if options["normalize"]:
+        #m_normed = m.matrix
+    #else:
+        #m_normed = m.matrix.copy()
+        #print("created matrix copy for normalization, normalizing.... ")
         # print(type(m_normed))
-        if scipy.sparse.issparse(m_normed):
-            norm = scipy.sparse.linalg.norm(m_normed, axis=1)[:, None]
-            m_normed.data /= norm.repeat(np.diff(m_normed.indptr))
-        else:
-            m_normed /= np.linalg.norm(m_normed, axis=1)[:, None]
+        #if scipy.sparse.issparse(m_normed):
+            #norm = scipy.sparse.linalg.norm(m_normed, axis=1)[:, None]
+            #m_normed.data /= norm.repeat(np.diff(m_normed.indptr))
+        #else:
+            #m_normed /= np.linalg.norm(m_normed, axis=1)[:, None]
 
-        print("normalized copy")
-
+        #print("normalized copy")
 
 #    for dims in [1300,1200,1000,900,800,700,600,500,400,300,200,100]:
 #    for dims in [1000,800,600,400,300,200]:
@@ -742,9 +743,6 @@ def main():
             m.normalize()
 
         print(m.name)
-        name_model = m.name
-        make_normalized_copy()
-
         run_all(options["name_dataset"])
         print("\noverall score: {}".format(cnt_total_correct / cnt_total_total))
 
