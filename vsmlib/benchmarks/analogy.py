@@ -667,6 +667,7 @@ def subsample_dims(newdim):
 
 
 def make_normalized_copy():
+    # todo use noramlization embedded in model
     global m_normed
     if options["normalize"]:
         m_normed = m.matrix

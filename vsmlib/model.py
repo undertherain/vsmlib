@@ -9,11 +9,11 @@ from matplotlib import pyplot as plt
 import os
 import brewer2mpl
 import tables
+import warnings
 import logging
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
 from .misc.data import save_json, load_json, detect_archive_format_and_open
-
 
 logger = logging.getLogger(__name__)
 
@@ -80,9 +80,23 @@ class Model(object):
         return rows, vert.T, labels
 
     def get_most_similar_vectors(self, u, cnt=10):
+        # todo split into dense and sparse implementations
         scores = np.zeros(self.matrix.shape[0], dtype=np.float32)
-        for i in range(self.matrix.shape[0]):
-            scores[i] = self.cmp_vectors(u, self.matrix[i])
+        if self.normalized:
+            scores = normed(u) @ self.matrix.T
+            scores = (scores + 1) / 2
+        else:
+            if hasattr(self, "_normalized_matrix"):
+                scores = normed(u) @ self._normalized_matrix.T
+                scores = (scores + 1) / 2
+            else:            
+                str_warn = "\n\tthis method executes slow if embeddings are not normalized."
+                str_warn += "\n\tuse normalize() method to normalize your embeddings"
+                str_warn += "\n\tif you need your embeddings to be not normalized you can use .cache_normalized_copy() method to cache normalized copy of embeddings"
+                str_warn += "\n\tplease note that latter will consume additional memory\n"
+                warnings.warn(str_warn, RuntimeWarning)
+                for i in range(self.matrix.shape[0]):
+                    scores[i] = self.cmp_vectors(u, self.matrix[i])
         ids = np.argsort(scores)[::-1]
         ids = ids[:cnt]
         return zip(ids, scores[ids])
@@ -118,17 +132,6 @@ class Model(object):
             return 0
         return self.cmp_rows(id1, id2)
 
-    # def load_props(self, path):
-        # try:
-            # with open(os.path.join(path, "props.json"), "r") as myfile:
-                # str_props = myfile.read()
-                # self.props = json.loads(str_props)
-        # except FileNotFoundError:
-            # logger.warning("props.json not found")
-            # self.props = {}
-            # exit(-1)
-
-
     def load_metadata(self, path):
         try:
             self.metadata = load_json(os.path.join(path, "metadata.json"))
@@ -136,6 +139,13 @@ class Model(object):
             logger.warning("metadata not found")
         if not "dimensions" in self.metadata:
             self.metadata["dimensions"] = self.matrix.shape[1]
+
+    @property
+    def normalized(self):
+        if "normalized" in self.metadata:
+            return self.metadata["normalized"]
+        return False
+
 
 def normalize(m):
     for i in (range(m.shape[0] - 1)):
@@ -152,7 +162,7 @@ class Model_explicit(Model):
         c = c[0, 0]
         if math.isnan(c):
             return 0
-        return c
+        return (c + 1) / 2
 
     def load_from_hdf5(self, path):
         self.load_metadata(path)
@@ -193,7 +203,8 @@ class ModelDense(Model):
         c = normed(r1) @ normed(r2)
         if math.isnan(c):
             return 0
-        return c
+        return (c + 1) / 2
+
 
     def save_matr_to_hdf5(self, path):
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'w')
@@ -250,6 +261,10 @@ class ModelDense(Model):
         self.matrix /= nrm[:, np.newaxis]
         self.name += "_normalized"
         self.metadata["normalized"] = True
+
+    def cache_normalized_copy(self):
+            self._normalized_matrix = self.matrix.copy()
+            self._normalized_matrix /= np.linalg.norm(self._normalized_matrix, axis=1)[:, None]
 
     def load_from_text(self, path):
         i = 0
