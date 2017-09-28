@@ -23,7 +23,7 @@ class Tests(unittest.TestCase):
         args.model = "skipgram"
         args.window = 4
         args.batchsize = 1000
-        args.epoch = 10
+        args.epoch = 5
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
         args.path_corpus = path_text
@@ -39,7 +39,7 @@ class Tests(unittest.TestCase):
         args.model = "skipgram"
         args.window = 4
         args.batchsize = 1000
-        args.epoch = 10
+        args.epoch = 5
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
         args.path_corpus = path_text
@@ -55,7 +55,7 @@ class Tests(unittest.TestCase):
         args.model = "skipgram"
         args.window = 4
         args.batchsize = 1000
-        args.epoch = 10
+        args.epoch = 3
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
         args.path_corpus = path_muliple
@@ -71,7 +71,7 @@ class Tests(unittest.TestCase):
         args.model = "skipgram"
         args.window = 4
         args.batchsize = 1000
-        args.epoch = 10
+        args.epoch = 3
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
         args.path_corpus = "./test/data/corpora/empty"
