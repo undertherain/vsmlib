@@ -240,7 +240,6 @@ class ThreeCosMul2(PairWise):
 class SimilarToAny(PairWise):
     def compute_scores(self, vectors):
         scores = get_most_similar_fast(vectors)
-        # print("scores shape:", scores.shape)
         best = scores.max(axis=0)
         return best
 
@@ -258,7 +257,6 @@ class SimilarToB():
         return results
 
     def do_on_two_pairs(self, pair_test):
-        # print ("pre ",pair_test)
         if is_pair_missing([pair_test]):
             result = result_miss
         else:
@@ -324,14 +322,12 @@ def get_distance_closest_words(center, cnt_words=1):
 
 def get_rank(source, center):
     if isinstance(center, str):
-        # print ("getting rank for ",center)
         center = m.get_row(center)
     if isinstance(source, str):
         source = [source]
     scores = get_most_similar_fast(center)
     ids_max = np.argsort(scores)[::-1]
     for i in range(ids_max.shape[0]):
-        # print("\t try ", m.vocabulary.get_word_by_id(ids_max[i]))
         if m.vocabulary.get_word_by_id(ids_max[i]) in source:
             break
     rank = i
@@ -420,7 +416,6 @@ def do_test_on_pair_regr_old(p_train, p_test):
     # create_list_test_right(p_test)
 
     X_train, Y_train = gen_vec_single(p_train)
-    # print(Y_train)
     if options["name_method"].startswith("LRCos"):
         # model_regression = LogisticRegression(class_weight = 'balanced')
         # model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
@@ -601,6 +596,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     experiment_setup["method"] = options["name_method"]
     if not options["exclude"]:
         experiment_setup["method"] += "_honest"
+    experiment_setup["timestamp"] = datetime.datetime.now().isoformat()
     out["experiment setup"] = experiment_setup
     
     out["results_short"] = dict()
@@ -666,24 +662,6 @@ def run_all(name_dataset):
 def subsample_dims(newdim):
     m.matrix = m.matrix[:, 0:newdim]
     m.name = re.sub("_d(\d+)", "_d{}".format(newdim), m.name)
-
-
-#def make_normalized_copy():
-    # todo use noramlization embedded in model
-    #global m_normed
-    #if options["normalize"]:
-        #m_normed = m.matrix
-    #else:
-        #m_normed = m.matrix.copy()
-        #print("created matrix copy for normalization, normalizing.... ")
-        # print(type(m_normed))
-        #if scipy.sparse.issparse(m_normed):
-            #norm = scipy.sparse.linalg.norm(m_normed, axis=1)[:, None]
-            #m_normed.data /= norm.repeat(np.diff(m_normed.indptr))
-        #else:
-            #m_normed /= np.linalg.norm(m_normed, axis=1)[:, None]
-
-        #print("normalized copy")
 
 #    for dims in [1300,1200,1000,900,800,700,600,500,400,300,200,100]:
 #    for dims in [1000,800,600,400,300,200]:
