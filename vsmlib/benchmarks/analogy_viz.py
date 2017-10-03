@@ -2,8 +2,11 @@ import os
 import pandas
 from pandas.io.json import json_normalize
 from vsmlib.misc.data import load_json
+import matplotlib as mpl
+from matplotlib import pyplot as plt
 
-path = "/mnt/storage/Data/linguistic/outs/BATS_3.0/LRCos_C1.0/w2v_bnc_vsm_w5_ns_normalized/D01 [noun+less_reg].json"
+
+path = "/mnt/storage/Data/linguistic/outs/BATS_3.0/LRCos_C1.0/w2v_bnc_vsm_w5_ns_normalized/"
 
 
 def df_from_file(path):
@@ -12,6 +15,7 @@ def df_from_file(path):
         i.pop("predictions", None)
     meta = [["experiment setup", "category"], ["experiment setup", "method"]]
     df = json_normalize(data, record_path=["results"], meta=meta)
+    df["reciprocal_rank"] = 1 / (df["rank"] + 1)
     return df
 
 
@@ -23,5 +27,14 @@ def df_from_dir(path):
     df = pandas.concat(dfs)
     return df
 
-df = df_from_file(path)
-print(df)
+df = df_from_dir(path)
+#print(df)
+group = df.groupby(["experiment setup.category","experiment setup.method"])
+means = group.mean()
+means.reset_index(inplace=True)
+#toplot=means
+#methods = means["method"].unique()
+#ptin
+print(means)
+means.plot(kind='bar', x="experiment setup.category", y="reciprocal_rank")
+plt.show()
