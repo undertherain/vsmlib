@@ -32,9 +32,14 @@ df = df_from_dir(path)
 group = df.groupby(["experiment setup.category","experiment setup.method"])
 means = group.mean()
 means.reset_index(inplace=True)
-#toplot=means
-#methods = means["method"].unique()
-#ptin
+#group = means.groupby(["experiment setup.method"])
+#dfs = [group.get_group(x) for x in group.groups]
+#labels = set()
+#for d in dfs:
+#    labels.update(set(d["experiment setup.category"].unique()))
+#    d.set_index("experiment setup.category",inplace=True)
+#labels=sorted(list(labels))
+#d=dfs[0]
 print(means)
-means.plot(kind='bar', x="experiment setup.category", y="reciprocal_rank")
+means.plot(kind='bar', x="experiment setup.category", y=["reciprocal_rank"])
 plt.show()
