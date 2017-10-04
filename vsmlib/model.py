@@ -320,7 +320,7 @@ class ModelNumbered(ModelDense):
             plt.legend()
 
 
-class Model_Levi(ModelNumbered):
+class Model_Levy(ModelNumbered):
     def load_from_dir(self, path):
         self.name = "Levi_" + os.path.basename(os.path.normpath(path))
         self.matrix = np.load(os.path.join(path, "sgns.contexts.npy"))
@@ -331,6 +331,17 @@ class Model_Levi(ModelNumbered):
         self.vocabulary.dic_words_ids = {}
         for i in range(len(self.vocabulary.lst_words)):
             self.vocabulary.dic_words_ids[self.vocabulary.lst_words[i]] = i
+
+class Model_Fun(ModelNumbered):
+    def load_from_dir(self,path, name):
+        self.name = "Fun_" + os.path.basename(os.path.normpath(path))
+        self.matrix=np.load(os.path.join(path,name + ".npy"))
+        self.vocabulary= vsmlib.vocabulary.Vocabulary_simple()
+        self.vocabulary.dir_root=path
+        self.vocabulary.load_list_from_sorted_file(os.path.join(path,name + ".vocab"))
+        self.vocabulary.dic_words_ids = {}
+        for i in range(len(self.vocabulary.lst_words)):
+            self.vocabulary.dic_words_ids[self.vocabulary.lst_words[i]]=i
 
 
 class Model_svd_scipy(ModelNumbered):
@@ -418,7 +429,7 @@ def load_from_dir(path):
         m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "sgns.words.npy")):
-        m = Model_Levi()
+        m = Model_Levy()
         logger.info("this is Levi")
         m.load_from_dir(path)
         m.load_metadata(path)
@@ -439,6 +450,13 @@ def load_from_dir(path):
     m = ModelNumbered()
     files = os.listdir(path)
     for f in files:
+        if f.startswith("words") and f.endswith(".npy") \
+               and os.path.isfile(os.path.join(path, f.replace(".npy", ".vocab"))) :
+            m = Model_Fun()
+            logger.info("this is fun's dependency embedding format")
+            m.load_from_dir(path, f[: -4])
+            m.load_metadata(path)
+            return m
         if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
             logger.info(path + " detected as text")
             m.load_from_text(os.path.join(path, f))
