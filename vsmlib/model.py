@@ -443,7 +443,12 @@ def load_from_dir(path):
             logger.info(path + " detected as text")
             m.load_from_text(os.path.join(path, f))
             m.load_metadata(path)
+            return m
+        if f.endswith(".npy"):
+            logger.info("detected as dense in mumpy format")
+            m.matrix = np.load(os.path.join(path, f))
 
+            m.load_metadata(path)
             return m
 
     raise RuntimeError("can not detect embeddings format")
