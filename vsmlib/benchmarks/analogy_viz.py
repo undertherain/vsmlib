@@ -6,7 +6,7 @@ import matplotlib as mpl
 from matplotlib import pyplot as plt
 
 
-path = "/mnt/storage/Data/linguistic/outs/BATS_3.0/LRCos_C1.0/w2v_bnc_vsm_w5_ns_normalized/"
+path = "/mnt/storage/Data/linguistic/outs/BATS_3.0/"
 
 
 def df_from_file(path):
@@ -31,7 +31,7 @@ df = df_from_dir(path)
 #print(df)
 group = df.groupby(["experiment setup.category","experiment setup.method"])
 means = group.mean()
-means.reset_index(inplace=True)
+#means.reset_index(inplace=True)
 #group = means.groupby(["experiment setup.method"])
 #dfs = [group.get_group(x) for x in group.groups]
 #labels = set()
@@ -40,6 +40,7 @@ means.reset_index(inplace=True)
 #    d.set_index("experiment setup.category",inplace=True)
 #labels=sorted(list(labels))
 #d=dfs[0]
-print(means)
-means.plot(kind='bar', x="experiment setup.category", y=["reciprocal_rank"])
+print(means[:1])
+#means.plot(kind='bar', x="experiment setup.category", y=["reciprocal_rank"], secondary_y=["experiment setup.method"] )
+means.plot(kind='bar', x="experiment setup.category" )
 plt.show()

@@ -597,7 +597,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     if not options["exclude"]:
         experiment_setup["method"] += "_honest"
     experiment_setup["timestamp"] = datetime.datetime.now().isoformat()
-    out["experiment setup"] = experiment_setup
+    out["experiment_setup"] = experiment_setup
     
     out["results_short"] = dict()
     out["results_short"]["cnt_correct"] = cnt_total_correct
