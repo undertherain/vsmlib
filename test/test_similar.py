@@ -4,7 +4,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
-path = "test/data/embeddings/text/plain"
+path = "test/data/embeddings/text/plain_with_file_header"
 
 
 class Tests(unittest.TestCase):
