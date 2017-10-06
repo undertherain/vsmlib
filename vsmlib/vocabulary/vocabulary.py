@@ -5,6 +5,9 @@ from vsmlib._version import VERSION
 from vsmlib.misc.formathelper import countof_fmt
 from vsmlib.misc.data import save_json, load_json
 from vsmlib.corpus import DirTokenIterator
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Vocabulary(object):
@@ -40,7 +43,26 @@ class Vocabulary(object):
         f.close()
         save_json(self.metadata, os.path.join(path, "metadata.json"))
 
-    def load(self, path):
+    
+    def load_list_from_sorted_file(self, filename):
+        self.lst_words = []
+        f = open(filename, encoding='utf-8', errors='replace')
+        lines = f.readlines()
+        for line in lines:
+            token = line.strip()
+            self.lst_words.append(token)
+        f.close()
+
+    def create_dic_from_list(self):
+        self.dic_words_ids = {}
+        for i in range(len(self.lst_words)):
+            self.dic_words_ids[self.lst_words[i]] = i
+
+    def load_from_list(self, path):
+        self.load_list_from_sorted_file(path)
+        self.create_dic_from_list()
+
+    def load_tsv(self, path):
         pos = 0
         f = open(os.path.join(path, "vocab.tsv"))
         self.lst_frequencies = []
@@ -57,6 +79,16 @@ class Vocabulary(object):
         f.close()
         self.cnt_words = len(self.lst_words)
         self.metadata = load_json(os.path.join(path, "metadata.json"))
+
+    def load(self, path):
+        if os.path.isfile(os.path.join(path, "vocab.tsv")):
+            self.load_tsv(path)
+
+        files = os.listdir(path)
+        for f in files:
+            if f.endswith(".vocab"):
+                logger.info("found vocab file")
+                self.load_from_list(os.path.join(path, f))
 
 
 class Vocabulary_simple(Vocabulary):
@@ -89,16 +121,6 @@ class Vocabulary_simple(Vocabulary):
             # rdic[tokens[0]]=np.int64(tokens[-1])
             # rlst.append(tokens[0])
             self.lst_words[np.int64(tokens[-1])] = tokens[0]
-        f.close()
-
-    def load_list_from_sorted_file(self, filename):
-        self.lst_words = []
-        f = open(os.path.join(self.dir_root, filename),
-                 encoding='utf-8', errors='replace')
-        lines = f.readlines()
-        for line in lines:
-            token = line.strip()
-            self.lst_words.append(token)
         f.close()
 
     def load(self, path, verbose=False):

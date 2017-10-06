@@ -23,6 +23,7 @@ class Tests(unittest.TestCase):
         path = "./test/data/embeddings/text/plain_with_file_header/"
         model = vsmlib.model.load_from_dir(path)
         self.assertIsInstance(model, Model)
+        model.vocabulary.get_id("apple")
         print(model.name)
 
     def test_save(self):
@@ -32,3 +33,10 @@ class Tests(unittest.TestCase):
         model.save_to_dir(path_save)
         model = vsmlib.model.load_from_dir(path_save)
         print(model.matrix.shape)
+
+    def test_load_numpy(self):
+        path = "./test/data/embeddings/npy/"
+        model = vsmlib.model.load_from_dir(path)
+        self.assertIsInstance(model, Model)
+        model.vocabulary.get_id("apple")
+        # todo make sure to check vocab

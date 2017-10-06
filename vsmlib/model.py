@@ -325,23 +325,15 @@ class Model_Levy(ModelNumbered):
         self.name = "Levi_" + os.path.basename(os.path.normpath(path))
         self.matrix = np.load(os.path.join(path, "sgns.contexts.npy"))
         self.vocabulary = vsmlib.vocabulary.Vocabulary_simple()
-        self.vocabulary.dir_root = path
-        self.vocabulary.load_list_from_sorted_file(
-            "/home/blackbird/data/scratch/Anna/w2-1000.iter1/sgns.words.vocab")
-        self.vocabulary.dic_words_ids = {}
-        for i in range(len(self.vocabulary.lst_words)):
-            self.vocabulary.dic_words_ids[self.vocabulary.lst_words[i]] = i
+        self.vocabulary.load_from_list(os.path.join(path,"sgns.words.vocab"))
+
 
 class Model_Fun(ModelNumbered):
     def load_from_dir(self,path, name):
         self.name = "Fun_" + os.path.basename(os.path.normpath(path))
         self.matrix=np.load(os.path.join(path,name + ".npy"))
         self.vocabulary= vsmlib.vocabulary.Vocabulary_simple()
-        self.vocabulary.dir_root=path
-        self.vocabulary.load_list_from_sorted_file(os.path.join(path,name + ".vocab"))
-        self.vocabulary.dic_words_ids = {}
-        for i in range(len(self.vocabulary.lst_words)):
-            self.vocabulary.dic_words_ids[self.vocabulary.lst_words[i]]=i
+        self.vocabulary.load_from_list(os.path.join(path, name + ".vocab"))
 
 
 class Model_svd_scipy(ModelNumbered):
@@ -411,19 +403,19 @@ class Model_glove(ModelNumbered):
 
 def load_from_dir(path):
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
-        logger.info("this is sparse explicit in hdf5")
+        logger.info("detected as sparse explicit in hdf5")
         m = vsmlib.Model_explicit()
         m.load_from_hdf5(path)
         m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "bigrams.data.bin")):
-        logger.info("this is sparse explicit")
+        logger.info("detected as sparse in vsmlib legacy format")
         m = vsmlib.Model_explicit()
         m.load(path)
         m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.bin")):
-        logger.info("this is w2v")
+        logger.info("this is w2v original binary format")
         m = vsmlib.Model_w2v()
         m.load_from_dir(path)
         m.load_metadata(path)
@@ -442,7 +434,7 @@ def load_from_dir(path):
         return m
     if os.path.isfile(os.path.join(path, "vectors.h5p")):
         m = vsmlib.ModelNumbered()
-        logger.info("detected vsmlib format ")
+        logger.info("detected as vsmlib format ")
         m.load_hdf5(path)
         m.load_metadata(path)
         return m
@@ -465,7 +457,8 @@ def load_from_dir(path):
         if f.endswith(".npy"):
             logger.info("detected as dense in mumpy format")
             m.matrix = np.load(os.path.join(path, f))
-
+            m.vocabulary = Vocabulary()
+            m.vocabulary.load(path)
             m.load_metadata(path)
             return m
 
