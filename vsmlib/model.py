@@ -332,7 +332,7 @@ class Model_Fun(ModelNumbered):
     def load_from_dir(self,path, name):
         self.name = "Fun_" + os.path.basename(os.path.normpath(path))
         self.matrix=np.load(os.path.join(path,name + ".npy"))
-        self.vocabulary= vsmlib.vocabulary.Vocabulary_simple()
+        self.vocabulary= vsmlib.vocabulary.Vocabulary()
         self.vocabulary.load_from_list(os.path.join(path, name + ".vocab"))
 
 
