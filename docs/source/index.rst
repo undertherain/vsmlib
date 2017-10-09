@@ -7,6 +7,7 @@ vsmlib - Python library for vector space models
    :maxdepth: 1
 
    tutorial/index
+   reference/index
 
 
 Indices and tables
