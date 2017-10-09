@@ -1,8 +1,11 @@
 Model
 -----
 
-.. autosummary::
-   :toctree: generated/
-   :nosignatures:
+.. automodule:: vsmlib
 
-   vsmlib.model
+
+members:
+--------
+
+.. automodule:: vsmlib.model
+   :members:

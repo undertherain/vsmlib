@@ -1,3 +1,13 @@
+"""
+.. module:: model
+   :platform: Unix, Windows
+   :synopsis: support for sifferent embeddings
+
+.. moduleauthor:: Aleksandr Drozd
+
+
+"""
+
 from vsmlib.vocabulary import Vocabulary_cooccurrence, Vocabulary_simple, Vocabulary
 import vsmlib.matrix
 import numpy as np
