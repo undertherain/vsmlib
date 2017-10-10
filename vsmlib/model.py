@@ -334,12 +334,12 @@ class Model_Levy(ModelNumbered):
         self.vocabulary.load_from_list(os.path.join(path,"sgns.words.vocab"))
 
 
-class Model_Fun(ModelNumbered):
-    def load_from_dir(self,path, name):
-        self.name = "Fun_" + os.path.basename(os.path.normpath(path))
-        self.matrix=np.load(os.path.join(path,name + ".npy"))
-        self.vocabulary= vsmlib.vocabulary.Vocabulary()
-        self.vocabulary.load_from_list(os.path.join(path, name + ".vocab"))
+#class Model_Fun(ModelNumbered):
+#    def load_from_dir(self,path, name):
+#        self.name = "Fun_" + os.path.basename(os.path.normpath(path))
+#        self.matrix=np.load(os.path.join(path,name + ".npy"))
+#        self.vocabulary= vsmlib.vocabulary.Vocabulary()
+#        self.vocabulary.load_from_list(os.path.join(path, name + ".vocab"))
 
 
 class Model_svd_scipy(ModelNumbered):
@@ -393,18 +393,18 @@ class Model_w2v(ModelNumbered):
         # self.load_provenance(path)
 
 
-@deprecated
-class Model_glove(ModelNumbered):
-    def __init__(self):
-        self.name = "glove"
-
-    def load_from_dir(self, path):
-        self.name = "glove_" + os.path.basename(os.path.normpath(path))
-        files = os.listdir(path)
-        for f in files:
-            if f.endswith(".gz"):
-                logger.info("this is Glove")
-                self.load_from_text(os.path.join(path, f))
+#@deprecated
+#class Model_glove(ModelNumbered):
+    #def __init__(self):
+        #self.name = "glove"
+#
+    #def load_from_dir(self, path):
+        #self.name = "glove_" + os.path.basename(os.path.normpath(path))
+        #files = os.listdir(path)
+        #for f in files:
+            #if f.endswith(".gz"):
+                #logger.info("this is Glove")
+                #self.load_from_text(os.path.join(path, f))
 
 
 def load_from_dir(path):
