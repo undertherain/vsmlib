@@ -1,12 +1,4 @@
-"""
-.. module:: model
-   :platform: Unix, Windows
-   :synopsis: support for sifferent embeddings
-
-.. moduleauthor:: Aleksandr Drozd
-
-
-Hi!
+"""The model module that implements embedding loading.
 """
 
 from vsmlib.vocabulary import Vocabulary_cooccurrence, Vocabulary_simple, Vocabulary

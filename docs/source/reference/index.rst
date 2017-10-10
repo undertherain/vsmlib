@@ -1,9 +1,5 @@
-****************
-Reference Manual
-****************
+API reference
+=============
 
-.. toctree::
-   :maxdepth: 2
-
-   model
-
+.. automodule:: vsmlib
+    
