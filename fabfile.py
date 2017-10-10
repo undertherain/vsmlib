@@ -21,5 +21,12 @@ def deploy():
 def test():
     local("python3.6 -m unittest")
 
+
 def time():
     local("python3 -m unittest discover --start-directory=./test/performance/ --patter=\"time*.py\"")
+
+
+def docs():
+    with lcd("./docs"):
+        local("make clean")
+        local("make html")

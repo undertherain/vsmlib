@@ -408,11 +408,14 @@ class Model_glove(ModelNumbered):
 
 
 def load_from_dir(path):
-    """Automatically detects embeddings format and loads them into Model class
+    """Automatically detects embeddings format and loads
 
-    Keyword arguments:
-    path -- absolute or relative path to the directory where embeddings are stores
-    """    
+    Args:
+        path: directory where embeddings are stores
+
+    Returns:
+        Instance of appropriate Model-based class
+    """
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
         logger.info("detected as sparse explicit in hdf5")
         m = vsmlib.Model_explicit()
