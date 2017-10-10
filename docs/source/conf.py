@@ -52,7 +52,7 @@ autodoc_default_flags = [
 autosummary_generate = True  # Make _autosummary files and include them
 napoleon_numpy_docstring = False  # Force consistency, leave only Google
 napoleon_use_rtype = False  # More legible
-autodoc_mock_imports = ['_tkinter']
+autodoc_mock_imports = ['_tkinter','numpy',"matplotlib",""]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
