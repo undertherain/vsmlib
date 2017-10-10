@@ -39,6 +39,7 @@ extensions = [
      'sphinx.ext.autosummary',
      # The Napoleon extension allows for nicer argument formatting.
      'sphinx.ext.napoleon',
+     'sphinx.ext.mathjax'
 ]
 
 autoclass_content = "both"
