@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# mod documentation build configuration file, created by
-# sphinx-quickstart on Tue Oct 10 18:10:03 2017.
-#
 # This file is execfile()d with the current directory set to its
 # containing dir.
 #
@@ -64,9 +61,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'mod'
-copyright = '2017, Ale'
-author = 'Ale'
+project = 'vsmlib'
+copyright = '2017, vsmlib community'
+author = 'vsmlib community'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -159,8 +156,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'mod.tex', 'mod Documentation',
-     'Ale', 'manual'),
+    (master_doc, 'mod.tex', 'vsmlib documentation',
+     'Aleksandr Drozd', 'manual'),
 ]
 
 
@@ -169,7 +166,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mod', 'mod Documentation',
+    (master_doc, 'vsmlib', 'vsmlib documentation',
      [author], 1)
 ]
 
@@ -180,8 +177,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'mod', 'mod Documentation',
-     author, 'mod', 'One line description of project.',
+    (master_doc, 'vsmlib', 'vsmlib Documentation',
+     author, 'mod', 'vector space models.',
      'Miscellaneous'),
 ]
 
