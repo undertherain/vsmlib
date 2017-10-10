@@ -5,6 +5,3 @@ Model
    :toctree: _autosummary/
 
    vsmlib.model
-
-
-   
