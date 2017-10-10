@@ -1,11 +1,10 @@
 Model
 -----
 
-.. automodule:: vsmlib
+.. autosummary::
+   :toctree: _autosummary/
+
+   vsmlib.model
 
 
-members:
---------
-
-.. automodule:: vsmlib.model
-   :members:
+   

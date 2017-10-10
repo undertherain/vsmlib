@@ -6,6 +6,7 @@
 .. moduleauthor:: Aleksandr Drozd
 
 
+Hi!
 """
 
 from vsmlib.vocabulary import Vocabulary_cooccurrence, Vocabulary_simple, Vocabulary
@@ -207,6 +208,9 @@ class Model_explicit(Model):
 
 
 class ModelDense(Model):
+    """Stored dense embeddings.
+
+    """
 
     def cmp_vectors(self, r1, r2):
         c = normed(r1) @ normed(r2)

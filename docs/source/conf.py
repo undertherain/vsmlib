@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # vsmlib documentation build configuration file, created by
-# sphinx-quickstart on Sun Oct  8 23:01:43 2017.
+# sphinx-quickstart on Tue Oct 10 15:54:06 2017.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -19,9 +19,9 @@
 #
 import os
 import sys
-# sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-sys.path.insert(0, os.path.abspath("../../"))
+#sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('.'))
+
 
 # -- General configuration ------------------------------------------------
 
@@ -34,11 +34,11 @@ sys.path.insert(0, os.path.abspath("../../"))
 # ones.
 extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode']
+
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -54,8 +54,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'vsmlib'
-copyright = '2017, Aleksandr Drozd'
-author = 'Aleksandr Drozd'
+copyright = '2017, vsmlib community'
+author = 'vsmlib community'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -150,7 +150,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'vsmlib.tex', 'vsmlib Documentation',
-     'Aleksandr Drozd', 'manual'),
+     'vsmlib community', 'manual'),
 ]
 
 
@@ -177,6 +177,3 @@ texinfo_documents = [
 
 
 
-
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
