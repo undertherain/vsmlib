@@ -18,8 +18,10 @@ import os
 import sys
 import pkg_resources
 
-#sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-sys.path.insert(0, os.path.abspath('../../'))
+# sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+# sys.path.insert(0, os.path.abspath('../../'))
+sys.path.append(os.path.abspath('.'))
+sys.path.append(os.path.abspath('..'))
 
 #__version__ = pkg_resources.get_distribution('vsmlib').version
 __version__ = "0.1.17"
@@ -53,7 +55,22 @@ autodoc_default_flags = [
 autosummary_generate = True  # Make _autosummary files and include them
 napoleon_numpy_docstring = False  # Force consistency, leave only Google
 napoleon_use_rtype = False  # More legible
-autodoc_mock_imports = ["numpy", "matplotlib", "matplotlib.pyplot", "scipy", "brewer2mpl", "tables", "tqdm", "_tkinter"]
+
+autodoc_mock_imports = [
+    "numpy",
+    "scipy",
+    "brewer2mpl"
+    "matplotlib",
+    "matplotlib.pyplot",
+    "tables",
+    "tqdm",
+    "_tkinter",
+]
+
+# import mock
+
+# for mod_name in autodoc_mock_imports:
+    # sys.modules[mod_name] = mock.Mock()
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
