@@ -18,10 +18,10 @@ import os
 import sys
 import pkg_resources
 
-# sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+#sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.abspath('../../'))
-sys.path.insert(0, os.path.abspath('../'))
-sys.path.insert(0, os.path.abspath('.'))
+#sys.path.insert(0, os.path.abspath('../'))
+#sys.path.insert(0, os.path.abspath('.'))
 
 #__version__ = pkg_resources.get_distribution('vsmlib').version
 __version__ = "0.1.17.2"
@@ -56,16 +56,36 @@ autosummary_generate = True  # Make _autosummary files and include them
 napoleon_numpy_docstring = False  # Force consistency, leave only Google
 napoleon_use_rtype = False  # More legible
 
-autodoc_mock_imports = [
-    "numpy",
-    "scipy",
-    "brewer2mpl"
+from unittest.mock import MagicMock
+
+#autodoc_mock_imports = [
+#    "numpy",
+#    "scipy",
+#    "brewer2mpl"
+#    "matplotlib",
+#    "matplotlib.pyplot",
+#    "tables",
+#    "tqdm"
+#]
+
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+            return MagicMock()
+
+MOCK_MODULES = [
+#    "numpy",
+#    "scipy",
+    "sklearn",
+    "brewer2mpl",
     "matplotlib",
     "matplotlib.pyplot",
     "tables",
-    "tqdm",
-    "_tkinter",
-]
+    "tqdm"
+    ]
+
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
