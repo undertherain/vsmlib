@@ -25,6 +25,10 @@ def normed(v):
 
 
 class Model(object):
+    """Basic model class to define interface.
+
+    Usually you would not use this class directly, but rather some of the classes which inherit from Model
+    """
 
     def __init__(self):
         self.provenance = ""
@@ -200,7 +204,7 @@ class Model_explicit(Model):
 
 
 class ModelDense(Model):
-    """Stored dense embeddings.
+    """Stores dense embeddings.
 
     """
 
