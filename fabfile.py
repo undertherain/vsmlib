@@ -6,6 +6,8 @@ def clean():
     with lcd(os.path.dirname(__file__)):
         local("python3.6 setup.py clean --all")
         local("find . | grep -E \"(__pycache__|\.pyc$)\" | xargs rm -rf")
+        local("rm -rf ./docs/build || true")
+        local("rm -rf ./docs/source/reference/_autosummary || true")
 
 
 def make():
