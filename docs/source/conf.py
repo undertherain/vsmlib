@@ -75,8 +75,10 @@ class Mock(MagicMock):
             return MagicMock()
 
 MOCK_MODULES = [
-#    "numpy",
-#    "scipy",
+    "scipy",
+    "scipy.sparse",
+    "scipy.sparse.linalg",
+    "numpy",
     "sklearn",
     "brewer2mpl",
     "matplotlib",
