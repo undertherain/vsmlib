@@ -24,7 +24,7 @@ sys.path.append(os.path.abspath('.'))
 sys.path.append(os.path.abspath('..'))
 
 #__version__ = pkg_resources.get_distribution('vsmlib').version
-__version__ = "0.1.17"
+__version__ = "0.1.17.1"
 
 # -- General configuration ------------------------------------------------
 

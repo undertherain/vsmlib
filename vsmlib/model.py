@@ -8,12 +8,12 @@ import scipy
 from scipy import sparse
 import scipy.sparse.linalg
 import math
-from matplotlib import pyplot as plt
 import os
 import brewer2mpl
 import tables
 import warnings
 import logging
+from matplotlib import pyplot as plt
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
 from .misc.data import save_json, load_json, detect_archive_format_and_open
