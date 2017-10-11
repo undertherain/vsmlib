@@ -19,11 +19,12 @@ import sys
 import pkg_resources
 
 # sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('.'))
 
 #__version__ = pkg_resources.get_distribution('vsmlib').version
-__version__ = "0.1.17.1"
+__version__ = "0.1.17.2"
 
 # -- General configuration ------------------------------------------------
 
