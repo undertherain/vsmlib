@@ -1,4 +1,1 @@
-from .analogy import main
-
-if __name__ == "__main__":
-    main()
+"""benchmarks for analogical reasonong"""
