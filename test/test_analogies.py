@@ -3,6 +3,7 @@ import unittest
 import vsmlib
 import vsmlib.benchmarks
 import vsmlib.benchmarks.analogy
+import vsmlib.benchmarks.analogy.analogy
 
 logging.basicConfig(level=logging.DEBUG)
 
