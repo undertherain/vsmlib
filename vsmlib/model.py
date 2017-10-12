@@ -107,6 +107,8 @@ class Model(object):
         return zip(ids, scores[ids])
 
     def get_most_similar_words(self, w, cnt=10):
+        """returns list of words sorted by cosine proximity to a target word"""
+        
         if isinstance(w, str):
             vec = self.matrix[self.vocabulary.get_id(w)]
         else:
