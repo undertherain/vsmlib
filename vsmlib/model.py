@@ -17,11 +17,9 @@ from matplotlib import pyplot as plt
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
 from .misc.data import save_json, load_json, detect_archive_format_and_open
+from .blas import normed
 
 logger = logging.getLogger(__name__)
-
-def normed(v):
-    return v / np.linalg.norm(v)
 
 
 class Model(object):
