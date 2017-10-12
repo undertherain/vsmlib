@@ -2,11 +2,7 @@ import os
 import pandas
 from pandas.io.json import json_normalize
 from vsmlib.misc.data import load_json
-import matplotlib as mpl
 from matplotlib import pyplot as plt
-
-
-path = "/mnt/storage/Data/linguistic/outs/BATS_3.0/"
 
 
 def df_from_file(path):
@@ -27,11 +23,22 @@ def df_from_dir(path):
     df = pandas.concat(dfs)
     return df
 
-df = df_from_dir(path)
-group = df.groupby(["experiment setup.category","experiment setup.method"])
-means = group.mean()
-means.reset_index(inplace=True)
-means = means.loc[:,["experiment setup.category", "experiment setup.method", "reciprocal_rank"]]
-unstacked=means.groupby(['experiment setup.category','experiment setup.method'])['reciprocal_rank'].aggregate('first').unstack()
-unstacked.plot(kind="bar")
-plt.show()
+
+def plot_accuracy(path):
+    df = df_from_dir(path)
+    group = df.groupby(["experiment setup.category", "experiment setup.method"])
+    means = group.mean()
+    means.reset_index(inplace=True)
+    means = means.loc[:, ["experiment setup.category", "experiment setup.method", "reciprocal_rank"]]
+    unstacked = means.groupby(['experiment setup.category', 'experiment setup.method'])['reciprocal_rank'].aggregate('first').unstack()
+    unstacked.plot(kind="bar")
+    plt.show()
+
+
+def main():
+    path = "/mnt/storage/Data/linguistic/outs/BATS_3.0/"
+    plot_accuracy(path)
+
+
+if __name__ == "__main__":
+    main()
