@@ -691,7 +691,7 @@ def main():
     else:
         print("usage: python3 -m vsmlib.benchmarls.analogy <config file>")
         print("config file example can be found at ")
-        print("https://github.com/undertherain/vsmlib/blob/master/vsmlib/benchmarks/config_analogy.yaml")
+        print("https://github.com/undertherain/vsmlib/blob/master/vsmlib/benchmarks/analogy/config_analogy.yaml")
         # print("or, hopefully")
         # path_script = os.path.dirname(inspect.stack()[0][1])
         # print(os.path.join(path_script,"config_analogy.yaml"))
