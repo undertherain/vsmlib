@@ -18,6 +18,9 @@ from itertools import product
 import logging
 import inspect
 
+
+logger = logging.getLogger(__name__)
+
 def profile_trivial(a):
     return a
 
@@ -161,6 +164,7 @@ class PairWise:
         results = []
         for p_train, p_test in product(pairs_train, pairs_test):
             if is_pair_missing([p_train, p_test]):
+                logger.debug("pair is missing")
                 continue
             result = self.do_on_two_pairs(p_train, p_test)
             result["b in neighbourhood of b_prime"] = get_rank(p_test[0], p_test[1][0])
@@ -407,7 +411,6 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
         result["landing_a_prime"] = True
     else:
         result["landing_a_prime"] = False
-
     return result
 
 
@@ -535,10 +538,12 @@ def register_test_func():
 #    file_out.close()
 
 
-def run_category(pairs, name_dataset, name_category="not yet"):
+def run_category(pairs, name_dataset, name_category):
     # if name_dataset.endswith("_D") or name_dataset.endswith("_I") or name_dataset.endswith("_E") or name_dataset.endswith("_L"):
        # name_dataset = name_dataset[:-2]
-
+    logger.info("doing tests for category: " + name_category)
+    global cnt_total_total
+    global cnt_total_correct
     results = []
     name_file_out = os.path.join(options["path_results"], name_dataset, options["name_method"])
     if options["name_method"] == "SVMCos":
@@ -547,7 +552,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
         name_file_out += "_C{}".format(inverse_regularization_strength)
     if not options["exclude"]:
         name_file_out += "_honest"
-    name_file_out += "/" + m.name + "/" + name_category
+    name_file_out = os.path.join (name_file_out, m.name, name_category)
     if name_file_out.endswith(".txt"):  # todo don't duplicate with subsample
         name_file_out = name_file_out[:-4] + ".json"
     print("saving to", name_file_out)
@@ -609,6 +614,7 @@ def run_category(pairs, name_dataset, name_category="not yet"):
     file_out = open(name_file_out, "w", errors="replace")
     file_out.write(str_results)
     file_out.close()
+    logger.info("category done")
 
 
 def get_pairs(fname):
@@ -642,11 +648,11 @@ def run_all(name_dataset):
     m.cache_normalized_copy()
 
     register_test_func()
-    print("doing all for ", name_dataset)
+    logger.info("processing dataset " + name_dataset)
     if options["name_method"] == "SVMCos":
-        print("using ", options["name_method"] + "_" + name_kernel)
+        logger.info("using " + options["name_method"] + "_" + name_kernel)
     else:
-        print("using ", options["name_method"])
+        logger.info("using " + options["name_method"])
     dir_tests = os.path.join(options["dir_root_dataset"], name_dataset)
     if not os.path.exists(dir_tests):
         raise Exception("test dataset dir does not exist:" + dir_tests)
