@@ -3,7 +3,7 @@ brewer2mpl
 tables
 matplotlib
 tqdm
-progressbar
+progressbar2
 sklearn
 pyyaml
 chainer
