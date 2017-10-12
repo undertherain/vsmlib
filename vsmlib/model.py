@@ -17,7 +17,7 @@ from matplotlib import pyplot as plt
 from .misc.formathelper import bcolors
 from .misc.deprecated import deprecated
 from .misc.data import save_json, load_json, detect_archive_format_and_open
-from .blas import normed
+from .blas import normed, normalize_sparse
 
 logger = logging.getLogger(__name__)
 
@@ -150,11 +150,6 @@ class Model(object):
         if "normalized" in self.metadata:
             return self.metadata["normalized"]
         return False
-
-
-def normalize_sparse(m):
-    norm = scipy.sparse.linalg.norm(m_normed, axis=1)[:, None]
-    m.data /= norm.repeat(np.diff(m.indptr))
 
 
 class Model_explicit(Model):
@@ -329,6 +324,8 @@ class ModelNumbered(ModelDense):
 
 
 class Model_Levy(ModelNumbered):
+    """This is deprecated and will be removed soon.
+    """
     def load_from_dir(self, path):
         self.name = "Levi_" + os.path.basename(os.path.normpath(path))
         self.matrix = np.load(os.path.join(path, "sgns.contexts.npy"))
