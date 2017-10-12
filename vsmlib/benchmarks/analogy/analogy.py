@@ -3,6 +3,7 @@ import math
 import random
 import scipy
 from tqdm import tqdm
+import progressbar
 import os
 import fnmatch
 import sklearn
@@ -17,7 +18,6 @@ import yaml
 from itertools import product
 import logging
 import inspect
-
 
 logger = logging.getLogger(__name__)
 
@@ -584,12 +584,17 @@ def run_category(pairs, name_dataset, name_category):
                 break
 
     else:
-        my_prog = tqdm(0, total=cnt_splits, desc=name_category)
+        #my_prog = tqdm(0, total=cnt_splits, desc=name_category)
+        my_prog = progressbar.ProgressBar(max_value=cnt_splits)
+        cnt = 0 
         for train, test in loo:
             p_test = [pairs[i] for i in test]
             p_train = [pairs[i] for i in train]
             # p_train = [x for x in p_train if not is_pair_missing(x)]
-            my_prog.update()
+            cnt+=1
+            #print("upgrading tqdm, total =", cnt_splits, "done = ", cnt)
+            my_prog.update(cnt)
+            #print("done")
             results += do_test_on_pairs(p_train, p_test)
 
     out = dict()
