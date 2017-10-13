@@ -20,7 +20,7 @@ What functionality is included
 
 * creating word embeddings by counting and neural-based methods, including sub-word-level models
 * importing and exporting from a banch of popular formats of word embeddings and providing unified access to word-vectors
-* perfroming simple tasks like estimating word similarity
+* perfroming a range of downstream tasks / benchmarks on embeddings
 * visualising embeddings
 
 How do I get set up?
