@@ -158,6 +158,7 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
         # most_frequent = np.argsort(l_frequencies)[-10:]
 
 def create_from_dir(path, min_frequency=0):
+    t_start = time.time()
     dic_freqs = {}
     if not os.path.isdir(path):
         raise RuntimeError("source directory does not exist")
@@ -180,4 +181,6 @@ def create_from_dir(path, min_frequency=0):
     v.metadata["min_frequency"] = min_frequency
     v.metadata["vsmlib_version"] = VERSION
     v.metadata["cnt_words"] = v.cnt_words
+    t_end = time.time()
+    v.metadata["execution_time"] = t_end - t_start
     return v
