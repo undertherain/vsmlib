@@ -3,6 +3,9 @@ import fnmatch
 import os
 import re
 from vsmlib.misc.data import detect_archive_format_and_open
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class FileTokenIterator:
@@ -39,6 +42,7 @@ class DirTokenIterator:
     def gen(self):
         for root, dir, files in os.walk(self.path, followlinks=True):
             for items in fnmatch.filter(files, "*"):
+                logger.info("processing " + os.path.join(root, items))
                 for token in FileTokenIterator(os.path.join(root, items)):
                     yield(token)
 

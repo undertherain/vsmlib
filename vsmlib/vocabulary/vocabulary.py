@@ -158,6 +158,9 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
         # most_frequent = np.argsort(l_frequencies)[-10:]
 
 def create_from_dir(path, min_frequency=0):
+    """Collects vocabulary from a corpus by a given path.
+
+    """
     t_start = time.time()
     dic_freqs = {}
     if not os.path.isdir(path):
