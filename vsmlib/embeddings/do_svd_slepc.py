@@ -1,3 +1,12 @@
+"""distributed dimensionality reduction with SLEPc
+
+SLEPC is high performance distributed sparse linear algebra library 
+
+run 
+mpirun -np 4 --hostfile ./hostfile  --map-by node python3 do_svd_slepc.py $1
+
+"""
+
 from mpi4py import MPI
 import petsc4py
 import slepc4py
