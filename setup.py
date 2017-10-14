@@ -72,7 +72,8 @@ def setup():
         install_requires=parse_requirements(),
         description=description,
         long_description=parse_readme(),
-        packages=setuptools.find_packages(exclude=['contrib', 'docs', 'test*'])
+        packages=setuptools.find_packages(exclude=['contrib', 'docs', 'test*']),
+        entry_points = {'console_scripts': ['vsmlib=vsmlib:main']}
     )
 
 
