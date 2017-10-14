@@ -8,7 +8,7 @@ vsmlib - Python library for vector space models
 
    tutorial/index
    reference/index
-
+   contribution
 
 Indices and tables
 ==================

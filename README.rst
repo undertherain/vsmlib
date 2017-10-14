@@ -42,7 +42,7 @@ How do I get set up?
 
 .. _Tutorial: http://vsmlib.readthedocs.io/en/latest/tutorial/index.html
 .. _API Reference: http://vsmlib.readthedocs.io/en/latest/reference/index.html
-.. _Contribute: http://vsmlib.readthedocs.io/en/latest/tutorial/index.html
+.. _Contribute: http://vsmlib.readthedocs.io/en/latest/tutorial/contribution.html
 
 
 Who do I talk to?
