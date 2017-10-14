@@ -8,7 +8,7 @@ import importlib
 _HERE = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 
 classifiers = [
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 3 - Alpha',
     'Environment :: Console',
     'Intended Audience :: Science/Research',
     'License :: OSI Approved :: Apache Software License',
@@ -73,7 +73,8 @@ def setup():
         description=description,
         long_description=parse_readme(),
         packages=setuptools.find_packages(exclude=['contrib', 'docs', 'test*']),
-        entry_points = {'console_scripts': ['vsmlib=vsmlib:main']}
+        entry_points = {'console_scripts': ['vsmlib=vsmlib:main']},
+        include_package_data=True
     )
 
 
