@@ -2,7 +2,7 @@
 """
 
 from vsmlib.vocabulary import Vocabulary_cooccurrence, Vocabulary_simple, Vocabulary
-import vsmlib.matrix
+from vsmlib.blas.sparse import load_matrix_csr
 import numpy as np
 import scipy
 from scipy import sparse
@@ -192,7 +192,7 @@ class Model_explicit(Model):
         self.vocabulary = Vocabulary_cooccurrence()
         self.vocabulary.load(path)
         self.name += os.path.basename(os.path.normpath(path))
-        self.matrix = vsmlib.matrix.load_matrix_csr(path, verbose=True)
+        self.matrix = load_matrix_csr(path, verbose=True)
 
     def clip_negatives(self):
         self.matrix.data.clip(0, out=self.matrix.data)
@@ -283,7 +283,7 @@ class ModelDense(Model):
     def load_from_text(self, path):
         i = 0
         # self.name+="_"+os.path.basename(os.path.normpath(path))
-        self.vocabulary = vsmlib.vocabulary.Vocabulary()
+        self.vocabulary = Vocabulary()
         rows = []
         header = False
         with detect_archive_format_and_open(path) as f:
@@ -450,13 +450,13 @@ def load_from_dir(path):
         m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.npy")):
-        m = vsmlib.ModelNumbered()
+        m = ModelNumbered()
         logger.info("detected as dense ")
         m.load_from_dir(path)
         m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.h5p")):
-        m = vsmlib.ModelNumbered()
+        m = ModelNumbered()
         logger.info("detected as vsmlib format ")
         m.load_hdf5(path)
         m.load_metadata(path)
