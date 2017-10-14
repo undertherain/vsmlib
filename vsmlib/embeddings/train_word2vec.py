@@ -50,6 +50,7 @@ def parse_args():
     parser.add_argument('--path_vocab', help='path to the vocabulary', required=True)
     parser.add_argument('--path_out', help='path to save embeddings', required=True)
     parser.add_argument('--test', dest='test', default=False, action='store_true')
+    parser.add_argument('--verbose', default=False, help='verbose mode', action='store_true', required=False)
 
     args = parser.parse_args()
     return args
@@ -219,6 +220,9 @@ def run(args):
 def main():
     args = parse_args()
     print_params(args)
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+
     run(args)
 
 
