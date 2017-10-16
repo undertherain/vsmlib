@@ -11,7 +11,7 @@ Submodules
     benchmarks
 """
 
-from vsmlib.model import Model_explicit, Model_svd_scipy, ModelNumbered, Model_w2v
+from vsmlib.model import ModelSparse, Model_svd_scipy, ModelNumbered, ModelW2V
 from ._version import VERSION
 
 

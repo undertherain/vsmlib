@@ -162,7 +162,7 @@ class Model(object):
         return False
 
 
-class Model_explicit(Model):
+class ModelSparse(Model):
     def __init__(self):
         self.name += "explicit_"
 
@@ -333,7 +333,7 @@ class ModelNumbered(ModelDense):
             plt.legend()
 
 
-class Model_Levy(ModelNumbered):
+class ModelLevy(ModelNumbered):
     """This is deprecated and will be removed soon.
     """
     def load_from_dir(self, path):
@@ -366,7 +366,9 @@ class Model_svd_scipy(ModelNumbered):
             "_svd_{}_C{}".format(cnt_singular_vectors, power)
 
 
-class Model_w2v(ModelNumbered):
+class ModelW2V(ModelNumbered):
+    """extends ModelDense to support loading of original binary format from Mikolov's w2v"""
+    
     @staticmethod
     def load_word(f):
         result = b''
@@ -386,7 +388,7 @@ class Model_w2v(ModelNumbered):
         self.matrix = np.zeros((cnt_rows, size_row), dtype=np.float32)
         logger.debug("cnt rows = {}, size row = {}".format(cnt_rows, size_row))
         for i in range(cnt_rows):
-            word = Model_w2v.load_word(f).decode(
+            word = ModelW2V.load_word(f).decode(
                 'UTF-8', errors="ignore").strip()
             self.vocabulary.dic_words_ids[word] = i
             self.vocabulary.lst_words.append(word)
@@ -427,24 +429,24 @@ def load_from_dir(path):
     """
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
         logger.info("detected as sparse explicit in hdf5")
-        m = vsmlib.Model_explicit()
+        m = vsmlib.ModelSparse()
         m.load_from_hdf5(path)
         m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "bigrams.data.bin")):
         logger.info("detected as sparse in vsmlib legacy format")
-        m = vsmlib.Model_explicit()
+        m = vsmlib.ModelSparse()
         m.load(path)
         m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "vectors.bin")):
         logger.info("this is w2v original binary format")
-        m = vsmlib.Model_w2v()
+        m = vsmlib.ModelW2V()
         m.load_from_dir(path)
         m.load_metadata(path)
         return m
     if os.path.isfile(os.path.join(path, "sgns.words.npy")):
-        m = Model_Levy()
+        m = ModelLevy()
         logger.info("this is Levi")
         m.load_from_dir(path)
         m.load_metadata(path)
