@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import time
+import datetime 
 from vsmlib._version import VERSION
 from vsmlib.misc.formathelper import countof_fmt
 from vsmlib.misc.data import save_json, load_json
@@ -186,4 +187,5 @@ def create_from_dir(path, min_frequency=0):
     v.metadata["cnt_words"] = v.cnt_words
     t_end = time.time()
     v.metadata["execution_time"] = t_end - t_start
+    v.metadata["timestamp"] = datetime.datetime.now().isoformat()
     return v
