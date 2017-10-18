@@ -6,7 +6,7 @@ The character-level RNN is similar to the character model for machine traslation
 <Achieving Open Vocabulary Neural Machine Translation with Hybrid Word-Character Models>
 https://pdfs.semanticscholar.org/0126/72696e5c1a1b06a2ba02fbfdb16bd24d920d.pdf?_ga=2.62596398.326349604.1504948983-92901532.1503389377
 
-This code is based on the original chainer w2v implementation.
+This code is based on the original chainer w2v implementation. 0ß
 """
 import argparse
 import collections
