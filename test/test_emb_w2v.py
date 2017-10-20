@@ -21,6 +21,8 @@ class Tests(unittest.TestCase):
         args.dimensions = 100
         args.negative_size = 5
         args.model = "skipgram"
+        args.subword = "none"
+        args.maxWordLength = 20
         args.window = 4
         args.batchsize = 1000
         args.epoch = 5
@@ -37,6 +39,8 @@ class Tests(unittest.TestCase):
         args.dimensions = 100
         args.negative_size = 5
         args.model = "skipgram"
+        args.subword = "none"
+        args.maxWordLength = 20
         args.window = 4
         args.batchsize = 1000
         args.epoch = 5
@@ -53,6 +57,8 @@ class Tests(unittest.TestCase):
         args.dimensions = 100
         args.negative_size = 5
         args.model = "skipgram"
+        args.subword = "none"
+        args.maxWordLength = 20
         args.window = 4
         args.batchsize = 1000
         args.epoch = 3
@@ -69,6 +75,8 @@ class Tests(unittest.TestCase):
         args.dimensions = 100
         args.negative_size = 5
         args.model = "skipgram"
+        args.subword = "none"
+        args.maxWordLength = 20
         args.window = 4
         args.batchsize = 1000
         args.epoch = 3
