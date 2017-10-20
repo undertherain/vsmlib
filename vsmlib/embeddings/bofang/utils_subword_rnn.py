@@ -1,25 +1,8 @@
-import argparse
-import collections
-
-import numpy as np
-import six
-import os
-
 import chainer
-from chainer import cuda
 import chainer.functions as F
 import chainer.initializers as I
 import chainer.links as L
-import chainer.optimizers as O
 from chainer import reporter
-from chainer import training
-from chainer.training import extensions
-
-import vsmlib
-from vsmlib.vocabulary import Vocabulary
-from vsmlib.vocabulary import create_from_dir
-from vsmlib.corpus import load_file_as_ids
-from vsmlib.model import ModelNumbered
 from vsmlib.embeddings.bofang.subword import *
 
 
