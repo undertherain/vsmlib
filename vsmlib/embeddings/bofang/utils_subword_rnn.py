@@ -102,7 +102,7 @@ class SkipGram(chainer.Chain):
             self.rnn = RNN(n_vocab_char, dimensions, dimensions, index2charIds)
 
             self.loss_func = loss_func
-            self.n_vocab = vocab.lst_words
+            self.n_vocab = len(index2word)
 
     def getEmbeddings(self):
         return self.rnn.charRNN(range(self.n_vocab)).data
