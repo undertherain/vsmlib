@@ -20,7 +20,8 @@ import vsmlib
 from vsmlib.vocabulary import Vocabulary
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
-from .window_iterators import WindowIterator, DirWindowIterator
+from vsmlib.embeddings.window_iterators import WindowIterator, DirWindowIterator
+import vsmlib.embeddings.bofang.utils_subword_rnn as utils_subword_rnn
 
 
 logger = logging.getLogger(__name__)
@@ -40,6 +41,11 @@ def parse_args():
                         help='number of epochs to learn')
     parser.add_argument('--model', '-m', choices=['skipgram', 'cbow'],
                         default='skipgram', help='model type ("skipgram", "cbow")')
+    parser.add_argument('--subword', '-sw', choices=['none', 'rnn'],
+                        default='none',
+                        help='subword type, currently support "none" and "rnn"')
+    parser.add_argument('--maxWordLength', default=20, type=int,
+                        help='max word length (currently only used for char-level subword)')
     parser.add_argument('--negative-size', default=5, type=int,
                         help='number of negative samples')
     parser.add_argument('--out_type', '-o', choices=['hsm', 'ns', 'original'],
@@ -93,6 +99,9 @@ class SkipGram(chainer.Chain):
             self.embed = L.EmbedID(n_vocab, n_units, initialW=I.Uniform(1. / n_units))
             self.loss_func = loss_func
 
+    def getEmbeddings(self):
+        return self.embed.W.data
+
     def __call__(self, x, context):
         e = self.embed(context)
         shape = e.shape
@@ -138,7 +147,7 @@ def create_model(args, net, vocab):
     model.metadata["vocabulary"] = vocab.metadata
     model.metadata.update(vars(args))
     model.metadata["vsmlib_version"] = vsmlib.__version__
-    model.matrix = cuda.to_cpu(net.embed.W.data)
+    model.matrix = cuda.to_cpu(net.getEmbeddings())
     return model
 
 
@@ -177,7 +186,11 @@ def run(args):
         raise Exception('Unknown output type: {}'.format(args.out_type))
 
     if args.model == 'skipgram':
-        model = SkipGram(vocab.cnt_words, args.dimensions, loss_func)
+        if args.subword == 'none':
+            model = SkipGram(vocab.cnt_words, args.dimensions, loss_func)
+        if args.subword == "rnn":
+            model = utils_subword_rnn.SkipGram(vocab, args.maxWordLength, args.dimensions, loss_func)
+
     elif args.model == 'cbow':
         model = ContinuousBoW(vocab.cnt_words, args.dimensions, loss_func)
     else:
