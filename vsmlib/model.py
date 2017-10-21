@@ -162,6 +162,7 @@ class Model(object):
 
 
 class ModelSparse(Model):
+    """sparse (usually count-based) embeddings"""
     def __init__(self):
         self.name += "explicit_"
 
@@ -173,6 +174,13 @@ class ModelSparse(Model):
         return (distance + 1) / 2
 
     def load_from_hdf5(self, path):
+        """load model in compressed sparse row format from hdf5 file
+
+        hdf5 file should contain row_ptr, col_ind and data array
+
+        Args:
+            path: path to the embeddings folder
+        """
         self.load_metadata(path)
         f = tables.open_file(os.path.join(path, 'cooccurrence_csr.h5p'), 'r')
         row_ptr = np.nan_to_num(f.root.row_ptr.read())
