@@ -3,13 +3,13 @@
 
 import os
 import math
-import brewer2mpl
-import tables
 import warnings
 import logging
+import tables
+import brewer2mpl
+import numpy as np
 import scipy
 import scipy.sparse.linalg
-import numpy as np
 from scipy import sparse
 from matplotlib import pyplot as plt
 from vsmlib.misc.data import save_json, load_json, detect_archive_format_and_open
@@ -261,7 +261,7 @@ class ModelDense(Model):
         self.matrix = np.dot(left, np.diag(sigma))
         logger.info("computed the product")
         self.metadata["pow_sigma"] = power
-        self.matadata["size_dimensions"] = int(self.matrix.shape[1])
+        self.metadata["size_dimensions"] = int(self.matrix.shape[1])
         f.close()
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
@@ -316,6 +316,8 @@ class ModelDense(Model):
 
 
 class ModelNumbered(ModelDense):
+    """extends dense model by numbering dimensions"""
+
     def get_x_label(self, i):
         return i
 
@@ -354,7 +356,7 @@ class ModelLevy(ModelNumbered):
 
 class Model_svd_scipy(ModelNumbered):
     def __init__(self, original, cnt_singular_vectors, power):
-        ut, s_ev, vt = scipy.sparse.linalg.svds(
+        ut, s_ev, _vt = scipy.sparse.linalg.svds(
             original.matrix, k=cnt_singular_vectors, which='LM')  # LM SM LA SA BE
         self.sigma = s_ev
         sigma_p = np.power(s_ev, power)
@@ -371,11 +373,11 @@ class ModelW2V(ModelNumbered):
     """extends ModelDense to support loading of original binary format from Mikolov's w2v"""
 
     @staticmethod
-    def load_word(f):
+    def _load_word(file):
         result = b''
         w = b''
         while w != b' ':
-            w = f.read(1)
+            w = file.read(1)
             result = result + w
         return result[:-1]
 
@@ -389,7 +391,7 @@ class ModelW2V(ModelNumbered):
         self.matrix = np.zeros((cnt_rows, size_row), dtype=np.float32)
         logger.debug("cnt rows = {}, size row = {}".format(cnt_rows, size_row))
         for i in range(cnt_rows):
-            word = ModelW2V.load_word(f).decode(
+            word = ModelW2V._load_word(f).decode(
                 'UTF-8', errors="ignore").strip()
             self.vocabulary.dic_words_ids[word] = i
             self.vocabulary.lst_words.append(word)
