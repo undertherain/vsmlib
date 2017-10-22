@@ -3,13 +3,11 @@ Introduction to vsmlib
 
 .. currentmodule:: vsmlib
 
-This is the first section of the vsmlib Tutorial.
-In this section, you will learn about the following things:
+This is the tutorial for VSMlib. It describes:  
 
-* Pros and cons of existing frameworks and why we are developing vsmlib
-* bla-bla-bla
+* What it is, and why we are developing it. 
+* what you can do with vsmlib.
+* the roadmap of the project.
 
-After reading this section, you will be able to:
 
-* do things with vsms
-* be awesome
+Both the library and the documentation are actively developed, check back for more! If you have questions, or would like to contribute, feel free to get in touch on `github <https://github.com/undertherain/vsmlib>`_.
