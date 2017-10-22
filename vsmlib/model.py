@@ -1,23 +1,21 @@
 """The model module that implements embedding loading.
 """
 
-from vsmlib.vocabulary import Vocabulary_cooccurrence, Vocabulary_simple, Vocabulary
-from vsmlib.blas.sparse import load_matrix_csr
-import numpy as np
-import scipy
-from scipy import sparse
-import scipy.sparse.linalg
-import math
 import os
-import brewer2mpl
-import tables
+import math
 import warnings
 import logging
+import tables
+import brewer2mpl
+import numpy as np
+import scipy
+import scipy.sparse.linalg
+from scipy import sparse
 from matplotlib import pyplot as plt
-from .misc.formathelper import bcolors
-from .misc.deprecated import deprecated
-from .misc.data import save_json, load_json, detect_archive_format_and_open
-from .blas import normed, normalize_sparse
+from vsmlib.misc.data import save_json, load_json, detect_archive_format_and_open
+from vsmlib.blas import normed, normalize_sparse
+from vsmlib.vocabulary import Vocabulary_cooccurrence, Vocabulary_simple, Vocabulary
+from vsmlib.blas.sparse import load_matrix_csr
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +23,8 @@ logger = logging.getLogger(__name__)
 class Model(object):
     """Basic model class to define interface.
 
-    Usually you would not use this class directly, but rather some of the classes which inherit from Model
+    Usually you would not use this class directly,
+    but rather some of the classes which inherit from Model
     """
 
     def __init__(self):
@@ -63,7 +62,7 @@ class Model(object):
             row = np.reshape(row, (xdim))
             # dense=np.vstack([dense,row[:width]])
             dense = np.vstack([dense, row])
-        return (dense)
+        return dense
 
     def filter_submatrix(self, lst_words_initial, width):
         words_of_interest = [
@@ -94,7 +93,7 @@ class Model(object):
             if hasattr(self, "_normalized_matrix"):
                 scores = normed(u) @ self._normalized_matrix.T
                 scores = (scores + 1) / 2
-            else:            
+            else:
                 str_warn = "\n\tthis method executes slow if embeddings are not normalized."
                 str_warn += "\n\tuse normalize() method to normalize your embeddings"
                 str_warn += "\n\tif for whatever reasons you need your embeddings to be not normalized, you can use .cache_normalized_copy() method to cache normalized copy of embeddings"
@@ -163,17 +162,25 @@ class Model(object):
 
 
 class ModelSparse(Model):
+    """sparse (usually count-based) embeddings"""
     def __init__(self):
         self.name += "explicit_"
 
     def cmp_vectors(self, r1, r2):
-        c = r1.dot(r2.T) / (np.linalg.norm(r1.data) * np.linalg.norm(r2.data))
-        c = c[0, 0]
-        if math.isnan(c):
+        distance = r1.dot(r2.T) / (np.linalg.norm(r1.data) * np.linalg.norm(r2.data))
+        distance = distance[0, 0]
+        if math.isnan(distance):
             return 0
-        return (c + 1) / 2
+        return (distance + 1) / 2
 
     def load_from_hdf5(self, path):
+        """load model in compressed sparse row format from hdf5 file
+
+        hdf5 file should contain row_ptr, col_ind and data array
+
+        Args:
+            path: path to the embeddings folder
+        """
         self.load_metadata(path)
         f = tables.open_file(os.path.join(path, 'cooccurrence_csr.h5p'), 'r')
         row_ptr = np.nan_to_num(f.root.row_ptr.read())
@@ -226,12 +233,21 @@ class ModelDense(Model):
         f.close()
 
     def load_hdf5(self, path):
+        """loads embeddings from hdf5 format"""
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'r')
         self.matrix = f.root.vectors.read()
         self.vocabulary = Vocabulary()
         self.vocabulary.load(path)
         self.name += os.path.basename(os.path.normpath(path))
         f.close()
+
+    def load_npy(self, path):
+        """loads embeddings from numpy format"""
+        self.matrix = np.load(os.path.join(path, "vectors.npy"))
+        # self.load_with_alpha(0.6)
+        self.vocabulary = Vocabulary_simple()
+        self.vocabulary.load(path)
+        self.name += os.path.basename(os.path.normpath(path))
 
     def save_to_dir(self, path):
         if not os.path.exists(path):
@@ -253,18 +269,11 @@ class ModelDense(Model):
         self.matrix = np.dot(left, np.diag(sigma))
         logger.info("computed the product")
         self.metadata["pow_sigma"] = power
-        self.matadata["size_dimensions"] = int(self.matrix.shape[1])
+        self.metadata["size_dimensions"] = int(self.matrix.shape[1])
         f.close()
         self.vocabulary = Vocabulary_simple()
         self.vocabulary.load(path)
         self.name += os.path.basename(os.path.normpath(path)) + "_a" + str(power)
-
-    def load_from_dir(self, path):
-        self.matrix = np.load(os.path.join(path, "vectors.npy"))
-        # self.load_with_alpha(0.6)
-        self.vocabulary = Vocabulary_simple()
-        self.vocabulary.load(path)
-        self.name += os.path.basename(os.path.normpath(path))
 
     def normalize(self):
         nrm = np.linalg.norm(self.matrix, axis=1)
@@ -315,6 +324,8 @@ class ModelDense(Model):
 
 
 class ModelNumbered(ModelDense):
+    """extends dense model by numbering dimensions"""
+
     def get_x_label(self, i):
         return i
 
@@ -340,7 +351,7 @@ class ModelLevy(ModelNumbered):
         self.name = "Levi_" + os.path.basename(os.path.normpath(path))
         self.matrix = np.load(os.path.join(path, "sgns.contexts.npy"))
         self.vocabulary = vsmlib.vocabulary.Vocabulary_simple()
-        self.vocabulary.load_from_list(os.path.join(path,"sgns.words.vocab"))
+        self.vocabulary.load_from_list(os.path.join(path, "sgns.words.vocab"))
 
 
 #class Model_Fun(ModelNumbered):
@@ -353,7 +364,7 @@ class ModelLevy(ModelNumbered):
 
 class Model_svd_scipy(ModelNumbered):
     def __init__(self, original, cnt_singular_vectors, power):
-        ut, s_ev, vt = scipy.sparse.linalg.svds(
+        ut, s_ev, _vt = scipy.sparse.linalg.svds(
             original.matrix, k=cnt_singular_vectors, which='LM')  # LM SM LA SA BE
         self.sigma = s_ev
         sigma_p = np.power(s_ev, power)
@@ -368,13 +379,13 @@ class Model_svd_scipy(ModelNumbered):
 
 class ModelW2V(ModelNumbered):
     """extends ModelDense to support loading of original binary format from Mikolov's w2v"""
-    
+
     @staticmethod
-    def load_word(f):
+    def _load_word(file):
         result = b''
         w = b''
         while w != b' ':
-            w = f.read(1)
+            w = file.read(1)
             result = result + w
         return result[:-1]
 
@@ -388,7 +399,7 @@ class ModelW2V(ModelNumbered):
         self.matrix = np.zeros((cnt_rows, size_row), dtype=np.float32)
         logger.debug("cnt rows = {}, size row = {}".format(cnt_rows, size_row))
         for i in range(cnt_rows):
-            word = ModelW2V.load_word(f).decode(
+            word = ModelW2V._load_word(f).decode(
                 'UTF-8', errors="ignore").strip()
             self.vocabulary.dic_words_ids[word] = i
             self.vocabulary.lst_words.append(word)
@@ -429,62 +440,62 @@ def load_from_dir(path):
     """
     if os.path.isfile(os.path.join(path, "cooccurrence_csr.h5p")):
         logger.info("detected as sparse explicit in hdf5")
-        m = vsmlib.ModelSparse()
-        m.load_from_hdf5(path)
-        m.load_metadata(path)
-        return m
+        result = ModelSparse()
+        result.load_from_hdf5(path)
+        result.load_metadata(path)
+        return result
     if os.path.isfile(os.path.join(path, "bigrams.data.bin")):
         logger.info("detected as sparse in vsmlib legacy format")
-        m = vsmlib.ModelSparse()
-        m.load(path)
-        m.load_metadata(path)
-        return m
+        result = ModelSparse()
+        result.load(path)
+        result.load_metadata(path)
+        return result
     if os.path.isfile(os.path.join(path, "vectors.bin")):
         logger.info("this is w2v original binary format")
-        m = vsmlib.ModelW2V()
-        m.load_from_dir(path)
-        m.load_metadata(path)
-        return m
+        result = ModelW2V()
+        result.load_from_dir(path)
+        result.load_metadata(path)
+        return result
     if os.path.isfile(os.path.join(path, "sgns.words.npy")):
-        m = ModelLevy()
+        result = ModelLevy()
         logger.info("this is Levi")
-        m.load_from_dir(path)
-        m.load_metadata(path)
-        return m
+        result.load_from_dir(path)
+        result.load_metadata(path)
+        return result
     if os.path.isfile(os.path.join(path, "vectors.npy")):
-        m = ModelNumbered()
+        result = ModelNumbered()
         logger.info("detected as dense ")
-        m.load_from_dir(path)
-        m.load_metadata(path)
-        return m
+        result.load_npy(path)
+        result.load_metadata(path)
+        return result
     if os.path.isfile(os.path.join(path, "vectors.h5p")):
-        m = ModelNumbered()
+        result = ModelNumbered()
         logger.info("detected as vsmlib format ")
-        m.load_hdf5(path)
-        m.load_metadata(path)
-        return m
+        result.load_hdf5(path)
+        result.load_metadata(path)
+        return result
 
-    m = ModelNumbered()
+    result = ModelNumbered()
     files = os.listdir(path)
     for f in files:
         if f.startswith("words") and f.endswith(".npy") \
-               and os.path.isfile(os.path.join(path, f.replace(".npy", ".vocab"))) :
-            m = Model_Fun()
+               and os.path.isfile(os.path.join(path, f.replace(".npy", ".vocab"))):
+            result = Model_Fun()
             logger.info("this is fun's dependency embedding format")
-            m.load_from_dir(path, f[: -4])
-            m.load_metadata(path)
-            return m
+            result.load_from_dir(path, f[: -4])
+            result.load_metadata(path)
+            return result
         if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
             logger.info(path + " detected as text")
-            m.load_from_text(os.path.join(path, f))
-            m.load_metadata(path)
-            return m
+            result.load_from_text(os.path.join(path, f))
+            result.load_metadata(path)
+            return result
         if f.endswith(".npy"):
             logger.info("detected as dense in mumpy format")
-            m.matrix = np.load(os.path.join(path, f))
-            m.vocabulary = Vocabulary()
-            m.vocabulary.load(path)
-            m.load_metadata(path)
-            return m
+            result.matrix = np.load(os.path.join(path, f))
+            result.vocabulary = Vocabulary()
+            result.vocabulary.load(path)
+            result.load_metadata(path)
+            return result
 
     raise RuntimeError("can not detect embeddings format")
