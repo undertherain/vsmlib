@@ -100,3 +100,35 @@ class SkipGram(chainer.Chain):
         loss = self.loss_func(e, x)
         reporter.report({'loss': loss}, self)
         return loss
+
+
+
+class ContinuousBoW(chainer.Chain):
+
+    def __init__(self, vocab, maxWordLength, dimensions, loss_func):
+        super(ContinuousBoW, self).__init__()
+
+        with self.init_scope():
+            index2word = {i: vocab.lst_words[i] for i in range(len(vocab.lst_words))}
+            index2charIds, vocab_char = get_chars(index2word, maxWordLength)
+            n_vocab_char = len(vocab_char)
+            self.rnn = RNN(n_vocab_char, dimensions, dimensions, index2charIds)
+
+            self.loss_func = loss_func
+            self.n_vocab = len(index2word)
+
+    def getEmbeddings(self):
+        return self.rnn.charRNN(range(self.n_vocab)).data
+    def __call__(self, x, context):
+        context_shape = context.shape
+
+        context = context.reshape((context.shape[0] * context.shape[1]))
+        e = self.rnn.charRNN(context)
+
+        e = F.reshape(e, (context_shape[0], context_shape[1], e.shape[1]))
+
+        h = F.sum(e, axis=1) * (1. / context_shape[1])
+
+        loss = self.loss_func(h, x)
+        reporter.report({'loss': loss}, self)
+        return loss

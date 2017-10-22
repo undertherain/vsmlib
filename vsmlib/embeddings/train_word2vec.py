@@ -192,7 +192,10 @@ def run(args):
             model = utils_subword_rnn.SkipGram(vocab, args.maxWordLength, args.dimensions, loss_func)
 
     elif args.model == 'cbow':
-        model = ContinuousBoW(vocab.cnt_words, args.dimensions, loss_func)
+        if args.subword == 'none':
+            model = ContinuousBoW(vocab.cnt_words, args.dimensions, loss_func)
+        if args.subword == "rnn":
+            model = utils_subword_rnn.ContinuousBoW(vocab, args.maxWordLength, args.dimensions, loss_func)
     else:
         raise Exception('Unknown model type: {}'.format(args.model))
 
