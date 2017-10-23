@@ -214,6 +214,7 @@ def run(args):
         vocab = create_from_dir(args.path_corpus)
     else:
         vocab.load(args.path_vocab)
+        logger.info("loaded vocabulary")
 
 
     loss_func = get_loss_func(args, vocab)
