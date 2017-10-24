@@ -167,6 +167,7 @@ def get_data(path, vocab):
     train, val = doc[:-1000], doc[-1000:]
     return train, val
 
+
 def get_loss_func(args, vocab):
     word_counts = vocab.lst_frequencies
     if args.out_type == 'hsm':
@@ -217,10 +218,8 @@ def train(args):
         vocab.load(args.path_vocab)
         logger.info("loaded vocabulary")
 
-
     loss_func = get_loss_func(args, vocab)
     model = get_model(args, loss_func, vocab)
-
 
     if args.gpu >= 0:
         model.to_gpu()

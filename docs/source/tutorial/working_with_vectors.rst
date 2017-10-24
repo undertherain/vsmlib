@@ -33,7 +33,7 @@ You can access the VSM metadata (recorded in metadata.json file located in the s
 {'size_dimensions': 300, 'dimensions': 300, 'size_window': '8'}
 
 Getting top similar neighbors of a word
-----------------
+---------------------------------------
 
 >>> my_vsm.get_most_similar_words("apple", cnt=5)
 [['apple', 1.0000000999898755],

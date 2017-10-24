@@ -10,7 +10,7 @@ System requirements
 - Python 3.5 or later
 
 Method 1: Pip-install
---------------------
+---------------------
 
 The latest stable version:
 
@@ -23,7 +23,7 @@ The latest development version:
 
 
 Method 2: Clone or download the github repo
-------------------------------------------
+-------------------------------------------
 
 You can avoid intalling vsmlib system-wide. Simply download and unpack the github repo into your project's working directory. 
 

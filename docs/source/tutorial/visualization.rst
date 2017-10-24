@@ -1,5 +1,5 @@
 Visualization
-=====================
+=============
 
 .. currentmodule:: vsmlib
 
@@ -18,11 +18,12 @@ Drawing features
 TODO: how to interpret this.
 
 Visualizing similarity between certain words.
---------------------------------------------
+---------------------------------------------
 
 >>> vs.draw_features_and_similarity(vsm, ["apple", "pear", "cat", "dog"])  
 
 .. image:: images/draw_similarity.png
+
 The color intensity indicates the degre of similarity. We can see that apple is more similar to pear than to cat or dog, and the other way round.
 
 Visualizing dimensions
