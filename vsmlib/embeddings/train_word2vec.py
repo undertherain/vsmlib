@@ -159,7 +159,7 @@ def get_data(path, vocab):
     return train, val
 
 
-def run(args):
+def train(args):
     time_start = timer()
     if args.gpu >= 0:
         chainer.cuda.get_device_from_id(args.gpu).use()
@@ -229,6 +229,11 @@ def run(args):
     model = create_model(args, model, vocab)
     time_end = timer()
     model.metadata["execution_time"] = time_end - time_start
+    return model
+
+
+def run(args):
+    model = train(args)
     model.save_to_dir(args.path_out)
     logger.info("model saved to " + args.path_out)
 
