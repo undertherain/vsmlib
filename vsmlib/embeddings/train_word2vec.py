@@ -18,6 +18,7 @@ import logging
 import os
 import vsmlib
 from vsmlib.vocabulary import Vocabulary
+from vsmlib.vocabulary import *
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
 from vsmlib.embeddings.window_iterators import WindowIterator, DirWindowIterator
@@ -33,6 +34,12 @@ def parse_args():
                         help='GPU ID (negative value indicates CPU)')
     parser.add_argument('--dimensions', '-d', default=100, type=int,
                         help='number of dimensions')
+    parser.add_argument('--context_type', '-ct', choices=['linear', 'deps'],
+                        default='linear',
+                        help='context type, for deps context, the annotated corpus is required')
+    parser.add_argument('--context_representation', '-cp', choices=['bound', 'unbound'],
+                        default='unbound',
+                        help='context representation')
     parser.add_argument('--window', '-w', default=5, type=int,
                         help='window size')
     parser.add_argument('--batchsize', '-b', type=int, default=1000,
@@ -52,8 +59,10 @@ def parse_args():
                         default='hsm',
                         help='output model type ("hsm": hierarchical softmax, '
                         '"ns": negative sampling, "original": no approximation)')
+    parser.add_argument('--path_vocab',
+                        default='',
+                        help='path to the vocabulary', required=False)
     parser.add_argument('--path_corpus', help='path to the corpus', required=True)
-    parser.add_argument('--path_vocab', help='path to the vocabulary', required=True)
     parser.add_argument('--path_out', help='path to save embeddings', required=True)
     parser.add_argument('--test', dest='test', default=False, action='store_true')
     parser.add_argument('--verbose', default=False, help='verbose mode', action='store_true', required=False)
@@ -158,18 +167,8 @@ def get_data(path, vocab):
     train, val = doc[:-1000], doc[-1000:]
     return train, val
 
-
-def train(args):
-    time_start = timer()
-    if args.gpu >= 0:
-        chainer.cuda.get_device_from_id(args.gpu).use()
-        cuda.check_cuda_available()
-
-    vocab = Vocabulary()
-    vocab.load(args.path_vocab)
-
+def get_loss_func(args, vocab):
     word_counts = vocab.lst_frequencies
-
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
         d_counts = {i: word_counts[i] for i in range(len(word_counts))}
@@ -184,7 +183,10 @@ def train(args):
         loss_func = SoftmaxCrossEntropyLoss(args.dimensions, vocab.cnt_words)
     else:
         raise Exception('Unknown output type: {}'.format(args.out_type))
+    return loss_func
 
+
+def get_model(args, loss_func, vocab):
     if args.model == 'skipgram':
         if args.subword == 'none':
             model = SkipGram(vocab.cnt_words, args.dimensions, loss_func)
@@ -198,6 +200,27 @@ def train(args):
             model = utils_subword_rnn.ContinuousBoW(vocab, args.maxWordLength, args.dimensions, loss_func)
     else:
         raise Exception('Unknown model type: {}'.format(args.model))
+    return model
+
+
+def train(args):
+    time_start = timer()
+    if args.gpu >= 0:
+        chainer.cuda.get_device_from_id(args.gpu).use()
+        cuda.check_cuda_available()
+
+    vocab = Vocabulary()
+    vocab.load(args.path_vocab)
+    if args.path_vocab == '':
+        vocab = create_from_dir(args.path_corpus)
+    else:
+        vocab.load(args.path_vocab)
+        logger.info("loaded vocabulary")
+
+
+    loss_func = get_loss_func(args, vocab)
+    model = get_model(args, loss_func, vocab)
+
 
     if args.gpu >= 0:
         model.to_gpu()
