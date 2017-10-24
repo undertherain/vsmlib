@@ -1,9 +1,11 @@
+numpy
 scipy
+sklearn
+matplotlib
 brewer2mpl
 tables
-matplotlib
 tqdm
 progressbar2
-sklearn
 pyyaml
 chainer
+system-query
