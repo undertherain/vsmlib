@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import time
-import datetime 
+import datetime
 from vsmlib._version import VERSION
 from vsmlib.misc.formathelper import countof_fmt
 from vsmlib.misc.data import save_json, load_json
