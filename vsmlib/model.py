@@ -126,6 +126,11 @@ class Model(object):
             results.append([self.vocabulary.get_word_by_id(i[0]), i[1]])
         return results
 
+    def has_word(self, w):
+        if self.vocabulary.get_id(w) < 0:
+            return False
+        return True
+
     def get_row(self, w):
         i = self.vocabulary.get_id(w)
         if i < 0:
