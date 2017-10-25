@@ -29,7 +29,7 @@ The command line parameters are as
 --model                       base model type ['skipgram' or 'cbow']
 --negative-size               number of negative samples
 --out_type                    output model type ["hsm": hierarchical softmax, "ns": negative sampling, "original": no approximation]
---subword                     specify if subword-level approach should be used ['none', 'rnn']
+--subword                     specify if subword-level approach should be used ["none", "rnn"]
 --batchsize                   learning minibatch size
 --gpu                         GPU ID (negative value indicates CPU)
 --epochs                      number of epochs to learn
@@ -57,5 +57,12 @@ Realted papers: original w2v, Bofang, Mnih, subword.
   booktitle = {Proceedings of International Conference on Learning Representations (ICLR)},
   author = {Mikolov, Tomas and Chen, Kai and Corrado, Greg and Dean, Jeffrey},
   year = {2013}}
+
+@inproceedings{Li2017InvestigatingDS,
+  title={Investigating Different Syntactic Context Types and Context Representations for Learning Word Embeddings},
+  author={Bofang Li and Tao Liu and Zhe Zhao and Buzhou Tang and Aleksandr Drozd and Anna Rogers and Xiaoyong Du},
+  booktitle={EMNLP},
+  year={2017}
+}
 
 

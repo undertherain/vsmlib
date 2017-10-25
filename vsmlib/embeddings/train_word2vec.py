@@ -50,7 +50,7 @@ def parse_args():
                         default='skipgram', help='model type ("skipgram", "cbow")')
     parser.add_argument('--subword', '-sw', choices=['none', 'rnn'],
                         default='none',
-                        help='subword type, currently support "none" and "rnn"')
+                        help='specify if subword-level approach should be used ')
     parser.add_argument('--maxWordLength', default=20, type=int,
                         help='max word length (currently only used for char-level subword)')
     parser.add_argument('--negative-size', default=5, type=int,
