@@ -60,11 +60,10 @@ Realted papers: original w2v, Bofang, Mnih, subword.
 
 ::
 
-@inproceedings{Li2017InvestigatingDS,
+ @inproceedings{Li2017InvestigatingDS,
   title={Investigating Different Syntactic Context Types and Context Representations for Learning Word Embeddings},
   author={Bofang Li and Tao Liu and Zhe Zhao and Buzhou Tang and Aleksandr Drozd and Anna Rogers and Xiaoyong Du},
   booktitle={EMNLP},
-  year={2017}
-}
+  year={2017}}
 
 
