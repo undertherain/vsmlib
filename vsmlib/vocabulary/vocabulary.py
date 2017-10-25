@@ -44,7 +44,6 @@ class Vocabulary(object):
         f.close()
         save_json(self.metadata, os.path.join(path, "metadata.json"))
 
-    
     def load_list_from_sorted_file(self, filename):
         self.lst_words = []
         f = open(filename, encoding='utf-8', errors='replace')
