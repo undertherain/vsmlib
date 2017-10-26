@@ -1,0 +1,5 @@
+#path_vectors: ./../../../test/data/embeddings/npy/
+
+path_vectors: /home/bofang/Downloads/glove/
+path_dataset: ./../../../test/data/benchmarks/sequence_labeling/pos/
+window: 2
