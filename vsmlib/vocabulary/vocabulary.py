@@ -17,6 +17,7 @@ class Vocabulary(object):
         # todo: check if our ternary tree module is available
         self.dic_words_ids = {}
         self.lst_words = []
+        self.lst_frequencies = []
         self.metadata = {}
 
     def get_id(self, w):
@@ -29,6 +30,8 @@ class Vocabulary(object):
         return(self.lst_words[i])
 
     def get_frequency(self, i):
+        if len(self.lst_frequencies) == 0:
+            return 0
         if type(i) == str:
             i = self.get_id(i)
         if i < 0:
