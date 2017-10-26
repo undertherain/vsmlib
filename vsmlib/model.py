@@ -158,6 +158,8 @@ class Model(object):
             logger.warning("metadata not found")
         if "dimensions" not in self.metadata:
             self.metadata["dimensions"] = self.matrix.shape[1]
+        if "vocabulary" in self.metadata:
+            self.vocabulary.metadata = self.metadata["vocabulary"]
 
     @property
     def normalized(self):
