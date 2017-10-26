@@ -1,43 +1,10 @@
 import numpy as np
-import math
-import random
-import scipy
-from tqdm import tqdm
-import progressbar
-import os
-import fnmatch
-import sklearn
 from sklearn.linear_model import LogisticRegression
-import re
-import datetime
-import json
-import csv
 import sys
-import vsmlib
 import yaml
-from itertools import product
-import logging
-import inspect
 from vsmlib.benchmarks.sequence_labeling import load_data
 import argparse
-import chainer
-from chainer import cuda
-import chainer.functions as F
-import chainer.initializers as I
-import chainer.links as L
-from timeit import default_timer as timer
-from chainer import reporter
-from chainer import training
-from chainer.training import extensions
-import logging
-import os
 import vsmlib
-from vsmlib.vocabulary import Vocabulary
-from vsmlib.vocabulary import *
-from vsmlib.corpus import load_file_as_ids
-from vsmlib.model import ModelNumbered
-from vsmlib.embeddings.window_iterators import WindowIterator, DirWindowIterator
-import vsmlib.embeddings.bofang.utils_subword_rnn as utils_subword_rnn
 
 
 def contextwin(l, win):
@@ -56,7 +23,9 @@ def contextwin(l, win):
     assert len(out) == len(l)
     return out
 
-
+'''
+Get sequence labeling task's input and output.
+'''
 def getInputOutput(lex, y, win, idx2word):
     input = []
     output = []
@@ -69,20 +38,10 @@ def getInputOutput(lex, y, win, idx2word):
             output.append(y[i][j])
     return input, output
 
-def parse_args():
-    parser = argparse.ArgumentParser()
 
-    parser.add_argument('--path_vectors', default='./../../../test/data/embeddings/npy/',
-                        help='path to the embeddings')
-    parser.add_argument('--path_dataset', default='./../../../test/data/benchmarks/sequence_labeling/',
-                        help='path to the dataset')
-    parser.add_argument('--window', '-w', default=2, type=int,
-                        help='window size')
-
-    args = parser.parse_args()
-    return args
-
-
+'''
+get input (X) embeddings
+'''
 def getX(input, m):
     x = []
 
@@ -99,6 +58,19 @@ def getX(input, m):
         x.append(v)
 
     return x
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--path_vectors', default='./../../../test/data/embeddings/npy/',
+                        help='path to the embeddings')
+    parser.add_argument('--path_dataset', default='./../../../test/data/benchmarks/sequence_labeling/',
+                        help='path to the dataset')
+    parser.add_argument('--window', '-w', default=2, type=int,
+                        help='window size')
+
+    args = parser.parse_args()
+    return args
 
 options = {}
 
@@ -151,10 +123,11 @@ def main():
     my_test_input, my_test_y = getInputOutput(test_lex, test_y, options['window'], idx2word)
     my_test_x = getX(my_test_input, m)
 
-
+    # fit LR classifier
     lrc = LogisticRegression()
     lrc.fit(my_train_x, my_train_y)
 
+    # get results
     score_train = lrc.score(my_train_x, my_train_y)
     score_test = lrc.score(my_test_x, my_test_y)
 

@@ -700,7 +700,7 @@ def main():
     if len(sys.argv) > 1:
         path_config = sys.argv[1]
     else:
-        print("usage: python3 -m vsmlib.benchmarls.analogy <config file>")
+        print("usage: python3 -m vsmlib.benchmarks.analogy <config file>")
         print("config file example can be found at ")
         print("https://github.com/undertherain/vsmlib/blob/master/vsmlib/benchmarks/analogy/config_analogy.yaml")
         # print("or, hopefully")
