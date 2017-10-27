@@ -331,6 +331,7 @@ class ModelDense(Model):
 
     def filter_by_vocab(self, words):
         """reduced embeddings to the provided list of words
+
         Args:
             words: set or list of words to keep
 
