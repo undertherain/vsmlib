@@ -4,7 +4,9 @@ import unittest
 import vsmlib
 import vsmlib.embeddings.train_word2vec
 import argparse
+import logging
 
+logging.basicConfig(level=logging.DEBUG)
 
 path_text = "./test/data/corpora/plain/sense_small.txt"
 path_vocab = "./test/data/vocabs/plain"
