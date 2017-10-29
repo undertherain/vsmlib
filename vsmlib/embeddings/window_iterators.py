@@ -78,7 +78,9 @@ class DirWindowIterator(chainer.dataset.Iterator):
         while True:
             try:
                 next_word = next(self.token_iter)
-                self.context_right.append(self.vocab.get_id(next_word))
+                id_next_word = self.vocab.get_id(next_word)
+                if id_next_word >= 0:
+                    self.context_right.append(id_next_word)
                 self.cnt_words_read += 1
                 if self.epoch == 0:
                     self.cnt_words_total += 1
