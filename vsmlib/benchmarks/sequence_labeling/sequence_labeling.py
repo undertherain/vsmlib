@@ -5,7 +5,7 @@ import yaml
 from vsmlib.benchmarks.sequence_labeling import load_data
 import argparse
 import vsmlib
-
+from sklearn.neural_network import MLPClassifier
 
 def contextwin(l, win):
     '''
@@ -14,7 +14,6 @@ def contextwin(l, win):
     it will return a list of list of indexes corresponding
     to context windows surrounding each word in the sentence
     '''
-    assert win >=1
     l = list(l)
     # print((int)(win/2))
     lpadded = (int)(win) * [0] + l + (int)(win) * [0]
@@ -44,8 +43,11 @@ get input (X) embeddings
 '''
 def getX(input, m):
     x = []
-
-    random_vector = m.matrix.sum(axis=0)
+    OOV_count = 0
+    token_count = 0
+    print(m.matrix.shape[0])
+    random_vector = m.matrix.sum(axis=0) / m.matrix.shape[0]
+    # random_vector = m.matrix[0]
     for wordList in input:
         v = []
         for word in wordList:
@@ -53,10 +55,13 @@ def getX(input, m):
                 wv = m.get_row(word)
             else:
                 wv = random_vector
+                OOV_count += 1
+            token_count += 1
             v.append(wv)
         v = np.array(v).flatten()
         x.append(v)
-
+    print("out of vocabulary rate : %f" % (OOV_count * 1. / token_count))
+    print("vocabulary cover rate : %f" % ((token_count - OOV_count) * 1. / token_count))
     return x
 
 def parse_args():
@@ -124,7 +129,7 @@ def main():
     my_test_x = getX(my_test_input, m)
 
     # fit LR classifier
-    lrc = LogisticRegression()
+    lrc = LogisticRegression(verbose=0)
     lrc.fit(my_train_x, my_train_y)
 
     # get results
