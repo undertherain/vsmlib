@@ -28,9 +28,9 @@ class FileTokenIterator:
 
 
 class DirTokenIterator:
-    def __init__(self, path):
+    def __init__(self, path, re_pattern = r"[\w\-']+|[.,!?…]"):
         self.path = path
-        self.__gen__ = self.gen()
+        self.__gen__ = self.gen(re_pattern)
 
     def __iter__(self):
         return self
@@ -38,7 +38,7 @@ class DirTokenIterator:
     def __next__(self):
         return next(self.__gen__)
 
-    def gen(self, re_pattern = r"[\w\-']+|[.,!?…]"):
+    def gen(self, re_pattern):
         for root, dir, files in os.walk(self.path, followlinks=True):
             for items in fnmatch.filter(files, "*"):
                 logger.info("processing " + os.path.join(root, items))
