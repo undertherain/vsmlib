@@ -14,7 +14,7 @@ from scipy import sparse
 from matplotlib import pyplot as plt
 from vsmlib.misc.data import save_json, load_json, detect_archive_format_and_open
 from vsmlib.blas import normed, normalize_sparse
-from vsmlib.vocabulary import Vocabulary_cooccurrence, Vocabulary_simple, Vocabulary
+from .vocabulary import Vocabulary_cooccurrence, Vocabulary_simple, Vocabulary
 from vsmlib.blas.sparse import load_matrix_csr
 
 logger = logging.getLogger(__name__)
@@ -156,8 +156,10 @@ class Model(object):
             self.metadata = load_json(os.path.join(path, "metadata.json"))
         except FileNotFoundError:
             logger.warning("metadata not found")
-        if not "dimensions" in self.metadata:
+        if "dimensions" not in self.metadata:
             self.metadata["dimensions"] = self.matrix.shape[1]
+        if "vocabulary" in self.metadata:
+            self.vocabulary.metadata = self.metadata["vocabulary"]
 
     @property
     def normalized(self):
@@ -326,6 +328,36 @@ class ModelDense(Model):
             assert size_embedding == self.matrix.shape[1]
         self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words), dtype=np.int32)
         # self.name += "_{}".format(len(rows[0]))
+
+    def filter_by_vocab(self, words):
+        """reduced embeddings to the provided list of words
+
+        Args:
+            words: set or list of words to keep
+
+        Returns:
+            Instance of Dense class
+
+        """
+        new_embds = ModelDense()
+        new_embds.vocabulary = Vocabulary()
+        lst_new_vectors = []
+        i = 0
+        for w in self.vocabulary.lst_words:
+            if w in words:
+                lst_new_vectors.append(self.get_row(w))
+                new_embds.vocabulary.lst_words.append(w)
+                new_embds.vocabulary.lst_frequencies.append(self.vocabulary.get_frequency(w))
+                new_embds.vocabulary.dic_words_ids[w] = i
+                i += 1
+        new_embds.matrix = np.array(lst_new_vectors, dtype=np.float32)
+        new_embds.vocabulary.metadata = {}
+        new_embds.vocabulary.metadata["cnt_words"] = i
+        new_embds.vocabulary.metadata["transform"] = "reudced by wordlist"
+        new_embds.vocabulary.metadata["original"] = self.vocabulary.metadata
+        new_embds.metadata = self.metadata
+        new_embds.metadata["vocabulary"] = new_embds.vocabulary.metadata
+        return new_embds
 
 
 class ModelNumbered(ModelDense):

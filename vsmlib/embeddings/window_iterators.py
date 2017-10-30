@@ -1,6 +1,9 @@
 import numpy as np
 import chainer
 from vsmlib.corpus import DirTokenIterator
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class WindowIterator(chainer.dataset.Iterator):
@@ -71,6 +74,7 @@ class DirWindowIterator(chainer.dataset.Iterator):
         self.center = 0
         self.cnt_words_total = 1
         self.cnt_words_read = 0
+        logger.debug("created dir window iterator")
 
     def next_single_sample(self):
         if not self._repeat and self.epoch > 0:
@@ -78,7 +82,9 @@ class DirWindowIterator(chainer.dataset.Iterator):
         while True:
             try:
                 next_word = next(self.token_iter)
-                self.context_right.append(self.vocab.get_id(next_word))
+                id_next_word = self.vocab.get_id(next_word)
+                if id_next_word >= 0:
+                    self.context_right.append(id_next_word)
                 self.cnt_words_read += 1
                 if self.epoch == 0:
                     self.cnt_words_total += 1

@@ -40,3 +40,9 @@ class Tests(unittest.TestCase):
         self.assertIsInstance(model, Model)
         model.vocabulary.get_id("apple")
         # todo make sure to check vocab
+
+    def test_filter_vocab(self):
+        path = "./test/data/embeddings/text/plain_with_file_header/"
+        model = vsmlib.model.load_from_dir(path)
+        filtered = model.filter_by_vocab(["apple"])
+        filtered.save_to_dir("/tmp/vsmlib/filtered")

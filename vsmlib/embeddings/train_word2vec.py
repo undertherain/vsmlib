@@ -223,6 +223,7 @@ def train(args):
 
     if args.gpu >= 0:
         model.to_gpu()
+        logger.debug("model sent to gpu")
 
     optimizer = chainer.optimizers.Adam()
     optimizer.setup(model)
