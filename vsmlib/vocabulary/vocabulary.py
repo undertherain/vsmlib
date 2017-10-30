@@ -191,3 +191,68 @@ def create_from_dir(path, min_frequency=0):
     v.metadata["execution_time"] = t_end - t_start
     v.metadata["timestamp"] = datetime.datetime.now().isoformat()
     return v
+
+
+def parse_annotated_token(token):
+    if '/' not in token or '[' not in token or ']' not in token:
+        raise RuntimeError("annotated format error, should look like 'word/ne[position/deps]'")
+    word = token.split('/')[0]
+    ne = token.split('/')[1].split('[')[0]
+    dep = token.split('[')[1].split(']')[0]
+    dep_pos = dep.split('/')[0]
+    dep_tag = dep.split('/')[1]
+    return word, ne, dep_pos, dep_tag
+
+
+def get_words_from_annotated_token(token, representation): # the format should look like word/ne[position/deps]
+
+    word, ne, dep_pos, dep_tag = parse_annotated_token(token)
+
+    if representation == 'word':
+        return [word]
+    if representation == 'ne':
+        return [word+'/'+ne]
+    if representation == 'deps':
+        w1 = word + '/+' + dep_tag
+        w2 = word + '/-' + dep_tag
+        return [w1, w2]
+    raise RuntimeError("no suitable context_representation find. ")
+
+
+def create_from_annotated_dir(path, min_frequency=0, representation='word'): # todo faster creation of vocab
+    """Collects vocabulary from a annotated corpus by a given path.
+
+    """
+    t_start = time.time()
+    dic_freqs = {}
+    if not os.path.isdir(path):
+        raise RuntimeError("source directory does not exist")
+    for token in DirTokenIterator(path, re_pattern = r"[^\s]+"):
+        words = get_words_from_annotated_token(token, representation)
+        for w in words:
+            print(w)
+            if w in dic_freqs:
+                dic_freqs[w] += 1
+            else:
+                dic_freqs[w] = 1
+    v = Vocabulary_simple()
+    v.lst_frequencies = []
+    for i, word in enumerate(sorted(dic_freqs, key=dic_freqs.get, reverse=True)):
+        frequency = dic_freqs[word]
+        if frequency < min_frequency:
+            break
+        v.lst_frequencies.append(frequency)
+        v.lst_words.append(word)
+        v.dic_words_ids[word] = i
+    v.cnt_words = len(v.lst_words)
+    v.metadata["path_source"] = path
+    v.metadata["min_frequency"] = min_frequency
+    v.metadata["vsmlib_version"] = VERSION
+    v.metadata["cnt_words"] = v.cnt_words
+    t_end = time.time()
+    v.metadata["execution_time"] = t_end - t_start
+    v.metadata["timestamp"] = datetime.datetime.now().isoformat()
+    v.metadata["context_representation"] = context_representation
+    return v
+
+
