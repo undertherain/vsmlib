@@ -252,7 +252,7 @@ def create_from_annotated_dir(path, min_frequency=0, representation='word'): # t
     t_end = time.time()
     v.metadata["execution_time"] = t_end - t_start
     v.metadata["timestamp"] = datetime.datetime.now().isoformat()
-    v.metadata["context_representation"] = context_representation
+    v.metadata["context_representation"] = representation
     return v
 
 
