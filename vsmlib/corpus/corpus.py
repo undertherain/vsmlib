@@ -10,9 +10,8 @@ logger = logging.getLogger(__name__)
 
 class FileTokenIterator:
 
-    def __init__(self, path):
+    def __init__(self, path, re_pattern = r"[\w\-']+|[.,!?…]"):
         self.path = path
-        re_pattern = r"[\w\-']+|[.,!?…]"
         self.re_token = re.compile(re_pattern)
 
     def __iter__(self):
@@ -39,21 +38,21 @@ class DirTokenIterator:
     def __next__(self):
         return next(self.__gen__)
 
-    def gen(self):
+    def gen(self, re_pattern = r"[\w\-']+|[.,!?…]"):
         for root, dir, files in os.walk(self.path, followlinks=True):
             for items in fnmatch.filter(files, "*"):
                 logger.info("processing " + os.path.join(root, items))
-                for token in FileTokenIterator(os.path.join(root, items)):
+                for token in FileTokenIterator(os.path.join(root, items), re_pattern=re_pattern):
                     yield(token)
 
 
-def load_file_as_ids(path, vocabulary, gzipped=None, downcase=True):
+def load_file_as_ids(path, vocabulary, gzipped=None, downcase=True, re_pattern=r"[\w\-']+|[.,!?…]"):
     # use proper tokenizer from cooc
     # options to ignore sentence bounbdaries
     # specify what to do with missing words
     # replace numbers with special tokens
     result = []
-    ti = FileTokenIterator(path)
+    ti = FileTokenIterator(path, re_pattern=re_pattern)
     for token in ti:
         w = token    # specify what to do with missing words
         if downcase:
