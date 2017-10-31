@@ -135,7 +135,7 @@ def main():
     my_test_x = getX(my_test_input, m)
 
     # fit LR classifier
-    lrc = LogisticRegression()
+    lrc = LogisticRegression(verbose=0)
     lrc.fit(my_train_x, my_train_y)
 
     # get results
