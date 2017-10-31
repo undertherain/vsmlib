@@ -3,7 +3,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score
 import sys
 import yaml
-import load_data
+from vsmlib.benchmarks.sequence_labeling import load_data
 import argparse
 import vsmlib
 
