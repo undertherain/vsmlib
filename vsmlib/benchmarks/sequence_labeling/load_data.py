@@ -7,6 +7,8 @@ def load(path, task):
 
     if task == 'pos':
         tag_position = 1
+    elif task == 'chunk':
+        tag_position = 2
     else:
         tag_position = -1
 

@@ -3,7 +3,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score
 import sys
 import yaml
-from vsmlib.benchmarks.sequence_labeling import load_data
+import load_data
 import argparse
 import vsmlib
 
@@ -107,8 +107,10 @@ def main():
     # get the embeddings
     m = vsmlib.model.load_from_dir(options['path_vectors'])
 
-    # get the dataset
+    #specify the task (can be ner, pos or chunk)
     task = options['task']
+
+    # get the dataset
     train_set, valid_set, test_set, dic = load_data.load(options['path_dataset'], task)
 
     idx2label = dict((k, v) for v, k in dic['labels2idx'].items())
@@ -135,7 +137,7 @@ def main():
     my_test_x = getX(my_test_input, m)
 
     # fit LR classifier
-    lrc = LogisticRegression(verbose=0)
+    lrc = LogisticRegression()
     lrc.fit(my_train_x, my_train_y)
 
     # get results
