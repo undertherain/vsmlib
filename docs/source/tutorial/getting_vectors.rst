@@ -43,7 +43,7 @@ Each of the 3 models (CBOW, GloVe and Skip-Gram) is available in 5 sizes (25, 50
 
 .. image:: images/contexts.png
 
-**Word linear context** 
+**Unbound linear context** (aka *word linear context*)
 
 *500 dimensions:* `word_linear_cbow_500d <https://my.pcloud.com/publink/show?code=XZ7oQV7ZtOKVArr2oo43sGneJ97PA0XAwus7>`_, `word_linear_sg_500d <https://my.pcloud.com/publink/show?code=XZ5oQV7ZAQf36xu0bCkSOS6T44MoFYJfw00k>`_, `word_linear_glove_500d <https://my.pcloud.com/publink/show?code=XZXoQV7ZpTzLwpqdLyzPfwnT7Fcv55E3Fe3V>`_
 
@@ -55,7 +55,7 @@ Each of the 3 models (CBOW, GloVe and Skip-Gram) is available in 5 sizes (25, 50
 
 *25 dimensions:* `word_linear_cbow_25d <https://my.pcloud.com/publink/show?code=XZYlYV7ZwGMYTVssGmSNVNS93AMYRBafIQO7>`_, `word_linear_sg_25d <https://my.pcloud.com/publink/show?code=XZPlYV7ZPqBg6CX2KXJa80Egqkqht47VCOKk>`_, `word_linear_glove_25d <https://my.pcloud.com/publink/show?code=XZslYV7ZHmkNLyF6UL8xE2GEFLtQSuHqxcKk>`_ 
 
-**Word dependency context** 
+**Unbound dependency context** (aka *word dependency context*)
 
 *500 dimensions:* `word_deps_CBOW_500d <https://my.pcloud.com/publink/show?code=XZacQV7ZUOWcmOufhL4iplh89volJJsgVhF7>`_, `word_deps_sg_500d <https://my.pcloud.com/publink/show?code=XZccQV7ZnBNANKrYz9fKh0nnU8OSX7YVhkR7>`_, `word_deps_glove_500d <https://my.pcloud.com/publink/show?code=XZicQV7ZhuzDUY6drr4ARqreHxkfXhkhkg27>`_
 
@@ -67,7 +67,7 @@ Each of the 3 models (CBOW, GloVe and Skip-Gram) is available in 5 sizes (25, 50
 
 *25 dimensions:* `word_deps_cbow_25d <https://my.pcloud.com/publink/show?code=XZqKYV7ZS10yWbGyzR8zEQ3VGP9p54FDyohy>`_, `word_deps_sg_25d <https://my.pcloud.com/publink/show?code=XZJlYV7Zs4JlIKbUtLQQFMiQmMOII7QXseD7>`_, `word_deps_glove_25d <https://my.pcloud.com/publink/show?code=XZrKYV7ZOmhjV47u8lHyJzuhOiEDm8JBkyhk>`_ 
 
-**Structured linear context** 
+**Bound linear context** (aka *structured linear context*)
 
 
 *500 dimensions:* `structured_linear_cbow_500d <https://my.pcloud.com/publink/show?code=XZKcQV7ZusfRm99TPSkdpqpjN4c9QkDQvYHX>`_, `structured_linear_sg_500d <https://my.pcloud.com/publink/show?code=XZEcQV7ZRXITvejfSV5MIHOkzEGkpm08BcNX>`_, `structured_linear_glove_500d <https://my.pcloud.com/publink/show?code=XZtcQV7ZEaxc9WkUEzFyWlABJfvvEhsVtuj7>`_
@@ -80,7 +80,7 @@ Each of the 3 models (CBOW, GloVe and Skip-Gram) is available in 5 sizes (25, 50
 
 *25 dimensions:* `structured_linear_cbow_25d <https://my.pcloud.com/publink/show?code=XZcwYV7ZNf6k7YwqV8FQ3jEl6Fdjz0Xl4myy>`_, `structured_linear_sg_25d <https://my.pcloud.com/publink/show?code=XZBKYV7ZnAm5dmhjkDQpQUeMYBCQGpYqveFy>`_, `structured_linear_glove_25d <https://my.pcloud.com/publink/show?code=XZ8KYV7Zsk1Vq1eyA8p4r330FPYokVxIyBtk>`_ 
 
-**Structured dependency context** 
+**Bound dependency context** (aka *structured dependency context*)
 
 *500 dimensions:* `structured_deps_cbow_500d <https://my.pcloud.com/publink/show?code=XZDcQV7ZQfLM3T3jydX9w2aJr7UldFEDWS4V>`_, `structured_deps_sg_500d <https://my.pcloud.com/publink/show?code=XZgcQV7ZfzzuQjOKCxkcOfrHj8Yemfv2WyXy>`_, `structured_deps_glove_500d <https://my.pcloud.com/publink/show?code=XZ9cQV7ZuRvd5fFmnxm11cug3ewruuPO5Aa7>`_
 
