@@ -41,7 +41,7 @@ You can also `download the source corpus <https://my.pcloud.com/publink/show?cod
 
 Each of the 3 models (CBOW, GloVe and Skip-Gram) is available in 5 sizes (25, 50, 100, 250, and 500 dimensions) and in 4 types of context: the traditional word linear context (which is used the most often), the `dependency-based structured context <http://www.aclweb.org/anthology/P14-2050>`_, and also less common structured linear and word dependency context.
 
-.. image:: images/context.png
+.. image:: images/contexts.png
 
 **Word linear context** 
 
