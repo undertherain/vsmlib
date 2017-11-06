@@ -163,8 +163,8 @@ def create_model(args, net, vocab):
 
 def get_data(path, vocab):
     doc = load_file_as_ids(path, vocab)
-    # doc = doc[doc >= 0]
-    # smart split
+    doc = doc[doc >= 0]
+    # todo smarter split
     train, val = doc[:-1000], doc[-1000:]
     return train, val
 

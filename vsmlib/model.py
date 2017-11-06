@@ -448,7 +448,9 @@ class ModelW2V(ModelNumbered):
 
     def load_from_dir(self, path):
         self.name += "w2v_" + os.path.basename(os.path.normpath(path))
-        self.load_from_file(os.path.join(path, "vectors.bin"))
+        filename = [file for file in os.listdir(path) if file.endswith("bin")][0]
+        self.load_from_file(os.path.join(path, filename))
+#        self.load_from_file(os.path.join(path, "vectors.bin"))
         # self.load_provenance(path)
 
 
@@ -515,24 +517,32 @@ def load_from_dir(path):
     result = ModelNumbered()
     files = os.listdir(path)
     for f in files:
-        if f.startswith("words") and f.endswith(".npy") \
-               and os.path.isfile(os.path.join(path, f.replace(".npy", ".vocab"))):
-            result = Model_Fun()
-            logger.info("this is fun's dependency embedding format")
-            result.load_from_dir(path, f[: -4])
-            result.load_metadata(path)
-            return result
         if f.endswith(".gz") or f.endswith(".bz") or f.endswith(".txt"):
-            logger.info(path + " detected as text")
+            logger.info(path + "Detected VSM in plain text format")
             result.load_from_text(os.path.join(path, f))
             result.load_metadata(path)
             return result
         if f.endswith(".npy"):
-            logger.info("detected as dense in mumpy format")
+            logger.info("Detected VSM in numpy format")
             result.matrix = np.load(os.path.join(path, f))
             result.vocabulary = Vocabulary()
             result.vocabulary.load(path)
             result.load_metadata(path)
             return result
+        if any(file.endswith('bin') for file in os.listdir(path)):
+            result = ModelW2V()
+            logger.info("Detected VSM in the w2v original binary format")
+            result.load_from_dir(path)
+            result.load_metadata(path)
+            return result
+#        if f.startswith("words") and f.endswith(".npy") \
+#               and os.path.isfile(os.path.join(path, f.replace(".npy", ".vocab"))):
+#            result = Model_Fun()
+##            result = ModelLevy()            
+#            logger.info("Detected VSM in npy and vocab in plain text file format")
+#            result.load_from_dir(path, f[: -4])
+#            result.load_metadata(path)
+#            return result
+        
 
-    raise RuntimeError("can not detect embeddings format")
+    raise RuntimeError("Cannot detect the format of this VSM")
