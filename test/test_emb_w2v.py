@@ -21,6 +21,8 @@ class Tests(unittest.TestCase):
         args.gpu = -1
         args.out_type = "ns"
         args.dimensions = 100
+        args.context_type = "linear"
+        args.context_representation = "word"
         args.negative_size = 5
         args.model = "skipgram"
         args.subword = "none"
@@ -39,6 +41,8 @@ class Tests(unittest.TestCase):
         args.gpu = -1
         args.out_type = "hsm"
         args.dimensions = 100
+        args.context_type = "linear"
+        args.context_representation = "word"
         args.negative_size = 5
         args.model = "skipgram"
         args.subword = "none"
@@ -57,6 +61,8 @@ class Tests(unittest.TestCase):
         args.gpu = -1
         args.out_type = "ns"
         args.dimensions = 100
+        args.context_type = "linear"
+        args.context_representation = "word"
         args.negative_size = 5
         args.model = "skipgram"
         args.subword = "none"
@@ -75,6 +81,8 @@ class Tests(unittest.TestCase):
         args.gpu = -1
         args.out_type = "ns"
         args.dimensions = 100
+        args.context_type = "linear"
+        args.context_representation = "word"
         args.negative_size = 5
         args.model = "skipgram"
         args.subword = "none"

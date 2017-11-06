@@ -37,7 +37,7 @@ def parse_args():
     parser.add_argument('--context_type', '-ct', choices=['linear', 'deps'],
                         default='linear',
                         help='context type, for deps context, the annotated corpus is required')
-    parser.add_argument('--context_representation', '-cp', choices=['deps', 'ne', 'word'],
+    parser.add_argument('--context_representation', '-cp', choices=['word', 'deps', 'ne', ],
                         default='word',
                         help='context representation, for deps (dependency information) and ne (named entity), '
                              'the annotated corpus is required')
