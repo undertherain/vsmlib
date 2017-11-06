@@ -18,7 +18,7 @@ import logging
 import os
 import vsmlib
 from vsmlib.vocabulary import Vocabulary
-from vsmlib.vocabulary import *
+from vsmlib.vocabulary.vocabulary import create_from_dir, create_from_annotated_dir
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
 from vsmlib.embeddings.window_iterators import WindowIterator, DirWindowIterator
@@ -37,9 +37,10 @@ def parse_args():
     parser.add_argument('--context_type', '-ct', choices=['linear', 'deps'],
                         default='linear',
                         help='context type, for deps context, the annotated corpus is required')
-    parser.add_argument('--context_representation', '-cp', choices=['bound', 'unbound'],
-                        default='unbound',
-                        help='context representation')
+    parser.add_argument('--context_representation', '-cp', choices=['deps', 'ne', 'word'],
+                        default='word',
+                        help='context representation, for deps (dependency information) and ne (named entity), '
+                             'the annotated corpus is required')
     parser.add_argument('--window', '-w', default=5, type=int,
                         help='window size')
     parser.add_argument('--batchsize', '-b', type=int, default=1000,
@@ -168,8 +169,8 @@ def get_data(path, vocab):
     return train, val
 
 
-def get_loss_func(args, vocab):
-    word_counts = vocab.lst_frequencies
+def get_loss_func(args, vocab_context):
+    word_counts = vocab_context.lst_frequencies
     if args.out_type == 'hsm':
         HSM = L.BinaryHierarchicalSoftmax
         d_counts = {i: word_counts[i] for i in range(len(word_counts))}
@@ -181,7 +182,7 @@ def get_loss_func(args, vocab):
         loss_func = L.NegativeSampling(args.dimensions, cs, args.negative_size)
         loss_func.W.data[...] = 0
     elif args.out_type == 'original':
-        loss_func = SoftmaxCrossEntropyLoss(args.dimensions, vocab.cnt_words)
+        loss_func = SoftmaxCrossEntropyLoss(args.dimensions, vocab_context.cnt_words)
     else:
         raise Exception('Unknown output type: {}'.format(args.out_type))
     return loss_func
@@ -218,7 +219,13 @@ def train(args):
         vocab.load(args.path_vocab)
         logger.info("loaded vocabulary")
 
-    loss_func = get_loss_func(args, vocab)
+    if args.context_representation != 'word': # for deps or ner context representation, we need a new context vocab for NS or HSM loss function.
+        vocab_context = Vocabulary()
+        vocab_context = create_from_annotated_dir(args.path_corpus, representation=args.context_representation)
+    else :
+        vocab_context = vocab
+
+    loss_func = get_loss_func(args, vocab_context)
     model = get_model(args, loss_func, vocab)
 
     if args.gpu >= 0:
