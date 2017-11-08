@@ -57,7 +57,7 @@ def parse_args():
     parser.add_argument('--negative-size', default=5, type=int,
                         help='number of negative samples')
     parser.add_argument('--out_type', '-o', choices=['hsm', 'ns', 'original'],
-                        default='hsm',
+                        default='ns',
                         help='output model type ("hsm": hierarchical softmax, '
                         '"ns": negative sampling, "original": no approximation)')
     parser.add_argument('--path_vocab',
@@ -211,16 +211,15 @@ def train(args):
         chainer.cuda.get_device_from_id(args.gpu).use()
         cuda.check_cuda_available()
 
-    vocab = Vocabulary()
-    vocab.load(args.path_vocab)
+
     if args.path_vocab == '':
         vocab = create_from_dir(args.path_corpus)
     else:
+        vocab = Vocabulary()
         vocab.load(args.path_vocab)
         logger.info("loaded vocabulary")
 
     if args.context_representation != 'word': # for deps or ner context representation, we need a new context vocab for NS or HSM loss function.
-        vocab_context = Vocabulary()
         vocab_context = create_from_annotated_dir(args.path_corpus, representation=args.context_representation)
     else :
         vocab_context = vocab
