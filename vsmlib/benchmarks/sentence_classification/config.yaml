@@ -1,0 +1,9 @@
+path_vectors: /home/shashwath/vsmsc/emb/
+path_dataset: ./../../../test/data/benchmarks/sentence_classification/
+gpu: -1
+batch_size: 20
+epochs: 25
+test: False
+embed_dim: 100
+freeze_embedding: False
+
