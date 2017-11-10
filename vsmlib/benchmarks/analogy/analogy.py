@@ -278,6 +278,8 @@ def do_test_on_pair_3CosAvg(p_train, p_test):
     vecs_a = []
     vecs_a_prime = []
     for p in p_train:
+        if is_pair_missing([p]):
+            continue
         vecs_a_prime_local = []
         for t in p[1]:
             if m.vocabulary.get_id(t) >= 0:
@@ -295,7 +297,7 @@ def do_test_on_pair_3CosAvg(p_train, p_test):
 
     results = []
     for p_test_one in p_test:
-        if is_pair_missing(p_test_one):
+        if is_pair_missing([p_test_one]):
             continue
         vec_b_prime = m.get_row(p_test_one[1][0])
         vec_b = m.get_row(p_test_one[0])
@@ -595,6 +597,8 @@ def run_category(pairs, name_dataset, name_category):
             #print("upgrading tqdm, total =", cnt_splits, "done = ", cnt)
             my_prog.update(cnt)
             #print("done")
+            # print(p_train)
+            # print(p_test)
             results += do_test_on_pairs(p_train, p_test)
 
     out = dict()
@@ -695,23 +699,29 @@ def subsample_dims(newdim):
     # run_all("BATS2.0")
 
 
-def main():
+def main(args=None):
     global options
-    if len(sys.argv) > 1:
-        path_config = sys.argv[1]
+
+    if args is None or args.analogy_path_config is None:
+        if len(sys.argv) > 1:
+            path_config = sys.argv[1]
+        else:
+            print("usage: python3 -m vsmlib.benchmarks.analogy <config file>")
+            print("config file example can be found at ")
+            print("https://github.com/undertherain/vsmlib/blob/master/vsmlib/benchmarks/analogy/config_analogy.yaml")
+            # print("or, hopefully")
+            # path_script = os.path.dirname(inspect.stack()[0][1])
+            # print(os.path.join(path_script,"config_analogy.yaml"))
+            # todo: move this to data folder to it is preserved in pythong package
+            return
     else:
-        print("usage: python3 -m vsmlib.benchmarks.analogy <config file>")
-        print("config file example can be found at ")
-        print("https://github.com/undertherain/vsmlib/blob/master/vsmlib/benchmarks/analogy/config_analogy.yaml")
-        # print("or, hopefully")
-        # path_script = os.path.dirname(inspect.stack()[0][1])
-        # print(os.path.join(path_script,"config_analogy.yaml"))
-        # todo: move this to data folder to it is preserved in pythong package
-        return
+        path_config = args.analogy_path_config
 
     with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
     dirs = cfg["path_vectors"]
+    if args is not None and args.path_vector is not None:
+        dirs = [args.path_vector]
     options["name_method"] = cfg["method"]
     options["exclude"] = cfg["exclude"]
     options["path_dataset"] = cfg["path_dataset"]
