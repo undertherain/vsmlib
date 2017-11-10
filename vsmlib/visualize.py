@@ -22,7 +22,7 @@ class MidpointNormalize(Normalize):
 
 
 def plot_heat(ax, m, xlabels, ylabels):
-    #norm = Normalize(-10,10,False)
+    # norm = Normalize(-10,10,False)
     norm = MidpointNormalize(midpoint=0)
     ax.set_aspect('equal')
     plt.xticks(rotation=90)
