@@ -15,7 +15,6 @@ class Tests(unittest.TestCase):
         model = vsmlib.model.load_from_dir(path_model)
         vsmlib.benchmarks.analogy.analogy.options["dir_root_dataset"] = "./test/data/benchmarks/analogy/"
         vsmlib.benchmarks.analogy.analogy.options["path_results"] = "/tmp/vsmlib/analogy"
-        vsmlib.benchmarks.analogy.analogy.options["name_method"] = "CosAdd"
         vsmlib.benchmarks.analogy.analogy.m = model  # todo this is ugly and should be fixed
         vsmlib.benchmarks.analogy.analogy.run_all("benchmarks")
 
@@ -24,7 +23,7 @@ class Tests(unittest.TestCase):
         model = vsmlib.model.load_from_dir(path_model)
         vsmlib.benchmarks.analogy.analogy.options["dir_root_dataset"] = "./test/data/benchmarks/analogy/"
         vsmlib.benchmarks.analogy.analogy.options["path_results"] = "/tmp/vsmlib/analogy"
-        vsmlib.benchmarks.analogy.analogy.options["name_method"] = "CosAvg"
+        vsmlib.benchmarks.analogy.analogy.options["name_method"] = "3CosAvg"
         vsmlib.benchmarks.analogy.analogy.m = model
         vsmlib.benchmarks.analogy.analogy.run_all("benchmarks")
 
