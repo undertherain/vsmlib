@@ -9,3 +9,4 @@ progressbar2
 pyyaml
 chainer
 system-query
+pillow
