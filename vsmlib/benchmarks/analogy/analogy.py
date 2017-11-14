@@ -615,15 +615,16 @@ def run_category(pairs, name_dataset, name_category):
     
     out["results_short"] = dict()
     out["results_short"]["cnt_correct"] = cnt_total_correct
+    out["results_short"]["cnt_total_total"] = cnt_total_total
     out["results_short"]["score_overall"] = cnt_total_correct / cnt_total_total
 
     out["results"] = results
-    out = jsonify(out)
-    str_results = json.dumps(out, indent=4, separators=(',', ': '), sort_keys=True)
+    str_results = json.dumps(jsonify(out), indent=4, separators=(',', ': '), sort_keys=True)
     file_out = open(name_file_out, "w", errors="replace")
     file_out.write(str_results)
     file_out.close()
     logger.info("category done")
+    return out["results_short"]
 
 
 def get_pairs(fname):
@@ -665,14 +666,17 @@ def run_all(name_dataset):
     dir_tests = os.path.join(options["dir_root_dataset"], name_dataset)
     if not os.path.exists(dir_tests):
         raise Exception("test dataset dir does not exist:" + dir_tests)
+    results = {}
     for root, dirnames, filenames in os.walk(dir_tests):
         for filename in fnmatch.filter(sorted(filenames), '*'):
             print(filename)
             pairs = get_pairs(os.path.join(root, filename))
             # print(pairs)
-            run_category(pairs, name_dataset, name_category=filename)
-    # print("total accuracy: {:.4f}".format(cnt_total_correct/(cnt_total_total+1)))
+            out = run_category(pairs, name_dataset, name_category=filename)
+            results[filename] = out
 
+    # print("total accuracy: {:.4f}".format(cnt_total_correct/(cnt_total_total+1)))
+    return results
 
 def subsample_dims(newdim):
     m.matrix = m.matrix[:, 0:newdim]
@@ -702,7 +706,7 @@ def subsample_dims(newdim):
 def main(args=None):
     global options
 
-    if args is None or args.analogy_path_config is None:
+    if args is None or args.path_config is None:
         if len(sys.argv) > 1:
             path_config = sys.argv[1]
         else:
@@ -715,19 +719,26 @@ def main(args=None):
             # todo: move this to data folder to it is preserved in pythong package
             return
     else:
-        path_config = args.analogy_path_config
+        path_config = args.path_config
 
     with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
-    dirs = cfg["path_vectors"]
-    if args is not None and args.path_vector is not None:
-        dirs = [args.path_vector]
     options["name_method"] = cfg["method"]
     options["exclude"] = cfg["exclude"]
     options["path_dataset"] = cfg["path_dataset"]
+    options["path_results"] = cfg["path_results"]
+    options["normalize"] = cfg["normalize"]
+
+    # overwrite params
+    if args is not None:
+        if args.path_vector is not None:
+            options["path_vectors"] = [args.path_vector]
+        if args.path_dataset is not None:
+            options["path_dataset"] = args.path_dataset
+    dirs = options["path_vectors"]
     options["name_dataset"] = os.path.basename(options["path_dataset"])
     options["dir_root_dataset"] = os.path.dirname(options["path_dataset"])
-    options["path_results"] = cfg["path_results"]
+
     global m
     for d in dirs:
         if "factorized" in d:
@@ -742,8 +753,12 @@ def main(args=None):
             m.normalize()
 
         print(m.name)
-        run_all(options["name_dataset"])
+        results = run_all(options["name_dataset"])
+        print(results)
         print("\noverall score: {}".format(cnt_total_correct / cnt_total_total))
+
+
+        return results
 
 
 if __name__ == "__main__":
