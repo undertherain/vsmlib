@@ -1,0 +1,4 @@
+#path_vectors: ./../../../test/data/embeddings/npy/
+
+path_vector: ./../../../tmp/embeddings/
+path_dataset: ./../../../test/data/benchmarks/similarity/
