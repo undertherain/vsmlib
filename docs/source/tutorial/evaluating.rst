@@ -4,18 +4,9 @@ Intrinsic evaluation
 Word analogy task
 -----------------
 
-One of the de-facto standard intrinsic evaluations for word embeddings
-is the word analogy task. The dataset known as the Google test set
-became the de-facto standard for evaluating word embeddings, but it is
-not balanced and samples only 15 linguistic relations, with 19,544
-questions in total. We developed BATS - a test set that is considerably
-larger (98,000 questions) and is balanced: it contains 40 different
-relations of 4 types (inflections, derivational morphology,
-lexicographic and encyclopedic semantics) with 50 unique pairs per
-relation.
+One of the de-facto standard intrinsic evaluations for word embeddings is the word analogy task. The dataset known as the Google test set became the de-facto standard for evaluating word embeddings, but it is not balanced and samples only 15 linguistic relations, with 19,544 questions in total. A newer dataset is `BATS <http://www.aclweb.org/anthology/N16-2002>`_: it is considerably larger (98,000 questions) and is balanced: it contains 40 different relations of 4 types (inflections, derivational morphology, lexicographic and encyclopedic semantics) with 50 unique pairs per relation.
 
-VSMlib comes with this test set and the script to test 6 different
-methods of solving word analogies. You can run the script from command
+VSMlib comes with the script to test 6 different methods of solving word analogies. You can run the script from command
 line, indicating the path to the config file as the only argument.
 
 .. code:: python
@@ -53,23 +44,24 @@ Dataset
 ~~~~~~~
 
 The BATS dataset can be `downloaded
-here <https://s3.amazonaws.com/blackbirdprojects/tut_vsm/bats/Gladkova_Drozd_BiggerAnalogyTestSet_2016.zip>`__.
-You can also make your own. The script expects the input dataset to be a
-tab-separated file formatted as follows:
+here <https://my.pcloud.com/publink/show?code=XZx9L07ZoMmTOoVfwvbGkW2VJFQHqzBKf6zX>`__.
+The script expects the input dataset to be a tab-separated file formatted as follows:
 
 ::
 
     cat cats
     apple apples
 
-You can group the files in subfolders. In many cases there is more than
-one correct answer; you can specify multiple options with slashes:
+In many cases there is more than one correct answer; they are separated with slashes:
 
 ::
 
     father  dad/daddy
     flower  blossom/bloom
     harbor  seaport/haven/harbour
+
+There is a file with a word pairs list for each relation, and these files are grouped into folders by the type of the relation.
+You can also make your own test set to use in VSMlib, formatted in the same way. 
 
 Analogy solving methods
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -128,28 +120,39 @@ others.
 Correlation with human similarity/relatedness judgements
 --------------------------------------------------------
 
-TODO The following datasets for intrinsic evaluation will soon be
-available via vsmlib:
+One of the first intrinsic evaluation metrics for distributional meaning representations was correlation with human judgements to what extent words are related. Roughly speaking, a good VSM should have tiger and zoo closer in the vector space than tiger and hammer, because tiger and zoo are intuitively more semantically related. There are several datasets with judgements of relatedness and similarity between pairs of words collected from human subjects. See `(Turney 2006) <https://dl.acm.org/ft_gateway.cfm?id=1174523&ftid=389424&dwn=1&CFID=827319269&CFTOKEN=87143883>`_ for the distinction between relatedness and similarity (or relational and attributional similarity). 
 
--  WordSim 353
--  MEN
--  SimLex
--  Rare Words
+You can run this type of test in VSMlib as follows:
 
-*Caveat*: while similarity and relatedness tasks remain one of the most
-popular methods of evaluating word embeddings, they have serious
-methodological problems. Perhaps the biggest one is the `unreliability
-of middle judgements <http://www.aclweb.org/anthology/W16-2507>`__:
-while humans are good at distinguishing clearly related and clearly
-unrelated word pairs (e.g. *cat:tiger* vs *cat:malt*), there is no clear
-reason for rating any of the many semantic relations higher than the
-other (e.g. which is more related - *cat:tiger* or *cat:whiskers*)? It
-is thus likely that the human similarity scores reflect some
-psychological measures like speed of association and prototypicality
-rather than something purely semantic, and thus a high score on a
-similarity task should be interpreted accordingly. This would also
-explain why a high score on similarity or relatedness does not
-necessarily predict good performance on downstream tasks.
+>>> python3 -m vsmlib.benchmarks.similarity /path/to/config_similarity.yaml 
+
+The ``config_similariy.yaml`` file is structured as 
+
+:: 
+
+    path_vector: /path/to/your/vsm1/
+    path_dataset: /path/to/the/test/dataset
+    normalize: true      # specifies if embeddings should be normalized
+
+The similarity/relatedness score file is assumed to have the following tab-separated format:
+
+:: 
+
+  tiger   cat 7.35
+  book    paper   7.46
+  computer    keyboard    7.62
+
+You can use any of the many available datasets, including:
+ -  `WordSim 353 <http://www.cs.technion.ac.il/~gabr/resources/data/wordsim353/>`_ (there is also a version of WordSim353 split into relatedness and similarity subsets)
+ -  `MEN <https://staff.fnwi.uva.nl/e.bruni/MEN>`_
+ -  `SimLex <https://www.cl.cam.ac.uk/~fh295/simlex.html>`_
+ -  `Rare Words <http://www.bigdatalab.ac.cn/benchmark/bm/dd?data=Rare%20Word>`_
+ - `Radinsky Mturk data <https://dl.acm.org/citation.cfm?id=1963455>`_
+
+Please refer to the pages of individual datasets for details on how they were collected and references to them. The collection of the above datasets in the same format can also be downloaded `here <https://my.pcloud.com/publink/show?code=XZCeL07ZaEJhoLIaDYz8kuC2B6YMuuYlhMyV>`_.
+
+**Caveat**: while similarity and relatedness tasks remain one of the most popular methods of evaluating word embeddings, they have serious methodological problems. Perhaps the biggest one is the `unreliability of middle judgements <http://www.aclweb.org/anthology/W16-2507>`__: while humans are good at distinguishing clearly related and clearly
+unrelated word pairs (e.g. *cat:tiger* vs *cat:malt*), there is no clear reason for rating any of the many semantic relations higher than the other (e.g. which is more related - *cat:tiger* or *cat:whiskers*)? It is thus likely that the human similarity scores reflect some psychological measures like speed of association and prototypicality rather than something purely semantic, and thus a high score on a similarity task should be interpreted accordingly. This would also explain why a high score on similarity or relatedness does not necessarily predict good performance on downstream tasks.
 
 Extrinsic evaluation
 ====================
