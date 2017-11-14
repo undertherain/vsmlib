@@ -81,20 +81,23 @@ def parse_args():
 
 options = {}
 
-def main():
+def main(args=None):
 
     # use ArgumentParser
     # args = parse_args()
 
     # use yaml
     global options
-    if len(sys.argv) > 1:
-        path_config = sys.argv[1]
+    if args is None or args.path_config is None:
+        if len(sys.argv) > 1:
+            path_config = sys.argv[1]
+        else:
+            print("usage: python3 -m vsmlib.benchmarls.sequence_labeling.sequence_labeling <config file>")
+            print("config file example can be found at ")
+            print("https://github.com/undertherain/vsmlib/blob/master/vsmlib/benchmarks/sequence_labeling/sequence_labeling/config.yaml")
+            return
     else:
-        print("usage: python3 -m vsmlib.benchmarls.sequence_labeling.sequence_labeling <config file>")
-        print("config file example can be found at ")
-        print("https://github.com/undertherain/vsmlib/blob/master/vsmlib/benchmarks/sequence_labeling/sequence_labeling/config.yaml")
-        return
+        path_config = args.path_config
 
     with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
@@ -102,10 +105,22 @@ def main():
     options["path_dataset"] = cfg["path_dataset"]
     options["window"] = cfg["window"]
     options["task"] = cfg["task"]
+    options["normalize"] = cfg["normalize"]
 
+    # overwrite params
+    if args is not None:
+        if args.path_vector is not None:
+            options["path_vectors"] = args.path_vector
+        if args.path_dataset is not None:
+            options["path_dataset"] = args.path_dataset
+        if args.task is not None:
+            options["task"] = args.task
 
     # get the embeddings
     m = vsmlib.model.load_from_dir(options['path_vectors'])
+    if options["normalize"]:
+        # m.clip_negatives()  #make this configurable
+        m.normalize()
 
     #specify the task (can be ner, pos or chunk)
     task = options['task']
@@ -146,6 +161,7 @@ def main():
         score_test = lrc.score(my_test_x, my_test_y)
         print("training set accuracy: %f" % (score_train))
         print("test set accuracy: %f" % (score_test))
+        results = {"train": score_train, "test":score_test}
     else:
         pred_train = lrc.predict(my_train_x)
         pred_test = lrc.predict(my_test_x)
@@ -153,6 +169,10 @@ def main():
         f1_score_test = f1_score(my_test_y, pred_test, average='weighted')
         print("Training set F1 score: %f" % f1_score_train)
         print("Test set F1 score: %f" % f1_score_test)
+
+        results = {"train": f1_score_train, "test":f1_score_test}
+    print(results)
+    return results
 
 
 

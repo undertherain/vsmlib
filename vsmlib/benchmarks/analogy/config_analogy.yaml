@@ -15,8 +15,8 @@ method: LRCos
 exclude: True
 # epcifies if question words should be excluded from possible answers 
 
-path_dataset: "/work/alex/data/linguistic/datasets/analogies/BATS_3.0"
+path_dataset: "/tmp/work/alex/data/linguistic/datasets/analogies/BATS_3.0"
 # path to dataset. last segment of the path would be interpreted as dataset name
 
-path_results: "/work/alex/data/linguistic/outputs/test"
+path_results: "/tmp/work/alex/data/linguistic/outputs/test"
 # specifies where to save results. subfolders for datasets and embeddings would be created automatically

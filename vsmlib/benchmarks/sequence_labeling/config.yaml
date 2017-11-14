@@ -4,3 +4,5 @@ path_vectors: /home/shashwath/ldt/skip/100d/
 path_dataset: ./../../../test/data/benchmarks/sequence_labeling/pos/
 window: 2
 task: pos
+normalize: true
+# specifies if embeddings should be normalized

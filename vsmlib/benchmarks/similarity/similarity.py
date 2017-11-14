@@ -53,6 +53,7 @@ def main(args=None):
         cfg = yaml.load(ymlfile)
     options["path_vector"] = cfg["path_vector"]
     options["path_dataset"] = cfg["path_dataset"]
+    options["normalize"] = cfg["normalize"]
 
     # overwrite params
     if args is not None:
@@ -63,6 +64,10 @@ def main(args=None):
 
     # get the embeddings
     m = vsmlib.model.load_from_dir(options['path_vector'])
+    if options["normalize"]:
+        # m.clip_negatives()  #make this configurable
+        m.normalize()
+
 
     results = {}
     for file in os.listdir(options["path_dataset"]):

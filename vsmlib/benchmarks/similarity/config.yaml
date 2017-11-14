@@ -2,3 +2,5 @@
 
 path_vector: ./../../../tmp/embeddings/
 path_dataset: ./../../../test/data/benchmarks/similarity/
+normalize: true
+# specifies if embeddings should be normalized
