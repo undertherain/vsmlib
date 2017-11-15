@@ -1,0 +1,1002 @@
+Component-Whole(e2,e1)	12	15	The system as described above has its greatest application in an arrayed configuration of antenna elements .
+Other	1	9	The child was carefully wrapped and bound into the cradle by means of a cord .
+Instrument-Agency(e2,e1)	1	7	The author of a keygen uses a disassembler to look at the raw assembly code .
+Other	2	6	A misty ridge uprises from the surge .
+Member-Collection(e1,e2)	1	2	The student association is the voice of the undergraduate student population of the State University of New York at Buffalo .
+Other	4	10	This is the sprawling complex that is Peru 's largest producer of silver .
+Cause-Effect(e2,e1)	7	19	The current view is that the chronic inflammation in the distal part of the stomach caused by Helicobacter pylori infection results in an increased acid production from the non-infected upper corpus region of the stomach .
+Entity-Destination(e1,e2)	0	6	People have been moving back into downtown .
+Content-Container(e1,e2)	1	6	The lawsonite was contained in a platinum crucible and the counter-weight was a plastic crucible with metal pieces .
+Entity-Destination(e1,e2)	12	20	The solute was placed inside a beaker and 5 mL of the solvent was pipetted into a 25 mL glass flask for each trial .
+Member-Collection(e1,e2)	2	6	The fifty essays collected in this volume testify to most of the prominent themes from Professor Quispel 's scholarly career .
+Other	1	5	Their composer has sunk into oblivion .
+Message-Topic(e1,e2)	6	9	The Pulitzer Committee issues an official citation explaining the reasons for the award .
+Cause-Effect(e2,e1)	1	8	The burst has been caused by water hammer pressure .
+Instrument-Agency(e2,e1)	2	6	Even commercial networks have moved into high-definition broadcast .
+Message-Topic(e1,e2)	4	10	It was a friendly call to remind them about the bill and make sure they have a copy of the invoice .
+Instrument-Agency(e2,e1)	1	8	Texas-born virtuoso finds harmony , sophistication in Appalachian instrument .
+Product-Producer(e2,e1)	1	14	The factory 's products have included flower pots , Finnish rooster-whistles , pans , trays , tea pots , ash trays and air moisturisers .
+Component-Whole(e2,e1)	7	8	The girl showed a photo of apple tree blossom on a fruit tree in the Central Valley .
+Member-Collection(e2,e1)	20	23	They tried an assault of their own an hour later , with two columns of sixteen tanks backed by a battalion of Panzer grenadiers .
+Entity-Origin(e1,e2)	1	18	Their knowledge of the power and rank symbols of the Continental empires was gained from the numerous Germanic recruits in the Roman army , and from the Roman practice of enfeoffing various Germanic warrior groups with land in the imperial provinces .
+Member-Collection(e2,e1)	4	9	She soon had a stable of her own rescued hounds .
+Cause-Effect(e1,e2)	1	14	The singer , who performed three of the nominated songs , also caused a commotion on the red carpet .
+Other	5	11	His intellectually engaging books and essays remain pertinent to illuminating contemporary history .
+Member-Collection(e2,e1)	7	10	Poor hygiene controls , reports of a brace of gamey grouse and what looked like a skinned fox all amounted to a pie that was unfit for human consumption .
+Other	2	7	This sweet dress is made with a blend of cotton and silk , and the crochet flower necklace is the perfect accessory .
+Cause-Effect(e1,e2)	0	8	Suicide is one of the leading causes of death among pre-adolescents and teens , and victims of bullying are at an increased risk for committing suicide .
+Message-Topic(e1,e2)	1	7	This article gives details on 2004 in music in the United Kingdom , including the official charts from that year .
+Message-Topic(e1,e2)	12	16	We have therefore taken the initiative to convene the first international open meeting dedicated solely to rural history .
+Component-Whole(e1,e2)	1	4	The timer of the device automatically eliminates wasted `` standby power '' consumption by automatically turn off electronics plugged into the `` auto off '' outlets .
+Message-Topic(e2,e1)	5	8	Bob Parks made a similar offer in a phone call made earlier this week .
+Cause-Effect(e2,e1)	5	7	He had chest pains and headaches from mold in the bedrooms .
+Product-Producer(e1,e2)	23	26	The silver-haired author was not just laying India 's politician saint to rest but healing a generations-old rift in the family of the country 's founding father .
+Entity-Destination(e1,e2)	8	13	It describes a method for loading a horizontal stack of containers into a carton .
+Component-Whole(e1,e2)	16	19	The Foundation decided to repurpose the building in order to reduce wear and tear on the plumbing in the manor house by redirecting visitors during restoration projects and beyond .
+Entity-Origin(e1,e2)	8	12	The technology is available to produce and transmit electricity economically from OTEC systems .
+Other	3	7	The Medicare buy-in plan ran into Senate resistance .
+Component-Whole(e2,e1)	1	5	The provinces are divided into counties ( shahrestan ) , and subdivided into districts ( bakhsh ) and sub-districts ( dehestan ) .
+Cause-Effect(e1,e2)	1	9	Financial stress is one of the main causes of divorce .
+Instrument-Agency(e2,e1)	0	11	Newspapers swap content via widgets with the help of the newsgator service .
+Cause-Effect(e1,e2)	1	5	The women that caused the accident was on the cell phone and ran thru the intersection without pausing on the median .
+Content-Container(e1,e2)	1	8	The transmitter was discovered inside a bed settee suite on which he had been sitting .
+Member-Collection(e2,e1)	5	8	The Kerala backwaters are a chain of brackish lagoons and lakes lying parallel to the Arabian Sea coast of Kerala state in southern India .
+Entity-Origin(e1,e2)	4	8	A St. Paul College student was released from jail Wednesday night , after his arrest Tuesday in the alleged rape of another student on campus .
+Cause-Effect(e2,e1)	0	10	Calluses are caused by improperly fitting shoes or by a skin abnormality .
+Instrument-Agency(e2,e1)	0	2	Adults use drugs for this purpose .
+Instrument-Agency(e2,e1)	1	7	The councilor proposed assessing infinitival complements through elicitation .
+Cause-Effect(e2,e1)	15	21	As in the popular movie `` Deep Impact '' , the action of the Perseid meteor shower is caused by a comet , in this case periodic comet Swift-Tuttle .
+Other	6	10	The following information appeared in the notes to consolidated financial statements of some corporate annual reports .
+Other	10	11	HipHop appropriates the symbols of a consumer society : oversized diamond colliers are worn .
+Cause-Effect(e2,e1)	1	5	The radiation from the atomic bomb explosion is a typical acute radiation .
+Component-Whole(e2,e1)	2	3	The ride-on boat tiller was developed by engineers Arnold S. Juliano and Dr. Eulito U. Bautista .
+Cause-Effect(e2,e1)	2	7	A neoplastic recurrence arose from an extensive radiation induced ulceration .
+Cause-Effect(e2,e1)	9	11	He has a tattoo on his right arm and scars from stitches on his right elbow .
+Member-Collection(e2,e1)	16	18	Whether your home includes a charm of finches , a sute of bloodhounds , or a knob of toads , I think it 's important to keep the numbers within reason .
+Message-Topic(e1,e2)	7	9	Furthermore , these INGO practitioners constructed a discourse around participation which distorted the real significance of participation .
+Other	3	4	Kelvin bought a silver ring which he was so happy with and he keeps wearing it now even though its abit too big haha .
+Message-Topic(e1,e2)	8	12	Scientists are in the midst of an ongoing debate about the relative value of openness and collaboration in their profession .
+Content-Container(e1,e2)	7	17	This cut blue and white striped cotton dress with red bands on the bodice was in a trunk of vintage Barbie clothing .
+Other	2	7	My major disagreement with Lyons concerns the causal part of his theory .
+Entity-Destination(e1,e2)	2	8	Both his feet have been moving into the ball .
+Content-Container(e1,e2)	19	24	The scissors were in a small plastic soap container , next to a bar of soap , and the box cutters were in a box next to a bottle of after-shave lotion .
+Member-Collection(e2,e1)	2	5	A great wing of fluorite dragons , the greatest concentration of the rather solitary dragons ever known , joined the desperate battle with the blues and silvers against Chaos .
+Entity-Destination(e1,e2)	4	8	As a control , cowpea was sealed in double bags without fumigant .
+Other	4	11	The infectious bacterial disease brucellosis has been found in a beef cow in eastern Idaho .
+Other	65	70	As the Anglo-Norman force sustained but little loss in this battle , their archers at the onset showered a hail of arrows upon the Irish host who were not protected with mail armour , and shot them down in hundreds before they could get to close quarters ; and then the charge of the heavy Anglo-Norman cavalry of mail-clad knights , completed the havoc and rout of the undisciplined Gaelic hosts .
+Entity-Origin(e1,e2)	19	24	The first incarnation of this series was set in the 1940s , during World War II , when the princess left her native paradise island ( where Amazon women had lived for centuries ) to help the U.S. foil the Nazis .
+Message-Topic(e1,e2)	2	6	Cieply 's story makes a compelling point about modern-day studio economics .
+Entity-Destination(e1,e2)	3	6	We poured the milk into the pumpkin mixture .
+Entity-Origin(e1,e2)	8	14	Lawyers in Detroit also worked overtime as several lawsuits ensued from angry and injured fans .
+Cause-Effect(e2,e1)	3	11	The continuing Nigerian outbreak is the biggest ever caused by the vaccine .
+Member-Collection(e2,e1)	9	12	Our mercenary Army has now degenerated into a Godless cabal of mindless killers not unlike the Soviets that were butchering civilians in Afghanistan ( exactly as sadistically as we have ) .
+Cause-Effect(e2,e1)	1	8	The fire inside WTC was caused by exploding fuel .
+Entity-Destination(e1,e2)	1	12	The epithelium from the knockout mouse bladder is migrating into the transplanted matrix .
+Entity-Origin(e1,e2)	1	6	The staff was removed from his position .
+Cause-Effect(e2,e1)	1	5	The suffering caused by the terrorists is the real torture .
+Message-Topic(e2,e1)	1	10	This love of nature 's gift has been reflected in artworks dating back more than a thousand years .
+Product-Producer(e2,e1)	1	9	The court decided the objection by making the instalment order as sought .
+Cause-Effect(e2,e1)	6	11	In a poetic twist , the tsunami triggered by the rock band forced many American jazz and blues singers to seek work in the United Kingdom , which is where Anderson found a receptive audience in 1965 .
+Cause-Effect(e2,e1)	0	6	Leakage and fire caused due to corrosion of bypass piping for recirculation gas at a fuel oil desulphurization unit .
+Instrument-Agency(e2,e1)	16	22	A team of students from Virginia Tech University have created a vehicle that allows vision impaired drivers to take control of the wheel .
+Member-Collection(e2,e1)	7	10	BMW 's iDrive 4.0 brings in a horde of new features .
+Cause-Effect(e1,e2)	2	8	The metal ball makes a ding ding ding noise when it swings back and hits the metal body of the lamp .
+Member-Collection(e2,e1)	4	6	It consists of an ensemble of ladies who are highly qualified to play various Arabic musical instruments .
+Product-Producer(e1,e2)	11	16	It underscores the need for continued surveillance of nicotine delivery in products created by an unregulated industry .
+Other	18	21	Unlike other fish , grunion come out of the water completely to lay their eggs in the wet sand of the beach .
+Entity-Destination(e1,e2)	2	7	A large marble was dropped into the bowl .
+Cause-Effect(e2,e1)	4	10	Historical view of the damage caused by the 1693 Catania earthquake and the reconstruction activities .
+Cause-Effect(e2,e1)	34	40	AI requested that the perpetrators be prosecuted to the fullest extent of the law , that adequate compensation be provided to the victims and that senior government and police officials offer apologies for the suffering caused by the responsible police officers .
+Other	1	8	The findings have been published in a special section of the academic journal Archives of Sexual Behavior .
+Entity-Origin(e1,e2)	2	19	An Amtrak passenger who alarmed fellow passengers by talking about terrorist threats on a cellphone was pulled from the train and is being held in Colorado .
+Component-Whole(e1,e2)	1	4	The introduction in the book is a summary of what is in the text .
+Entity-Origin(e1,e2)	2	9	The second simulation was started from the uncomplexed x-ray structure after insertion of the ligand into the binding site .
+Instrument-Agency(e2,e1)	1	7	This user plays games on a portable console .
+Entity-Origin(e1,e2)	3	7	The ambitious Eurasia exhibition arose from an idea by Achille Bonito Oliva .
+Instrument-Agency(e2,e1)	1	17	The driver of the cement truck cleaned the loading chute on his truck with a truck-mounted water hose and began to pull away .
+Cause-Effect(e2,e1)	31	38	The Marshall Plan also provided a way of gaining public acceptance in Europe for the New Deal format that the United States had successfully used before the war to end the recession triggered by the 1929 Wall Street crash .
+Member-Collection(e2,e1)	10	13	In the corner there are several gate captains and a legion of Wu crossbowmen .
+Cause-Effect(e2,e1)	6	12	Once they grow there , the swelling and inflammation caused by the infection closes off the sac , causing it not to `` shed '' bacteria , and protecting the bacteria inside from antibiotics and your body 's own immune cells .
+Cause-Effect(e2,e1)	6	11	Guitars are played acoustically ; the tone is produced by the vibration of the strings which is amplified by the body of the guitar , which acts as a large hollow resonating chamber , or they may rely on an amplifier that can electronically manipulate tone .
+Other	17	21	Flowers are reborn from the soil and the climate begins to warm , all set to a score improvised by an orchestra of birds .
+Entity-Destination(e1,e2)	3	6	He posted the answers to the website .
+Cause-Effect(e2,e1)	17	21	Arcane Subtlety reduced the threat caused by Polymorph by 40 % at max rank , though the threat caused by the spell is minimal .
+Instrument-Agency(e2,e1)	1	6	A programmer uses a high level language to implement its algorithms .
+Cause-Effect(e2,e1)	29	34	The beautiful hydrothermal features in the park ( geysers , hot springs , mud pots , etc . ) , the uplift and subsidence , and many of the earthquakes are caused by the movements of hydrothermal and/or magmatic fluids .
+Content-Container(e1,e2)	12	16	Flowers are nice , but do n't last very long and the fruit in a fruit basket often goes bad .
+Component-Whole(e1,e2)	5	7	He decided to pad the heel of shoes with a shock absorbing insole or heel pad .
+Instrument-Agency(e2,e1)	16	19	From the Scots ( Lingle ) and French ( Ligneul , Lignoul ) , comes a shoemaker 's sewing thread , waxed and bristled ( See Waxed End ) .
+Entity-Destination(e1,e2)	1	8	One tablet per quart was dropped into a canteen and made the water safe to drink .
+Content-Container(e1,e2)	2	11	The tiny image of the Renaissance master is hidden in a carafe of wine in his 1597 oil painting Bacchus , one of his most acclaimed works .
+Content-Container(e1,e2)	17	24	Then I swept up the dust , which looked like sawdust , and put it in a plastic container , which was in a cabinet under the granite counter top .
+Entity-Origin(e1,e2)	5	11	In the former method the acetone was distilled from an allraline solution after the excess oxidant had been destroyed with sodium .
+Message-Topic(e1,e2)	3	7	In this comprehensive guide , over 850 roses are described , illustrated , and arranged by group .
+Entity-Origin(e2,e1)	0	1	Chestnut flour was more common than wheat flour in the Italian Alps a century ago .
+Product-Producer(e2,e1)	4	6	For us the term artists ' book simply means a book made by an artist ; a book made as a work of art rather than as a literary artifact .
+Other	5	6	My parents bought her a silver necklace almost identical to the one pictured .
+Cause-Effect(e1,e2)	1	10	Forward motion of the vehicle through the air caused a suction on the road draft tube .
+Other	6	8	Paul Friedrich guides us through a babel of words , and worlds of the imagination ranging from his translations from five languages ( notably the Russian of his literary studies ) to the poetry of the Indian Mexico of his anthropological field work to America writ large -- super highways , a Vermont farm , father and child .
+Component-Whole(e1,e2)	13	16	The picture below shows a view chapel and west range of the inner courtyard of the castle .
+Member-Collection(e2,e1)	5	7	I was attacked by a flock of pigeons today .
+Other	1	9	That decision was also the subject of an unsuccessful legal challenge .
+Entity-Origin(e1,e2)	6	13	The exit temperature of an effluent stream from the low temperature steam reforming reactor is not higher than 600 C .
+Entity-Destination(e1,e2)	1	5	Individual investors moved into the property .
+Message-Topic(e1,e2)	4	12	One of the trickiest questions to answer in an interview relates to salary .
+Message-Topic(e2,e1)	1	9	This tradition has been narrated in prophet 's early biographies .
+Instrument-Agency(e2,e1)	1	12	A thief who tried to steal the truck broke the igenition with screwdriver .
+Member-Collection(e2,e1)	9	12	After the Marian reforms the Legion was notionally a unit of heavy infantrymen armed with just sword and pilum , but even so it was normally fielded with attached auxiliary skirmishers and missile troops , and incorporated a small cavalry unit .
+Entity-Destination(e1,e2)	3	6	The prosecutors carried guns into the court room .
+Cause-Effect(e1,e2)	1	5	The malfunctions on Monday caused delays for patrons waiting to check out or renew books at the branches , and impeded access to personal accounts that allow users to renew or hold books online .
+Entity-Destination(e1,e2)	0	7	Chemical weapons have been dropped into the lake .
+Entity-Origin(e1,e2)	2	8	Many other dwarves also hailed from this infamous clan .
+Component-Whole(e1,e2)	1	4	The nose of a bloodhound is so good that evidence found by a bloodhound will hold up in matters involving the United States Supreme Court .
+Product-Producer(e2,e1)	8	12	Global digital music sales grow as the music industry develops new business models .
+Product-Producer(e1,e2)	1	6	The devices were manufactured at the factory in Beaverton well into the 1980s , when production was shifted elsewhere and portions of the factory sold .
+Member-Collection(e2,e1)	28	32	An expensive uniform and a strict ballot rendered it somewhat too exclusive in its character , but in the end it answered its purpose by becoming practically a muster of the National leaders of the present and the future .
+Other	1	4	The train ride from station to station is approximate 30 minutes .
+Entity-Origin(e1,e2)	4	7	The archaeological site yields relics from long-forgotten culture .
+Other	1	4	A maze of interlocking jurisdictions and levels of government confronts average citizens in trying to solve even the simplest of problems .
+Cause-Effect(e1,e2)	1	13	Water damage from roof leaks , plumbing leaks or flooding lead to the growth of molds .
+Other	10	12	Warm weather is here , and with it comes the scourge of mosquitoes .
+Other	1	4	The formation of struvite stones is associated with the presence of urea-splitting bacteria , most commonly Proteus mirabilis ( but also Klebsiella , Serratia , Providencia species ) .
+Other	38	43	Our army was successfully engaged during the day with strong rearguards of all arms on the Petit Morin River , thereby materially assisting the progress of the French armies on our right and left , against whom the enemy was making his greatest efforts .
+Member-Collection(e2,e1)	19	23	So when William did cross the Boyne on July 1st 1690 , he had an army consisting of the riffraff of Europe 's mercenaries .
+Entity-Origin(e1,e2)	2	11	The overall geometry of the heart was extracted from the intensity data .
+Cause-Effect(e2,e1)	1	4	The discomfort from the injury was now precluding him from his occupation which involved prolonged procedures in the standing position .
+Member-Collection(e2,e1)	15	17	Flames of purple , pink , yellow and blue dance in the air as a coven of sorcerers call forth energies from within the Empyrean .
+Member-Collection(e2,e1)	8	11	Out of the early morning haze , a convoy of articulated lorries pulls into the Gashouder square .
+Entity-Destination(e1,e2)	4	6	This book has transported readers into ancient times .
+Other	7	9	We always try to maintain the best environment for programmers , starting with good salary and conducive working environment .
+Content-Container(e1,e2)	8	14	Indeed , a green or black basalt heart scarab was found put inside the body in its place .
+Entity-Origin(e1,e2)	2	9	The first motorcycle was manufactured in a small wood building with only one room .
+Cause-Effect(e1,e2)	1	8	The water pushed to the coast resulted in tides as much as three feet above normal , with waves of 5-10 feet atop these tides .
+Message-Topic(e1,e2)	1	6	The chapters in this book investigate issues and communities .
+Entity-Destination(e1,e2)	4	7	He rescheduled the birthday party to the next day .
+Product-Producer(e2,e1)	1	8	The bacterial aerosol was generated from an up-draft nebulizer .
+Entity-Destination(e1,e2)	0	4	People have travelled into space , but not the deep ocean .
+Entity-Origin(e1,e2)	31	36	For those of you who are unsure what Afrikaans is , it is a language which originated from the Dutch which were the first settlers in South Africa and the unique language was evolved from other settlers from Malaya , Indonesia , Madagascar and West Africa .
+Product-Producer(e2,e1)	0	1	Beaver dams are created as a protection against predators , such as coyotes , wolves and bears , and to provide easy access to food during winter .
+Message-Topic(e1,e2)	6	11	So , the theme of the play has to do with religion .
+Message-Topic(e1,e2)	4	9	There has been intense debate over the circles ' origins .
+Component-Whole(e2,e1)	7	8	I have recently developed creases in my ear lobes .
+Entity-Origin(e2,e1)	3	12	Manufacturing extra neutral alcohol which is the basic ingredient used for making liquor , the commodity was largely used by companies making Indian Made Foreign Liquor ( IMFL ) .
+Instrument-Agency(e2,e1)	2	10	Initially the user calibrates the microscope with a fluorescence lifetime standard positioned at the sample plane .
+Component-Whole(e2,e1)	1	5	The province comprises the southeastern part of Panay Island with island-province of Guimaras just across its coast .
+Cause-Effect(e1,e2)	1	8	The charge is the source of an electric field , which carries energy-the electrostatic self-energy .
+Cause-Effect(e2,e1)	1	8	The tardiness however has been caused by the arrival of my old man ; who in true Bloodworth fashion has had me walking everywhere .
+Content-Container(e1,e2)	1	5	The key was in a chest .
+Entity-Origin(e1,e2)	1	7	The residue was distilled from an Arbuzov flask .
+Member-Collection(e2,e1)	14	17	As the Gondorians moved forward the evil force started to withdraw , unleashing a rain of deadly arrows into the heavily armoured Gondorians .
+Message-Topic(e1,e2)	5	9	It is a medieval Latin manuscript relating the early history of the Isle of Man .
+Cause-Effect(e2,e1)	7	10	The river had now turned into full flood after the deluge of rain a few days ago .
+Component-Whole(e2,e1)	18	21	He stopped rowing when the boat was opposite to the paddle wheel of the steamer , and the steamer stopped her engine at the same time .
+Instrument-Agency(e2,e1)	3	10	This is the umbrella that peels the potatoes with a pencil and makes a pink ink with the peelings stood up .
+Entity-Origin(e2,e1)	2	3	This American-style wheat ale is a light , unfiltered brew with a citrus aroma andflavor imparted by a late addition of lemon grass .
+Entity-Origin(e1,e2)	1	4	The car left the plant .
+Component-Whole(e2,e1)	10	13	Our experience extends to 15 years continued promotion of this archipelago of nine islands .
+Content-Container(e1,e2)	12	19	To separate the solids at the end of the experiment , the clay was contained in a semi- permeable membrane tubing .
+Entity-Destination(e1,e2)	4	6	This machine is blowing sand into molds .
+Other	1	10	The cultivation consisted of plowing the crop with a double-shovel plow .
+Message-Topic(e1,e2)	2	5	The final chapter offers a theological survey of the use of the formula .
+Cause-Effect(e2,e1)	3	8	She mentioned the scandal caused by a BBC documentary on the treatment of children in a special-needs home and asked how the state had responded to these .
+Component-Whole(e1,e2)	4	7	Isolated fractures of the shaft of the ulna , without other fractures , often result when the forearm is raised to fend off a blow .
+Other	4	6	We have placed the candidates into roles .
+Other	4	6	Frequent agitations throw academic life into disarray .
+Product-Producer(e2,e1)	5	7	Still other examples of the potter 's ceramics are clad in slinky assortments of tassels and beads .
+Component-Whole(e1,e2)	1	4	The nasal cavity of birds contains turbinates ( Bang 1971 ) , cartilaginous structures that are thought to have as one of their functions water recovery from air .
+Other	7	10	Thus , in simple words , a tendon attaches a muscle to a bone .
+Other	0	4	Positions were denoted by black dots along the tracks , the adjacent numbers indicating the day of the month .
+Cause-Effect(e2,e1)	10	15	The World Health Organization ( WHO ) found that the radiation release from the Chernobyl accident was 200 times that of the Hiroshima and Nagasaki .
+Content-Container(e2,e1)	4	8	My dog ate a cellophane bag full of dog treats on Tuesday .
+Component-Whole(e2,e1)	1	7	The owl held the mouse in its claw .
+Entity-Destination(e1,e2)	12	22	This is how grain was delivered to the wooden grain bins and hay was put inside the upper part of the rock barn .
+Product-Producer(e2,e1)	7	11	Police foiled an attempt to kill an artist who drew a cartoon depicting the Prophet Muhammad that sparked outrage in the Muslim world .
+Entity-Destination(e1,e2)	19	23	When Woody Harrelson received a copy of the screenplay for `` Zombieland '' last year , he stuffed the paper into his duffel bag of unread scripts and promptly forgot about it .
+Member-Collection(e2,e1)	4	8	The city is a treasure trove of terrific libraries , interesting museums , and wonderful Victorian architecture complemented by the incomparable work of Scotland 's greatest architect , Charles Rennie Mackintosh .
+Component-Whole(e1,e2)	3	6	We leave the bail of the reel open and place your the rod in a double mounted set up as shown on the facing page .
+Entity-Origin(e1,e2)	10	15	The Mapungubwe Collection at the University of Pretoria features remarkable works from the largely forgotten kingdom of Mapungubwe that flourished near the confluence of the Limpopo and Shashe Rivers between 1000 and 1300 AD .
+Cause-Effect(e2,e1)	7	11	Also , in the midst of the confusion caused by the coup , the issuing of militant posters was a way for artists and organizations to declare their active engagement against the rebellion .
+Product-Producer(e1,e2)	7	11	The title is taken from an 1813 book by a Virginia planter and senator named John Taylor .
+Member-Collection(e2,e1)	6	12	In the same way , a society is built up of many individuals .
+Instrument-Agency(e2,e1)	1	8	The scientist approached the big cat with a notepad and a pencil in her hands .
+Entity-Origin(e1,e2)	2	9	The bottom photo is from the New York public library .
+Cause-Effect(e1,e2)	1	6	The accident caused a major traffic snarl on the arterial road .
+Other	13	15	Two plane crash survivors have paid a special visit to the Hutt Hospital surgeon whose team helped to re-build their shattered faces eight years ago .
+Content-Container(e1,e2)	1	5	The dress was in a trunk dated summer of 1938 along with several other dresses from this same period .
+Cause-Effect(e2,e1)	14	19	The various forms of idealistic , materialistic and agnostic philosophies are subject to the tension caused by the indicated situation .
+Member-Collection(e1,e2)	14	17	From him , Cain learns that Alexis had survived his suicide and became the leader of that organization , renaming it Delilah .
+Product-Producer(e2,e1)	5	14	James Hagler , Venice 's director of historical resources , has completed a picture book of the area 's buildings .
+Entity-Destination(e1,e2)	4	8	A program has fetched data into host variable arrays .
+Entity-Destination(e1,e2)	4	7	Recently , only insignificant things arrive to theatres .
+Other	3	4	Tissue damage and electrode corrosion are both associatcd with high charge density stimulation .
+Component-Whole(e2,e1)	8	10	Two of Walters 's fingers are inside the koala 's pouch .
+Member-Collection(e2,e1)	12	15	In a former residence , your writer had an atrium containing a duel of doves moles numbering 22 .
+Component-Whole(e2,e1)	7	8	To stand up to the wind , umbrella frames are strong yet flexible .
+Cause-Effect(e2,e1)	0	18	Contractions of the diaphragm are caused by stimulation of the vagus nerve either by the brain or by irritation anywhere along the length of the nerve .
+Entity-Origin(e1,e2)	3	6	A 15 minute plane drive from runway to terminal is uncommon .
+Entity-Origin(e1,e2)	2	8	The geometric skeleton is derived from a static object using an implicit 'directions ' method .
+Product-Producer(e2,e1)	1	5	The filmmakers dug a large hole in the ground for the scene where the Narnians cause the pillars supporting the growth near Aslan 's How to collapse on the Telmarines .
+Message-Topic(e1,e2)	4	6	It is a monthly report providing opinion and advice on current United States government contract issues .
+Instrument-Agency(e2,e1)	0	11	Governments , frightened of losing votes , resolved the crisis through subsidization .
+Other	18	19	For Christmas , Daniel gave Kelly a Tiffany bracelet , and for Valentine 's Day he bought a diamond necklace .
+Member-Collection(e2,e1)	4	7	We also passed a wake of turkey buzzards , and I was again glad to not be driving , because my car and I both have shaky nerves still , from the Great Turkey Buzzard Incident of '08 .
+Cause-Effect(e2,e1)	1	6	Plantar warts are caused by a virus that infects the outer layer of skin on the soles of the feet .
+Other	1	10	The sensor was manufactured in a cost effective thin film process .
+Other	67	70	The putative left , we see , is just as eager as the nominal right to brand crime and violence with any hint of political motivation as terrorism , and therefore to remove it from the ordinary processes of criminal law and sanction , which are already quite draconian in these United States , and to animate parallel systems of harsher surveillance and punishment for the political compeers of such criminals .
+Component-Whole(e2,e1)	1	25	The list of the 10 Most Beautiful Women posted on the official Web site of the 2009 Australian Open was filled with sleek , thin images .
+Component-Whole(e1,e2)	1	4	The rope of the prayer-bell was there in a perfect state and coiled up .
+Instrument-Agency(e2,e1)	9	16	One man pours on a liquid while the other man stirs the mixture with a wooden paddle or spatula .
+Member-Collection(e2,e1)	17	21	Besides , the Chinese case also challenges some ideas of RSS theory , including the concept of alliance of different social classes and the role of working class in democratization .
+Entity-Destination(e1,e2)	12	16	As the US and Colombian military put pressure on drug traffickers , operations are migrating into nearby countries .
+Content-Container(e1,e2)	2	6	A conical cover preserved in a ewer in Athens accords extremely well with the form of these vessels .
+Component-Whole(e2,e1)	5	8	The front of the boring machine contains tungsten-tipped picks that workers guide with the use of laser projections on video screens .
+Entity-Destination(e1,e2)	3	6	They incorporated the immigrant flows into microsimulation .
+Entity-Origin(e1,e2)	10	14	I have always felt so relieved that Roy and the boys had left the creek .
+Message-Topic(e1,e2)	2	6	The first report analyses the adaptation strategies of the EU member states .
+Product-Producer(e1,e2)	12	16	Cook 's discoveries prepared the way for establishment of a new penal colony by the colonial power .
+Other	6	10	This process passes on a health gene to the next generation .
+Instrument-Agency(e1,e2)	1	4	A telescope assists the eye chiefly in two ways .
+Entity-Destination(e1,e2)	1	8	The boy accidentally went into the girl 's bathroom .
+Content-Container(e1,e2)	1	7	The document is stored in the proper folder as a text .
+Message-Topic(e1,e2)	9	15	Unfortunately , they just had brief mentions and more pages were spent describing the clubs scene .
+Other	9	10	The map to the left shows a snapshot of weather conditions in selected towns across Italy .
+Member-Collection(e2,e1)	7	9	I reflected on this while passing a passel of pigeons parading on a Loop sidewalk the other day .
+Other	3	7	The retailers poured resources into promoting low-alcohol wine .
+Content-Container(e1,e2)	12	16	Fiscus was the treasury of the Roman emperor , so-called because the money was stored in baskets .
+Entity-Destination(e1,e2)	3	8	Hundreds of toxic chemicals were released into the atmosphere .
+Other	2	10	The final part of the court is completed by the chapel , begun by Mary I in 1554 in memory of her father .
+Content-Container(e1,e2)	0	10	Mobile lost in the ocean was found in a cod belly .
+Message-Topic(e1,e2)	1	5	The flyer advertised a two-week workshop being conducted at the university this summer .
+Other	1	5	The hotel arose from the reconstruction of historical building .
+Message-Topic(e1,e2)	2	6	This revised edition incorporates new research findings and advances in the treatment of genetic disorders , including gene-directed therapies .
+Member-Collection(e1,e2)	0	4	Fish swim in a shoal , but they fall one by one .
+Entity-Destination(e1,e2)	1	8	All bookmarks have been exported to a single file .
+Instrument-Agency(e2,e1)	1	5	The team used the newly-developed nanoparticle to build therapies for treating individuals with cardiovascular disease .
+Message-Topic(e2,e1)	4	7	Tobia made a stunning revelation in a phone call in September 2002 .
+Member-Collection(e2,e1)	12	16	It was also home to a bale of snapping turtles and a siege of great blue herons .
+Entity-Destination(e1,e2)	1	6	The indenter is pushed into the material , and both the load and displacement increase .
+Entity-Destination(e1,e2)	2	12	The latest issue of Five Bells has been sent to poet union members .
+Component-Whole(e2,e1)	0	8	Cruisers and large yachts have much more sophisticated fittings that that require more skills .
+Instrument-Agency(e2,e1)	1	7	The accused killed the victim with a kirpan and separated the head from the body and threw it in a canal near Nabha .
+Member-Collection(e2,e1)	13	16	There are enough gills there to serve the oxygen demands of an entire shiver of whale sharks .
+Entity-Destination(e1,e2)	17	21	The inhabitants send messages to each other by placing the message in a capsule and placing the capsule in a message tube .
+Component-Whole(e2,e1)	2	6	The finished doll was made with stockings for the face and a baby sock for the body .
+Message-Topic(e1,e2)	9	12	It is the document repository of extremely valuable archival documents illustrating the history of the Spanish Empire .
+Other	14	19	This `` all around immature nice guy '' is , above all , a choreographer , having devised the moves to the film adaptation of Hairspray .
+Other	1	9	The state has assembled a $ 230 million incentive package to lure the project , which could mean as many as 9000 jobs .
+Content-Container(e2,e1)	6	9	When you strike someone with a bottle full of carbonated beverage , apparently a vacuum is created and then quickly refills , which is somehow capable of breaking the glass .
+Content-Container(e1,e2)	1	6	Welding wire is coiled in a pail and used as an electrode in an automatic or semiautomatic welding operation .
+Cause-Effect(e1,e2)	2	5	The stong earthquake caused a blackout on the sound stage and short-circuited some of the neon-tubed violins .
+Message-Topic(e2,e1)	1	7	Various configurations have been illustrated in the drawings .
+Member-Collection(e1,e2)	3	9	Avci was the head of the chief of the police in Diyarbakir between 1984 and 1992 .
+Component-Whole(e2,e1)	1	14	The series comprises some re-issues of the previous books , as well as new titles .
+Product-Producer(e2,e1)	2	7	The agitating students also put up a barricade on the Dhaka-Mymensingh highway disrupting vehicular movement for about two hours from 10:30am to 12:30pm .
+Other	1	4	The solution comprises the creation of a decentralized Internet host name resolution system with flat hierarchy on the basis of Metrized Small World data structure .
+Cause-Effect(e2,e1)	22	25	Tension Release by Mega Food contains Sensoril , a clinically studied extract of a Ashwagandha that helps to inhibit fatigue and physical tension from everyday stress .
+Other	20	22	With an innate desire to know and to do , mankind has progressed past placing a dead fish in every hill of corn , beans and squash .
+Entity-Destination(e1,e2)	10	12	Mayans charted Venus 's motion across the sky , poured chocolate into jars and interred them with the dead .
+Entity-Origin(e1,e2)	1	6	The elephant descended from an aquatic animal .
+Other	2	5	A special meeting of the shareholders of Lydia Diamond was held on December 23rd , 2009 and the Sale was approved by the shareholders .
+Entity-Destination(e1,e2)	3	7	He inserted a needle into the tattoo machine .
+Other	13	19	The aim of this study , therefore , was to examine the embryo quality obtained from vitrified , warmed oocytes in a standard infertility population .
+Entity-Destination(e1,e2)	1	7	The letter was sent from group to group of the dispersed believers to try and build them up `` to encourage them '' to fill them with hope .
+Cause-Effect(e1,e2)	0	9	Cardiovascular disease is one of the leading causes of morbidity and mortality in the UK , as well as in the developed and the developing world .
+Other	11	16	The level surface closest to the MSS , known as the geoid , departs from an ellipsoid by about 100 m in each direction .
+Entity-Destination(e1,e2)	8	14	After soaking them overnight , we slipped the beans into a fairly wide-necked wine flask that 's been peeled of its straw wrapper .
+Cause-Effect(e2,e1)	0	4	Dizziness from nasal and sinus pressure usually can be seen on a good nasal examination and a CT of the sinuses .
+Instrument-Agency(e2,e1)	4	8	Students actually benefit from study through an STS approach .
+Other	6	12	In the 2006 campaign , the governor won the Hispanic vote with appearances such as one at Casa de Maryland .
+Content-Container(e1,e2)	1	6	The bomb was hidden in a handcart near the Mar Toma Church , also known as Church of St. Thomas , in the city of Mosul .
+Member-Collection(e2,e1)	16	20	She does , however , remember walking through campus when a chipper salesman gave her a fistful of bright orange coupons offering her and her friends complimentary slices of pizza .
+Entity-Destination(e1,e2)	5	8	I have imported an audio book into the software .
+Entity-Destination(e1,e2)	1	6	The soldiers moved into the deep jungle .
+Other	1	4	The chair of the corporation , at the time of election , shall be either a former President , the retiring President , or a member ( not emeritus ) of the Corporation .
+Other	1	6	The hole was found in a piece of the package that was ripped off near its edge .
+Content-Container(e1,e2)	1	6	The mummy originally was inside a wooden coffin , which had deteriorated .
+Cause-Effect(e1,e2)	1	4	This meeting establishes the laws which govern the church and the priorities for the coming year .
+Content-Container(e1,e2)	1	7	The game was sealed in the original packing , unopened and untouched .
+Component-Whole(e1,e2)	2	6	The oculomotor nerve rests in a cistern within the sinus roof .
+Entity-Destination(e1,e2)	7	11	A baby girl was murdered and her body stuffed in a sack and dumped in a water body in the capital 's Pallabi area .
+Entity-Destination(e1,e2)	2	7	The new model is moving into new territory with revisions .
+Other	9	15	He also pointed out that on the Sabbath the priests broke the commandment with priestly work .
+Entity-Origin(e1,e2)	1	5	The sagas developed from the oral culture of the Viking Age .
+Component-Whole(e1,e2)	4	7	Hogarth also decorated the walls of the hospital with works of art donated by contemporary British artists .
+Content-Container(e1,e2)	4	8	They are storing the solution in a non-food refrigerator to avoid degradation and transfer what is immediately needed to a spray bottle for manual cleaning .
+Entity-Destination(e1,e2)	8	11	In a desperate attempt , the company poured money into the project .
+Instrument-Agency(e2,e1)	9	13	My grandparents rest beneath a stone that shows a farmer plowing with a mule , an emblem of the way they began their lives together back in the 1930s .
+Component-Whole(e2,e1)	4	5	The temperature at which flower buds are injured depends .
+Content-Container(e1,e2)	1	5	Her clothes were in a box with no lid sitting on the next higher step .
+Component-Whole(e2,e1)	1	6	The venter encloses a venter canal cell and an egg cell .
+Message-Topic(e2,e1)	0	7	Feedback , as defined earlier in this chapter , is information that can be used to modify or maintain previous behaviours .
+Entity-Origin(e1,e2)	1	6	The train arrives from a distant point and bears down on the viewer , finally crossing the lower edge of the screen .
+Content-Container(e1,e2)	6	28	In a shocking incident , the body of a 10-year-old school boy , a resident of Jaylal Munshi Ka Rasta in Nahargarh area , was found in a sack with his mouth glued with feviquick on the railway tracks near Chanani Railway Station in Niwai area of Tonk district on Thursday evening .
+Member-Collection(e2,e1)	16	18	He likewise directed Edric to fling out his nets , who was rewarded with a miraculous draught of salmons .
+Message-Topic(e1,e2)	4	13	Five has launched a website , Holy Soap , dedicated to popular television soap operas across all channels .
+Component-Whole(e2,e1)	3	7	The Aroon indicator system consists of two lines , 'Aroon ( up ) ' and 'Aroon ( down ) ' .
+Product-Producer(e2,e1)	5	8	The fire started when the owner lit a fire behind the house .
+Product-Producer(e2,e1)	2	7	A street writer who specialises in love letters becomes involved with one of the addressees .
+Entity-Origin(e1,e2)	1	10	The name of the aquarium was derived from a public vote amongst Japanese people .
+Entity-Destination(e1,e2)	4	8	She has fetched the poodle into the same acre of ground as pup .
+Cause-Effect(e2,e1)	2	4	Phobia like fear from crowd , fear from insects , fear from height etc all contribute in developing the anxiety disorder .
+Entity-Origin(e1,e2)	1	6	The avalanches originated in an extensive mass of rock that had previously been hydrothermally altered in large part to clay .
+Message-Topic(e1,e2)	1	4	The exhibition describes the fight against the forces of nature that has been central to the history of Vasa ever since it sunk in 1628 .
+Entity-Destination(e1,e2)	3	8	We placed some wax into the old tin can .
+Component-Whole(e1,e2)	5	8	I looked straight under the nose of the plane and sure enough , I was directly over the tiny airstrip .
+Component-Whole(e1,e2)	1	5	The executive board of this company reported on its activities and answered questions from the audience .
+Entity-Origin(e1,e2)	15	18	They have also taken a very personal story about one family and a box of toys from the future and turned it into an epic story in which childlike innocence saves the human race .
+Component-Whole(e2,e1)	3	8	He unwinded the pocketwatch by letting down the mainspring , a ribbon of tightly rolled steel inside the mainspring barrel .
+Message-Topic(e1,e2)	3	9	OVATION is the television network devoted exclusively to the arts , featuring programming on visual arts , theater , opera , music and dance .
+Message-Topic(e1,e2)	10	12	A penal code is a portion of a state 's laws defining crimes and specifying the punishment .
+Entity-Origin(e2,e1)	14	15	A normal beer is 8 zlots ( 2 euros ) and a beer with raspberry syrup is 9 zlots .
+Other	10	13	In a cloudless , new moon sky , a billion stars lit the heavens .
+Cause-Effect(e2,e1)	16	22	The hidden preamble or timing signal is employed to mark the time of commencement of the transmission of information pulses from a transmitter .
+Member-Collection(e2,e1)	2	5	In a peep of bantam chickens , proliferative skin lesions were observed on the shanks of 6 of 29 birds , with digit necrosis observed in some birds .
+Message-Topic(e2,e1)	1	13	The cover of the inner artwork of the record was analysed in an article published in 2008 .
+Cause-Effect(e1,e2)	2	9	Doe 's confrontation with the flight attendant caused a commotion on the plane , prolonged the flight 's delay , and added to the aggravation already being felt by the passengers and crew .
+Product-Producer(e2,e1)	1	4	The workers build the honeycomb in which the eggs are laid and the honey and pollen is stored .
+Content-Container(e1,e2)	3	10	The blue plastic cutting board behind it was in a box lot I bought at an auction .
+Member-Collection(e1,e2)	27	30	Instead of `` dominance '' and `` submission '' , he uses the terms `` assertiveness '' and `` passiveness '' to reflect the role of the wolf in the pack .
+Other	5	13	The chronic myelogenous leukemia-specific P210 protein is the product of the bcr/abl hybrid gene .
+Other	4	10	The purpose of the audit was to report on the financial statements .
+Content-Container(e2,e1)	1	6	The stomach was full of fine gravel and small seeds .
+Member-Collection(e2,e1)	7	9	I bore my chalice safely through a throng of foes .
+Content-Container(e1,e2)	13	21	The body is already removed for an autopsy and placed in a lead coffin , which is put inside a wooden case .
+Cause-Effect(e2,e1)	16	23	The increase of the signal might correspond to formation of the high-density excitons , while the reduction of the signal originates from the relaxation .
+Cause-Effect(e2,e1)	8	12	We estimate a wind speed associated with the devastation caused by the tornado .
+Component-Whole(e2,e1)	1	11	The robot reached the goal using a smaller number of internal states than with the conventional methods .
+Cause-Effect(e2,e1)	2	6	The basic indicator of the health condition of trees , stands and forests is tree defoliation .
+Cause-Effect(e2,e1)	1	5	The deficits are caused by people saving too much of their money .
+Instrument-Agency(e2,e1)	1	11	A teacher writes a whole number less than 50000 on the blackboard .
+Component-Whole(e2,e1)	5	8	It was a whole flying wedge of white swans flying over Wall Street marking the market in their own charming way .
+Other	3	6	Unfortunately , my friend falls in love easily and breaks her heart all the time .
+Cause-Effect(e1,e2)	2	7	Heat , wind and smoke cause flight delays .
+Cause-Effect(e2,e1)	7	12	In developing countries four-fifths of all the illnesses are caused by water-borne diseases , with diarrhoea being the leading cause of childhood death .
+Product-Producer(e1,e2)	17	22	This has made it much richer , rather like fried bread and altogether different from the crisp rectangles produced by the modern cook .
+Entity-Destination(e1,e2)	0	5	Billions flow into unit trust-linked products .
+Product-Producer(e2,e1)	1	4	The corporation has constructed railways in Ukraine , Guinea , Iran , Iraq , and Syria .
+Message-Topic(e2,e1)	2	18	The faded glamour of American roadside diners , cinemas and motels is the subject of a new photography exhibition at the Fox Talbot Museum .
+Other	3	7	After completing the resetting through the reset signal , the bit period transmitted by the master module 30 is received .
+Cause-Effect(e2,e1)	1	5	The destruction caused by the bombing of Attorney General Palmer 's home .
+Component-Whole(e2,e1)	1	5	The kit includes an on-off-on toggle switch for the clipper switching and modifications .
+Entity-Origin(e1,e2)	0	4	Blood arrives from the animal via suitable tubing and enters the pump .
+Component-Whole(e2,e1)	5	12	In biological anatomy , the mesencephalon ( or midbrain ) comprises the tectum ( or corpora quadrigemini ) , tegmentum , the ventricular mesocoelia ( or `` iter '' ) , and the cerebral peduncles , as well as several nuclei and fasciculi .
+Entity-Destination(e1,e2)	5	8	The company rescheduled the new construction to early next year .
+Content-Container(e1,e2)	2	7	A sailing ship is scratched in a jug marked `` G. Goodale , Hartford . ''
+Entity-Destination(e1,e2)	1	6	Past consciousness is travelling into the future .
+Component-Whole(e2,e1)	7	15	About two months later , the baby alligator breaks open the egg with a sharp pick on the end of the nose called an `` egg tooth '' .
+Component-Whole(e1,e2)	11	15	Because some of these terms are used in the case study chapters later in the book , they are defined here now .
+Content-Container(e1,e2)	1	5	The plane was in a crate and the put on a Flatbed truck and taken to the SAR Hangar .
+Entity-Destination(e1,e2)	10	14	He held the vessel with his right hand and poured water into his left hand , and washed his hands up to the wrist .
+Entity-Origin(e1,e2)	3	15	Most of the vapor that is in the air evaporated from the surface of the oceans .
+Cause-Effect(e2,e1)	6	10	The second biggest factor affecting the sound produced by a drum is the tension at which the drum head is held against the shell of the drum .
+Entity-Origin(e1,e2)	20	24	One of my woodworkers got imprisoned as a result of a bloody noble putting up an export ban after the caravan had left the depo .
+Content-Container(e1,e2)	1	5	The tea was in a glass with pink flowers on the rim , served on a small porcelain plate with a European pastoral scene of a man in knee britches holding hands with a woman in a long dress .
+Product-Producer(e2,e1)	10	16	The second memorable shift was in September , when the plant made the 75-millionth ton of steel .
+Component-Whole(e2,e1)	1	8	The box regulated the temperature using an odoff controller and T2 as temperature reference .
+Cause-Effect(e2,e1)	2	6	The largest landslide triggered by the earthquake is located approximately 32 kilometers southeast of Muzafarrabad in a tributary valley of the Jhelum River .
+Member-Collection(e2,e1)	10	14	But , Lord King , he has with him a meinie of full forty knights .
+Component-Whole(e2,e1)	2	27	This extensor mechanism is composed chiefly of the quadriceps femoris ( rectus femoris , vastus lateralis , vastus intermedius , vastus medialis ) , quadriceps tendon , patella , and patellar tendon .
+Content-Container(e2,e1)	3	5	I carried a bag with condoms in it , and I gave them out .
+Cause-Effect(e1,e2)	1	4	The debris caused a crash on the Schuylkill , and it has been closed for hours because of the mishap .
+Cause-Effect(e2,e1)	1	5	A fire triggered by the blasts damaged eight buildings at the plant , including one that was burned down .
+Message-Topic(e2,e1)	1	4	These standards are under discussion and not yet published .
+Component-Whole(e2,e1)	4	9	However , the Barbary macaque grows a big thick coat for the winter , which means they can live outside all year .
+Member-Collection(e1,e2)	27	30	Anderson is regarded as one of the most able and articulate members of Congress , but he has a voting record that is anathema to most other congressmen in his party .
+Entity-Destination(e1,e2)	5	8	The melt water has transported sediments into the lake .
+Component-Whole(e2,e1)	1	4	The review published political commentary and opinion , but even more than that .
+Message-Topic(e1,e2)	7	11	NUS today responded to the Government 's announcement of the long-awaited review of university funding .
+Content-Container(e1,e2)	1	7	The handbag was locked in a glass display case .
+Other	2	7	In his poem , written by the riverside near the battle-ground , Mr. Emerson alluded to `` Yon stem headstone '' .
+Entity-Destination(e1,e2)	1	6	The intestines have migrated into the abdomen from the umbilical cord .
+Cause-Effect(e1,e2)	1	5	Mechanical faults caused delays and cancellations on Wellington 's suburban train services this morning .
+Product-Producer(e2,e1)	5	16	Caryn James , a film critic for The New York Times , has just completed a novel .
+Message-Topic(e2,e1)	1	11	The incidents of his travels were related in a succession of books .
+Entity-Origin(e1,e2)	1	8	The focus is going away from the display button .
+Other	0	6	Asparagus is a natural cure for cancer .
+Member-Collection(e2,e1)	9	11	Villagers in the Netherlands are glad to have a mustering of stork visit them .
+Entity-Origin(e1,e2)	3	8	A case of craniopharyngioma originating in the sphenoid bone is presented .
+Message-Topic(e1,e2)	3	8	Early in the book , a seashore tide pool is used as an exquisite metaphor for discovery .
+Entity-Destination(e1,e2)	2	7	The remaining power is exported to the grid .
+Cause-Effect(e2,e1)	10	24	Relieve spinal stenosis by enlarging the spinal canal to relieve pressure on the spinal cord that has been caused by a herniated or bulging disc .
+Entity-Destination(e1,e2)	1	5	The sinus rinse went into ear canal .
+Product-Producer(e2,e1)	17	22	In 1882 Louis developed a method of making photographic plates , and by 1894 the brothers ' factory was producing 15 million plates a year .
+Entity-Destination(e1,e2)	0	9	Cold air at the surface moved southward into the mountains of Colorado .
+Member-Collection(e2,e1)	15	17	The translucent blue plastic belied the heady resonance of the instrument , and like a mission of monkeys , several coworkers were lured into the room by the dulcet tones of my accordion .
+Member-Collection(e2,e1)	16	19	Her shallow waters seethe at times , standing tall and swaying back and forth like a quiver of king cobras .
+Component-Whole(e1,e2)	2	6	The curved roach on a square sail was dependent on the angle or height of the stay immediately below it .
+Component-Whole(e2,e1)	5	8	Coquina is a poorly consolidated limestone composed of pieces of coral or shells .
+Entity-Origin(e2,e1)	2	11	The dark heartwood is the source of the brilliant red dye hematoxylin .
+Other	1	9	The beer acts as a great hair of the dog .
+Other	1	7	The company has run into a financial problem over the last few years .
+Component-Whole(e1,e2)	2	5	The curved spans of the bridge are the original sections .
+Other	1	8	A girl plays her violin on a pogo stick .
+Instrument-Agency(e2,e1)	1	5	A surgeon carefully applies the splints to the forearm .
+Content-Container(e1,e2)	1	5	The body was inside a duffel bag that was secured with duct tape .
+Other	7	9	Mado manages to escape and kidnaps the scientist 's niece .
+Product-Producer(e1,e2)	9	10	A friend had given her purple scraps from a clothing factory in a nearby town .
+Entity-Origin(e2,e1)	0	2	Peanut butter cookies are simply cookies that use peanut butter as one of the ingredients .
+Entity-Destination(e1,e2)	15	18	Fall planting can not be completed before the ground freezes , so I stored the seeds in a stratification unit until spring .
+Entity-Origin(e2,e1)	5	6	Two years ago I made cranberry sauce to die for .
+Member-Collection(e2,e1)	9	11	One of the Grand Canyon tour guides has a barren of mules for the tourists to ride down into the Canyon .
+Cause-Effect(e2,e1)	10	17	Passengers have rights in the event of a delay or cancellation that has been caused by the airline .
+Instrument-Agency(e2,e1)	1	6	The supreme court has applied the protections of this amendment to the states through the Due Process Clause of the Fourteenth Amendment .
+Content-Container(e1,e2)	3	9	The pontiff 's body was contained in a plain cypress coffin .
+Message-Topic(e1,e2)	1	6	Brief guides have been prepared on maps , school histories , electoral rolls , land tenure , government buildings , railways and hotel licensing .
+Entity-Origin(e1,e2)	13	19	A without notice injunction was obtained at very short notice under which the tenant was excluded from his own home and the block of flats in which he lived .
+Other	16	24	The screenplay by Patterson McNutt and Arthur J. Beckhard focuses on the adoption of a young orphan ( Shirley Temple ) by a wealthy bachelor ( John Boles ) .
+Message-Topic(e1,e2)	1	5	The essay inquires into the origins , nature , and usage of the term in multiple contexts .
+Cause-Effect(e2,e1)	4	7	However Susanoo was in sorrow after the loss of his mother and he was raging in his kingdom .
+Cause-Effect(e2,e1)	2	6	But the earthquake triggered by the eruption of Thera struck first .
+Other	5	9	Our objective is to review advances in the molecular biology and pharmacogenomics of lung cancer and how they apply to personalizing medicine .
+Message-Topic(e1,e2)	1	9	This paper is a review of frequency stability measurement techniques and of noise properties of frequency sources .
+Cause-Effect(e1,e2)	0	10	Diabetes mellitus is one of the leading causes of irreversible blindness worldwide , and , in the United States .
+Other	1	5	The crew assisted with the investigation and was in service for around an hour .
+Other	1	7	This data has been concerning primarily assembly operations .
+Product-Producer(e1,e2)	2	7	The third bid was from a window company that does its own installation .
+Other	3	5	Interior chief adds hurdles for drilling on public lands .
+Product-Producer(e1,e2)	17	21	When the Amendment was transcribed , the semicolon in the religious exemption portion was changed to a comma by the Senate scribe .
+Entity-Destination(e1,e2)	2	6	The fibre pellets were blown into cavities using special equipment .
+Instrument-Agency(e2,e1)	1	4	The winemaker carefully chose grapes from different lots in the vineyards and blended them into this wonderful Pinot .
+Component-Whole(e1,e2)	1	4	The pin of the connector is inserted through the hole and connected to the microstrip circuit .
+Other	9	12	It is the most efficient and compact form of insulation in a carafe , and it 's unbreakable .
+Product-Producer(e1,e2)	3	6	Early in the book , the authors review why the groundswell is taking off and how to participate , and they identify the `` tools '' - blogs , wikis and so on - that drive the groundswell .
+Cause-Effect(e2,e1)	10	17	Getting help has reduced the time to reverse all the irritation that had been caused by the fungus .
+Entity-Origin(e1,e2)	3	9	The pure lotus flower blooms out of the muddy pond .
+Member-Collection(e2,e1)	40	43	The 13th Gate offers 13 themed experiences to make every nightmare seem real from crawling through a crematory oven and an old hearse to being lost in dark underground tunnels or finding yourself standing on a rickety bridge over a bed of live snakes .
+Content-Container(e2,e1)	8	11	He was generous enough to bring in a hamper of festive goodies for one of you lot to win .
+Entity-Origin(e1,e2)	3	15	Much of the impetus behind the formation of the fund came from a wounded Vietnam veteran .
+Cause-Effect(e2,e1)	8	11	On the other hand , the higher the satisfaction from the purchase , the greater the benefit of word-of-mouth referrals and repeat purchasing .
+Other	11	13	Although big city marathons offer great crowd support and a large camaraderie of runners , running in a big city marathon is not for everyone .
+Other	8	11	In 48 % of the divorces , the kinship systems of grandparents expanded with divorce through one or more of the following four processes .
+Instrument-Agency(e2,e1)	1	10	The restaurant first cleaned the floor with a company-approved cleaning agent before the COF test was conducted .
+Component-Whole(e2,e1)	1	7	The package includes an audio and video receiver that transmits information to the plasma display .
+Cause-Effect(e2,e1)	17	25	District Judge without a jury and judgment was entered for the defendants on the ground that the accident was caused by the plaintiff 's own negligence .
+Content-Container(e1,e2)	6	10	When it was ready , my coffee arrived in a mug instead of to go as I had ordered it .
+Other	6	8	The world is experiencing an unprecedented glut of savings , driving down real interest rates .
+Instrument-Agency(e1,e2)	4	10	In this manner , nuts from the Amazon powered a plane .
+Other	1	5	The case centers on a tree at a high school that was a meeting place for white students .
+Member-Collection(e2,e1)	13	17	The influence of hole shape on extraordinary optical transmission was investigated using hole arrays consisting of rectangular holes with different aspect ratios .
+Product-Producer(e1,e2)	6	11	For many years , a recurring comment by the senior dental students at Louisiana State University School of Dentistry ( LSUSD ) during exit interviews is their lack of confidence regarding the business aspects of running a dental practice .
+Entity-Destination(e1,e2)	0	5	Flowers are carried into the chapel .
+Message-Topic(e1,e2)	1	3	The documents define policies , procedures , training , and auditing .
+Other	3	6	Still filled with rage after the fight with the Darkside , I rush at Ansem , light and dark energy overflowing from me .
+Cause-Effect(e2,e1)	9	20	The children descend the ladder after hearing the fire alarm which has been triggered by the wood work workshop catching fire .
+Instrument-Agency(e2,e1)	1	7	The guys catch the shad with gill nets .
+Component-Whole(e1,e2)	22	25	As we watched the videotape , we noticed that for some unknown reason men were tending to wander over toward the glassware section of the store .
+Component-Whole(e1,e2)	11	14	The site has free galleries of pics of guys showing the waistband of their underwear above their jeans .
+Message-Topic(e1,e2)	1	6	The plot centers around a young girl who must decide between helping her community that is being falsely accused of witchcraft or staying silent to protect her family .
+Component-Whole(e2,e1)	1	2	A catamaran tiller having a grip is provided to permit tension to be applied to the tiller more easily .
+Entity-Destination(e1,e2)	4	7	This oil company imports oil to some countries illegally .
+Other	3	13	Sometimes the best blogging is going on well away from the most visible places .
+Instrument-Agency(e2,e1)	3	9	Some of the nurses drank the alcohol out of jars containing diseased human viscera .
+Entity-Origin(e1,e2)	2	6	Two broad topics emerging from the literature on fiscal forecasting are reviewed .
+Instrument-Agency(e2,e1)	9	15	The NRC , RSO , and the First Bank representative accessed the vault with the key .
+Component-Whole(e1,e2)	2	10	The drill platform was a part of the Romulan mining ship Narada that could be lowered into the atmosphere of a planet or planetoid for mining operations .
+Product-Producer(e1,e2)	11	12	Eighty years on from the first pipes being laid for the car plant , unemployment is at 2 million and rising .
+Component-Whole(e1,e2)	11	14	However , Greg saw people inside and went to the front entrance of the palace and was able to use enough Russian to communicate with the guide and get permission to buy our tickets without waiting to come inside for a tour .
+Entity-Origin(e1,e2)	1	5	The clarinet developed from the recorder family , and is closely related to the saxophone .
+Product-Producer(e2,e1)	1	7	The author 's reasons for creating a work differ remarkably from his incentive to publicly distribute the work .
+Component-Whole(e1,e2)	1	4	The paddle of the microaccelerometer is designed symmetric with respect to the direction of the beam .
+Product-Producer(e2,e1)	2	6	Next the soldiers put up a wall of stakes on the pile of dirt .
+Instrument-Agency(e2,e1)	1	6	The hookah filters the smoke through water , making the end result much less harsh and allowing the flavor of the smoke to really come through .
+Message-Topic(e1,e2)	6	14	Then there 's Labour - where negotiations are under way on issues such as apprentice training .
+Member-Collection(e2,e1)	3	5	There 's a trembling of finches on my lawn .
+Cause-Effect(e1,e2)	1	5	The incident caused a brief sensation on the Web among people suspicious that it was a political commentary .
+Component-Whole(e2,e1)	15	16	This is a guide teaches you how to make a video tutorial by recording the computer screen without camera in minutes .
+Other	1	7	The navy searched the vessel with the crew on board .
+Component-Whole(e1,e2)	0	5	Poems are published on this site purely for educational reasons , for the purpose of information and with good intentions .
+Instrument-Agency(e2,e1)	1	12	A hairdresser fine-tunes your hair color without causing excessive damage by using toners .
+Instrument-Agency(e2,e1)	0	23	Students locate these cities on the large map ( B2 ) with assistance from the teacher ( B14 ) marking them with colored pushpins .
+Content-Container(e1,e2)	16	20	We 've even included a beautiful Royal Scot Crystal Hogget decanter to round off this bountiful banquet in a hamper basket .
+Member-Collection(e2,e1)	12	14	In addition to Weinstein , the band is comprised of a formidable array of luminaries .
+Content-Container(e1,e2)	1	5	The sugar was in a cabinet above the sink .
+Other	7	16	He sealed the cut after making a cut of the stem with a clean , sharp blade .
+Product-Producer(e1,e2)	1	2	The sugar factory in Ipswich was built in 1925 .
+Other	12	16	The workers locked themselves in the upstairs office and left the shocked managers downstairs in the shop .
+Instrument-Agency(e2,e1)	1	9	The recipient receives the call through a miniature radio receiver carried on his person , the receiver having a built-in ferritic antenna .
+Content-Container(e2,e1)	7	10	He carried with him an old wicker basket containing stale biscuits , some cured ham , and a bottle full of goat 's milk .
+Entity-Destination(e1,e2)	2	9	Paternally derived genetic material is inherited to the next generation .
+Component-Whole(e1,e2)	1	5	The power cord of the dryer connects to a terminal block at the rear of the dryer .
+Cause-Effect(e1,e2)	13	16	And this is frequently cited as `` proof '' that saturated fats and cholesterol cause heart disease .
+Member-Collection(e2,e1)	2	4	As a fraternity of adults we have a right to question the GM , and should expect a reasonable response .
+Member-Collection(e2,e1)	4	6	It was an immense flight of gulls , seamews , and cormorants ; a vast multitude of affrighted sea birds .
+Message-Topic(e1,e2)	4	7	The exhibition comprises original drawings featuring famous landmarks between Plymouth and London .
+Other	8	13	The Water Information Program is a public information program sponsored by the water districts , organizations and agencies in the San Juan and Dolores watersheds of Southwestern Colorado .
+Member-Collection(e2,e1)	12	15	While the job was good , Ahmed 's daily exposure to the troupe of circus performers and artists continued to pique his interest .
+Other	8	15	Scientists recently succeeded in wiping out a nasty memory from the mind of a genetically-engineered mouse .
+Instrument-Agency(e1,e2)	0	4	Cigarettes are used by women in order to relax , to avoid gaining weight , and to appear attractive , mature and feminine .
+Cause-Effect(e1,e2)	10	21	Many commercial soap , shower gel or cleanser products contain preservatives , colorants and chemicals that cause dryness , rashes , itchiness and roughness on the skin .
+Instrument-Agency(e1,e2)	1	5	Bitewing x-rays are used by dentists in order to determine if any cavities exist within the mouth .
+Entity-Destination(e1,e2)	1	10	English cricket has now been dragged into the whole revolting business .
+Entity-Destination(e1,e2)	1	5	The space monkey travels into space .
+Member-Collection(e2,e1)	10	12	Any country gentleman who liked the sport kept a small pack of hounds , and rode over his own lands or the lands of such of his neighbours as had no similar establishments of their own .
+Entity-Destination(e1,e2)	3	9	The plain HTTP request was sent to an HTTPS port .
+Product-Producer(e2,e1)	1	16	The girl , in her first holiday season as an Elm Creek Quilter , creates a quilt for her best friend even as she begins to question her feelings for him .
+Entity-Destination(e1,e2)	2	8	The small box was placed inside the large box and the 4-inch of surrounding space filled with either shredded fabric , fiberglass insulation or no insulation .
+Cause-Effect(e1,e2)	10	19	Birchwood and Stockton Heath were called to the scene after pyrotechnics used during one of the performances caused a fire on the main stage .
+Cause-Effect(e1,e2)	12	15	Like a catch-22 the worst part is that acne causes stress and stress triggers acne breakouts .
+Cause-Effect(e2,e1)	7	14	The US patent system is in a crisis that has been caused by the flood of patent applications being filed at the USPTO every year .
+Product-Producer(e2,e1)	8	10	And in every single trial , the sponsoring manufacturer 's drug came out as better than , or equal to , the others in the trial .
+Instrument-Agency(e1,e2)	4	9	The size of the scissors used by a beginning stylist for learning to cut the hair is actually determined more by the size of his or her hands .
+Content-Container(e1,e2)	4	8	My little brother 's tooth was in a cup of water the other day and I nearly fainted when I saw it .
+Component-Whole(e1,e2)	20	23	Located by the river at Circular Road , Cong , between actual locations used for the filming , the ground floor of the cottage has been designed as an exact replica of 'White-o-Mornin ' Cottage .
+Member-Collection(e2,e1)	22	24	Day after day , then , he has put himself into a hornets ' nest , or what the Scottish call a bike of bees .
+Entity-Destination(e1,e2)	2	8	As his hand was put inside the glass box , he had to guess what creepy animal was inside .
+Other	5	12	While many farmers did their plowing the land with a single furrow plow , some large-scale farmers began to use a multiple share or bukker plow .
+Other	11	13	Letters were be submitted by 5 p.m. on the Wednesday before publication by mail .
+Content-Container(e1,e2)	1	5	My passport was in a trunk under my bed .
+Cause-Effect(e2,e1)	6	15	Viral gastroenteritis is a highly contagious infection of the intestines caused by one of several viruses .
+Entity-Destination(e1,e2)	7	14	Recently , a huge amount of commercial fish and shellfish have migrated to cooler water .
+Entity-Destination(e1,e2)	5	8	The murder has dragged the victim into the water .
+Component-Whole(e1,e2)	16	19	The first bank in Loudoun County , the short-lived Loudoun Company , held meetings in the cellar of this dwelling beginning around 1815 , hence the name Bank House .
+Other	2	7	The outer segment is comprised of a membrane which is folded into several layers of disks .
+Member-Collection(e2,e1)	15	17	In this section , we are going to follow SRR Sandy as she raises a litter of pups .
+Product-Producer(e1,e2)	1	7	The shed got put up by these people who arrived and made it .
+Message-Topic(e1,e2)	1	4	The session discussed about inter-loans of performance sets .
+Cause-Effect(e1,e2)	2	9	Diet fizzy drinks and meat cause heart disease and diabetes .
+Cause-Effect(e2,e1)	5	8	We explore the experience of grief after the loss of a parent and offers support ; we also make simple suggestions , and we provide a place for sharing memories .
+Entity-Destination(e1,e2)	3	8	Too often , students were misplaced into alternative schools .
+Member-Collection(e2,e1)	1	3	A deceit of lapwings , with their beautiful crests , made a pretty dish to set before the king .
+Cause-Effect(e2,e1)	2	8	The war mentality was generated by the Iraq war in combination with the constant drum beat of fear at home .
+Instrument-Agency(e2,e1)	1	11	The authors assessed the reliability of the basic diagnostic methods in series of 181 patients with bladder tumoursas compared with operative findings .
+Message-Topic(e1,e2)	1	5	The painting represents the last meal shared by Jesus with his disciples before his capture and death .
+Component-Whole(e1,e2)	1	4	Two pillars of a bridge at Karsaz Road have collapsed today morning .
+Entity-Origin(e2,e1)	2	3	All other blood products are derived from whole blood .
+Cause-Effect(e1,e2)	0	10	Preeclampsia is still one of the leading causes of maternal mortality .
+Other	17	23	Since no computers were then available to him , he hand-simulated the Boxes algorithm , using a device made from an assembly of matchboxes .
+Other	5	9	Compared to running barefoot , running in conventional running shoes increases stress on the knee joints up to 38 % .
+Content-Container(e1,e2)	1	10	The packet of corn tortillas , which was inside a box , said `` contains wheat '' .
+Product-Producer(e1,e2)	15	21	Detectives are sifting through hundreds of mobile telephone records in an effort to trace a call made by the Graff jewellery robbers as they stood outside the store two days before the successful heist .
+Product-Producer(e1,e2)	6	7	Two years ago , being a sugar company in india was a sweet proposition .
+Cause-Effect(e1,e2)	1	6	The demolition was the cause of terror and communal divide is just a way of not letting truth prevail .
+Entity-Destination(e1,e2)	1	5	Two prices arrived to the hotel .
+Entity-Origin(e1,e2)	3	12	A 300-pound Siberian tiger that killed a visitor escaped from its high-walled pen on its own .
+Content-Container(e1,e2)	1	6	A comb was hidden in an envelope at the bottom of a paper folder stuck to the wall .
+Component-Whole(e2,e1)	1	5	This machine has two heating units and two cooling units .
+Component-Whole(e1,e2)	8	11	The tailpiece anchors the strings to the lower bout of the violin by means of the tailgut .
+Entity-Destination(e1,e2)	6	11	Recently , in China , more people are moving into big cities .
+Entity-Origin(e2,e1)	3	4	An overdose of lime juice with salt also acts as an excellent purgative without any side effects , thereby giving relief in constipation .
+Cause-Effect(e1,e2)	1	8	The outbreak resulted in 256 deaths and 3,402 injuries .
+Component-Whole(e1,e2)	9	13	In my case the solution was to lock the padlock on the security pane itself .
+Product-Producer(e2,e1)	5	13	To develop a rampart , troops piled up the dirt into a small hill .
+Content-Container(e1,e2)	1	5	The fridge was inside a mahogany case .
+Other	4	9	The postcard took the reader into the author 's past .
+Message-Topic(e1,e2)	10	12	The White Paper Full Employment in Australia was the defining document of economic policy in Australia for the 30 years between 1945 and 1975 .
+Other	10	13	These emotionally wrenching experiences encouraged the volunteers to seek the comradeship of fellow veterans .
+Component-Whole(e1,e2)	20	23	Gwathmey famously prefers curves to angularity and , though these are absent from the facade , they recur in the lobby of the building , with rounded pylons and legato movements through space .
+Instrument-Agency(e2,e1)	1	11	The priest mixes the Holy Oil and the wine with a spoon and pours it into small containers , as many as there be priests .
+Entity-Destination(e1,e2)	3	7	The Senator donated money to a local charity .
+Content-Container(e1,e2)	1	5	This bag was in a bin with other santa bags ( out of package ) .
+Content-Container(e1,e2)	3	6	The freshness of ale in a carton is the limiting factor .
+Message-Topic(e1,e2)	1	6	The statute applied to the six dominions which existed in 1931 .
+Other	12	19	Clay County , a small but thriving colony grows in the seepage spring which is the source of the creek .
+Other	3	9	New portable electronic devices are running into temperature sensitivity issues .
+Message-Topic(e1,e2)	6	8	It is a cable television specialty channel showing sports and sport-related shows .
+Other	5	9	While melting butter on the stove is the preferred method , because it gives you more control over the process , you can also melt butter in a microwave .
+Cause-Effect(e2,e1)	7	9	Sip the tea slowly to reduce stomach pain from indigestion , bloating and feeling of fullness .
+Instrument-Agency(e2,e1)	1	8	The teacher covers the candle with a tall glass .
+Cause-Effect(e1,e2)	0	9	Alcohol , substance abuse and poverty all lead to child abuse .
+Cause-Effect(e1,e2)	2	5	The ATM malfunction caused a rush on the ATM machine until the police sealed off the area .
+Other	0	4	Physiotherapy was focused on admission avoidance , prevention of deterioration after admission and facilitating early discharge .
+Other	18	20	Moreover , the knightly ethic was based on a sense of honour and reflected the ideal of a comradeship of arms .
+Product-Producer(e1,e2)	9	13	The photomask is usually prepared with a photoplotter from data produced by a technician using CAM , or computer-aided manufacturing software .
+Member-Collection(e2,e1)	21	24	Actually on the strength of matrimonial alliances of the Bhargavas with ruling families of Kanyakubja and Ayoddhya , Parasurama organised a confederacy of various kingdoms including Vaisali , Videha , Kasi , Kanyakubja and Ayodhya which fought the Haihayas on various batterfields .
+Product-Producer(e2,e1)	8	11	He painstakingly taught the chords to the young troubadour 's anti-establishment broadsides .
+Entity-Destination(e1,e2)	1	7	Narcotic goods have been imported into several states in Australia .
+Member-Collection(e2,e1)	5	8	Another program to increase the population of French settlers was the selection of 770 women to make the journey to New France .
+Component-Whole(e2,e1)	1	6	This oven has a flat belt conveyor with three zones and complete controls .
+Instrument-Agency(e2,e1)	1	11	All psychiatrists are familiar with antipsychotic , anti-anxiety , and antidepressant medications , whose origins date to the 1950s .
+Other	1	7	Some sections have been denoted with an asterisk .
+Instrument-Agency(e2,e1)	8	13	The assigned cashier code serves to identify the cashier using the electronic cash register .
+Message-Topic(e1,e2)	1	4	The report emphasised the need for better co-ordination between the agencies .
+Other	1	9	The corpse of a murderer was dangling from the noose , twisting in the wind .
+Cause-Effect(e1,e2)	0	3	Sodium causes fluid retention , which can lead to edema ( swelling ) , increased blood pressure , and in those susceptible patients , congestive heart failure .
+Member-Collection(e2,e1)	3	6	In theory , boards of independent directors look after the interests of individual shareholders .
+Product-Producer(e2,e1)	7	11	For the last two years , the team has constructed two gardens out of recycled materials .
+Component-Whole(e1,e2)	1	4	The pouches of female wallabies , like those of other macropods , are front-opening .
+Product-Producer(e2,e1)	3	6	In 1858 a shoemaker invented a machine for sewing the soles of shoes to the uppers .
+Member-Collection(e2,e1)	1	3	A gam of whales migrates to breeding lagoons every season .
+Other	2	4	He takes words into action .
+Content-Container(e1,e2)	1	7	The sample was contained in a 5-mm glass tube surrounded by oscillator and receiver coils at right angles to one another .
+Entity-Origin(e1,e2)	23	27	I 'm about to delve into Buchholz 's pitch F/X and pitch data to try to find some sort of answer here using guidelines from Allen 's article plus Buchholz 's run values as shown here .
+Cause-Effect(e2,e1)	9	17	In businesses generally the third party claims for the damages that has been caused by the company vehicle .
+Entity-Destination(e1,e2)	3	9	The freeze-dried dura mater was placed into warm sterile saline for 20 minutes before grafting .
+Entity-Destination(e1,e2)	1	7	These text messages are sent to the outer space .
+Instrument-Agency(e2,e1)	1	4	Stanford researchers have coated paper with carbon nanotubes and silver nanowires to serve as electricity storage devices .
+Content-Container(e1,e2)	4	9	Unfortunately , Cleo the stuffed dog was in a trunk that was stolen back in 1975 .
+Other	1	7	The martyrs conquered the fears associated with persecution and always remained loyal to the Lord .
+Product-Producer(e2,e1)	6	9	Here is a picture of the artist taking a photograph of a young girl in front of a vegetable stand on Mulberry Street in New York City .
+Instrument-Agency(e2,e1)	1	11	The therapist treats the patient with a certain kind of manual therapy .
+Instrument-Agency(e1,e2)	1	4	The program assists separating families in high conflict over parenting arrangements .
+Component-Whole(e1,e2)	1	8	This document is part of the WHO information series on school health .
+Entity-Destination(e1,e2)	1	4	Two deers ran into cars .
+Component-Whole(e2,e1)	3	5	We got a ball with catnip inside .
+Other	7	10	Secretary Tim Geithner came along with a fistful of taxpayer dollars .
+Component-Whole(e2,e1)	6	13	This is due to a unique design that filters the dirt through the bag and not the blower fan .
+Cause-Effect(e1,e2)	1	5	The law established a major redistribution of territorial sovereignty within the Empire .
+Cause-Effect(e1,e2)	6	9	Infectious mononucleosis due to the Epstein-Barr virus causes exudative tonsillitis or pharyngitis in about one-half of cases .
+Entity-Destination(e1,e2)	3	7	Accidentally , the electricity flew into the water on the ground .
+Message-Topic(e1,e2)	13	17	The lead serves both as an introduction to the article and as a summary of the important aspects of the subject of the article .
+Message-Topic(e2,e1)	1	5	The device shown in the figure rotates .
+Member-Collection(e2,e1)	6	8	The symposium was attended by a constellation of artists and writers .
+Cause-Effect(e2,e1)	21	26	During the trial , the prosecution presented `` pictures of burning bodies and human remains as well as images of the explosion triggered by the Pentagon crash . ''
+Product-Producer(e1,e2)	23	24	These days , with a decent income landing in my bank account from writing , and the beginnings of some success as a fiction writer , I feel I have enough of the trappings to unashamedly admit to being a writer .
+Member-Collection(e2,e1)	2	19	The academic staff at the UvH comprises scholars in humanistics , religious and cultural scholars , social scientists , philosophers and historians .
+Cause-Effect(e2,e1)	1	10	Extensive damage at the mine has been caused by the strikers .
+Message-Topic(e1,e2)	3	6	The artist 's installation studies the relationships between man and nature .
+Component-Whole(e2,e1)	1	5	The sail had an important roach and had adjustable batten fittings on the leech and luff receptacles .
+Product-Producer(e2,e1)	15	22	Next was a stop at Christien Meindertsma 's gorgeous knitting exhibition where she and an assistant knit a giant really thick woolen rug using six-foot-long needles .
+Product-Producer(e1,e2)	10	11	`` Just like real baseball , '' he told the card manufacturer 's reps as he tried to flog the game at toy fairs .
+Entity-Origin(e1,e2)	1	16	The name of the climactic battle cue , `` Neodammerung '' is derived from the German word Gotterdammerung , literally `` twilight of the gods '' .
+Content-Container(e2,e1)	4	6	She gave him a bottle with wine in it .
+Product-Producer(e1,e2)	1	6	This document is issued from 28 locations across the country and 160 Indian missions abroad .
+Component-Whole(e2,e1)	2	11	This specific machine has been fitted with a Mirus automatic sheet feeder thereby increasing the capacity on large runs .
+Instrument-Agency(e1,e2)	2	6	The dominant method that the Roman mathematicians used to identify a year for dating purposes was to name it after the two consuls who took office in it .
+Entity-Destination(e1,e2)	2	5	He stuffed cash into his shirt as he fled the robbery .
+Component-Whole(e1,e2)	6	10	I especially love the way the scroll wheel of the mouse riffles through the tabs ; it 's so fast and easy .
+Other	3	7	This is the site deep inside the earth where fault movement begin .
+Entity-Destination(e1,e2)	4	7	This outlaw has exported terrorism to our society .
+Other	16	19	Thus , we have set-up , early on , a familiar literary dynamic -- - two compeers of different ages thrown together : Huck Finn and Nigger Jim , Holden Caufield and sister Phoebe , hell -- - maybe even Dmitri Karamazov and Alyosha ( or , if we stretch it far enough , Falstaff and Prince Hal ) .
+Product-Producer(e1,e2)	1	4	A food and beverage manufacturer found that lack of partnered planning with their service provider counterparts deeply divided the two sides .
+Instrument-Agency(e2,e1)	1	14	A person regains the movement roughly equal to walking on solid ground by using snowshoes .
+Product-Producer(e1,e2)	7	11	The Dyna-Cam engine originally came from a design by the Blazer brothers , who worked for Studebaker in 1916 .
+Cause-Effect(e2,e1)	5	7	I too , get a headache from wine , and was always told that it was the sulfites .
+Instrument-Agency(e2,e1)	1	5	Incandescent bulbs work by using electricity to heat a tungsten filament in the bulb until it glows .
+Other	13	18	The most significant is a well-preserved black and white mosaic for which the authority has given a provisional translation .
+Content-Container(e1,e2)	3	9	Inside , the poster was enclosed in tight plastic packaging .
+Message-Topic(e1,e2)	4	8	Some of these conspiracy theories allege that his birth certificate is a forgery .
+Message-Topic(e1,e2)	7	12	On the border issue , the original draft had declared some initial borders , which are to be confirmed and decided by the UN partition plan .
+Entity-Origin(e1,e2)	2	6	An oak tree grows from an acorn .
+Other	3	7	Clinicians entered the patients into randomised controlled trials .
+Instrument-Agency(e2,e1)	1	4	A girl plays her violin on a pogo stick .
+Product-Producer(e1,e2)	8	12	In 1594 and in 1608 he published an atlas created by the cartographer Matthias Quad .
+Other	1	6	The interrogation covers von Neurath 's activities during the years 1932 to 1938 and Hitler 's policy of aggression during the late 1930s .
+Member-Collection(e2,e1)	1	3	A drove of oxen was taken to market .
+Content-Container(e1,e2)	1	8	The mast was folded up accordion-style inside a canister that was attached to the side of the main antenna .
+Message-Topic(e1,e2)	3	7	Members use the website to inform about projects and events .
+Cause-Effect(e2,e1)	4	8	Describing all of the harm caused by the hurricane has filled entire books so this Web page summarizes the total damage and focuses on the damage incurred on Long Island , New York .
+Entity-Destination(e1,e2)	5	13	The colourless or nearly colourless liquor amnii then was put into an ounce phial .
+Entity-Origin(e1,e2)	1	7	The statement comes from the writer 's knowledge and its ideas are fresh and original .
+Component-Whole(e1,e2)	1	9	The flip-flop is a basic element of the sequential circuit and there are various structures even for the same type .
+Content-Container(e2,e1)	1	4	A suitcase full of marihuana was found by the pilot of a searching helicopter near the side of the road at a place where tire tracks could be observed pulling off the edge of the road .
+Content-Container(e1,e2)	1	5	The fluid was in a cup , and was intended for use as a lotion by her husband .
+Message-Topic(e1,e2)	4	11	The aim of this paper is to present some recent experimental results obtained in Rayleigh-Benard instability .
+Message-Topic(e1,e2)	3	11	It is a drama that is centered around a troubled teenage girl and a family that is trying to get over the loss of their son .
+Cause-Effect(e2,e1)	5	9	Information is included on the disease caused by the organism , its transmission , geographical distribution , and hosts .
+Entity-Origin(e1,e2)	1	5	The water evaporated from the kettle .
+Member-Collection(e2,e1)	12	15	And out of the Unspeakable River dividing Zambia and Zimbabwe splashes a crash of stampeding hippopotami .
+Instrument-Agency(e2,e1)	0	5	Builders use a paste like adhesive ( known in the building trade as mud ) to fix the plasterboard to the wall .
+Other	1	5	The star is landing into controversies because of thoughtless statements .
+Other	2	6	Our political prisoner is falling into oblivion .
+Cause-Effect(e1,e2)	0	8	Infection is one of the commonest causes of death in burn patients , particularly .
+Other	11	20	The Vikings had become assimilated into a peaceable society , and monasteries at Chertsey and Abingdon were founded by the river .
+Product-Producer(e1,e2)	9	10	The staff stood guard all night , drinking the coffee machine dry and plotting their revenge on the injustices of the workplace .
+Cause-Effect(e2,e1)	8	13	I was diagnosed with bipolar disorder following a breakdown triggered by the sudden death of my brother six years ago .
+Instrument-Agency(e2,e1)	4	13	More recently , starter manufacturers have attached the flange with a number of capscrews to the main housing thus allowing a finite number of position .
+Member-Collection(e2,e1)	8	10	Still , we were surprised yesterday by a wake of buzzards perched on a dead copse of trees and haunting Wellfleet Harbor .
+Entity-Origin(e1,e2)	1	6	The call came from a Minnesota father who said his daughter was in the chapel that day .
+Member-Collection(e2,e1)	13	15	The chavettes are the female of the species , usually have a ' passel of brats with different dads before they turn 20 which ensures the perpetuation of the disease .
+Other	4	10	For years now my daughter has put up with verbal harssement from a girl .
+Member-Collection(e2,e1)	17	20	Charles Beauregard is still working for Intelligence and hears about the Red Baron flying ace and his circus of vampire fighters .
+Other	3	6	The longest serving spacecraft goes into retirement .
+Content-Container(e1,e2)	4	14	We saw that a piece of the double stent was placed inside the urinary bladder of mice to study the extent of tissue reaction .
+Product-Producer(e2,e1)	5	9	Under Hideyoshi 's administration the factory 's output of firearms increased dramatically .
+Other	1	6	The baby is falling into a sleep .
+Entity-Destination(e1,e2)	1	7	Many builders have approached the colony 's building committee for redevelopment projects .
+Cause-Effect(e1,e2)	2	6	The reactor meltdown caused a chain reaction that destroyed all the towers in the network .
+Content-Container(e1,e2)	2	8	The only ginger I had was in a jar , so I put a heaping teaspoon in .
+Entity-Destination(e1,e2)	2	4	China sent seeds into space .
+Component-Whole(e1,e2)	2	15	The local group , which has over 5000 members , is part of a national association of active and retired law enforcement officers .
+Entity-Destination(e1,e2)	3	7	The Entrepreneurs Forum event is postponed to tomorrow .
+Entity-Destination(e1,e2)	2	5	He stuffed chips into his mouth and watched his cousin-in-law shrewdly .
+Message-Topic(e1,e2)	5	8	This paper offers a reflexive account of secondary analysis focused on the topic of convenience food and choice .
+Cause-Effect(e2,e1)	0	9	Convulsions that occur after DTaP are caused by a fever .
+Other	20	23	Although a commercial Enigma , modified by Polish cryptanalysts to match a military Enigma , used phone plugs , the plugs in the plugboard of the actual Enigma had two prongs , but they still functioned electrically in the same way as phone plugs .
+Message-Topic(e1,e2)	3	5	This includes those rules governing transfers , academic eligibility , age requirements , and the number of consecutive seasons of athletic eligibility beyond grade eight .
+Entity-Origin(e1,e2)	20	24	There 's a phrase of Sickert 's where he speaks somewhere about something succeeding in that it is like a page torn from the book of life .
+Message-Topic(e1,e2)	1	3	This book relates tales , which were recorded by a popular minister in the early 1900 's .
+Component-Whole(e2,e1)	4	5	She double clicked the mouse button by placing her finger on the left mouse-button and then quickly pressing and releasing the button two times .
+Entity-Origin(e1,e2)	1	6	A man who fell from a bridge along Interstate 29/35 after running from a minor crash has died .
+Entity-Destination(e1,e2)	1	6	The virus is exported to the hard disk .
+Other	5	8	It is marked by a sign indicating the length of the pause .
+Entity-Destination(e1,e2)	18	21	The Police has beaten him up , poured water into his ears and nose , and stuffed a shoe in his mouth .
+Product-Producer(e1,e2)	5	11	Abu'l-Qasim 's Treastie is a text from 1301 by an Iranian potter who describes numerous recepies .
+Cause-Effect(e2,e1)	4	7	As the vehicles caught fire after the collision , the transformers began to explode one after the other .
+Component-Whole(e1,e2)	9	12	A type T thermocouple controlled air temperature at the inlet of the dryer .
+Cause-Effect(e1,e2)	0	4	Fog or smoke cause irritation to those with respiratory sensitivity .
+Entity-Destination(e1,e2)	1	6	Federal dollars flow into Halifax recreational facilities .
+Other	1	7	A professor portrays his students ' term paper as his own .
+Component-Whole(e2,e1)	10	15	What is so amazing about this technology is that the image is constructed from random photos pulled from the Internet .
+Other	1	9	The team , has carefully devised an amended research methodology ; it has also since found that further compromises will have to be made .
+Message-Topic(e1,e2)	1	6	A clip describing the bakery 's investment in people as well as machines has been presented .
+Message-Topic(e2,e1)	4	7	Only the most ambitious emissions reductions under discussion within UNFCCC achieves climate goals .
+Message-Topic(e1,e2)	1	4	This fable illustrates the force of jealousy between married people .
+Cause-Effect(e1,e2)	1	5	The sinking resulted in the loss of 112 lives , including those of 28 Americans .
+Product-Producer(e2,e1)	12	20	Listed as an author is Andrew Wakefield - he is the British researcher who started the vaccine-autism myth with his paper linking the MMR vaccine to autism .
+Other	1	5	The team drafted a great player in 2002 when they chose Julius Peppers second overall .
+Message-Topic(e1,e2)	8	13	Throughout his writing career , all of his novels have concerned fictional secret agents .
+Member-Collection(e2,e1)	11	14	Today , it is most famous for proving sanctuary to a creep of giant tortoises ( Geochelone gigantea ) , descendants of four gifted from the Seychellois governor to his opposite number in Zanzibar in the 18th century .
+Cause-Effect(e2,e1)	7	15	Chronic daily headaches are tension headaches or headaches which are caused by taking too many pain killers .
+Other	5	14	But over time , indigenous students have been moving into more specialised and skill-intensive components within disciplines .
+Instrument-Agency(e2,e1)	2	5	Human rights advocates lit a flame to press the international community - especially China - to bring security to Darfur , Sudan .
+Entity-Destination(e1,e2)	1	9	I/O traffic is transferred directly into a target processor cache in accordance with routing information .
+Entity-Destination(e1,e2)	11	19	Mr. Lagano was engrossed in a search for cherrystone and quahog clams , which he deposited proudly in a bucket beside him .
+Other	1	4	A month of snowy sundays in January had an adverse impact on Prospect 's finances .
+Member-Collection(e2,e1)	5	8	It has the fourth highest population of slum dwellers among major cities in India .
+Entity-Destination(e1,e2)	1	7	The items have been donated to the museum of Thracian Art .
+Product-Producer(e2,e1)	8	12	In defamation , the circumstances are that the defendant has made a statement which injures the reputation of the claimant .
+Component-Whole(e1,e2)	1	4	The coil of the galvanometer is wrapped around a cylindrical form .
+Entity-Origin(e1,e2)	0	6	Voters are eluded from the fundamental issues .
+Member-Collection(e2,e1)	10	13	He was later recaptured through the combined efforts of a coven of white witches and a group of satanists .
+Entity-Origin(e1,e2)	11	16	The misery of the passengers had started from Singapore as the plane took off from the city seven hours behind schedule .
+Instrument-Agency(e2,e1)	2	8	The Etruscan craftsmen marked their wares with ink marks .
+Content-Container(e2,e1)	7	10	I got the idea after getting a bottle with an apple in it as a gift from a cousin .
+Other	4	7	At necropsy a heavy infestation of Haematopinus lice was present , along with a polyserositis affecting the right hock , left elbow and peritoneum .
+Entity-Destination(e1,e2)	1	8	The garbages have been secretly thrown into the ocean for the last few years .
+Cause-Effect(e2,e1)	1	6	Pneumococcal meningitis is caused by pneumococcus bacteria , which also cause several diseases of the respiratory system , including pneumonia .
+Message-Topic(e1,e2)	2	6	A local gallery is promoting the work of a diverse range of artists from across the region .
+Member-Collection(e2,e1)	17	20	Philip Larkin 's poem `` At Grass '' employs his sensitive poetic technique to reflect on a field of aged racehorses , and on the practice of poetry .
+Message-Topic(e1,e2)	1	6	The book criticizes the institutionalized nuclear family from a feminist perspective .
+Message-Topic(e1,e2)	1	4	Legal regulations applying to professional corporations typically differ in important ways from those applying to other corporations .
+Other	8	10	Three shark attacks in 24 hours threw local people into panic .
+Other	3	5	We share a kinship of ideals with every man and woman on earth who struggles for their God-given rights .
+Message-Topic(e1,e2)	1	5	The novel depicts the harsh life of workers who worked on a crab-fishing and canning boat in the northern seas of Japan .
+Member-Collection(e2,e1)	8	11	Frank C. Lewis , a representative of a syndicate of Chicago capitalists , was credited as the source of this information .
+Entity-Destination(e1,e2)	1	7	The helicopter was landing into the high grass during the combat SAR demo with soldiers on board .
+Cause-Effect(e2,e1)	8	12	Also ( on a proportional basis ) the rainbow caused by the spray appeared smaller than that of the other rainbow .
+Member-Collection(e2,e1)	8	10	The day after they had marvelled at a fluther of jellyfish , the girl looked up and frowned in confusion .
+Entity-Destination(e1,e2)	1	6	The implant is placed into the jaw bone .
+Message-Topic(e1,e2)	3	8	The first two papers define the contemporary terrorist threat while the next three papers examine global counter-terrorism trends .
+Entity-Destination(e1,e2)	1	5	Background music is added into slideshows .
+Entity-Destination(e1,e2)	1	6	The cops moved into the floating hotels .
+Entity-Origin(e1,e2)	12	17	Later in the year , from November to April , the black flood arrives from the upper reaches of the river beyond Timbuktu .
+Content-Container(e2,e1)	1	4	The box contained a dollar bill .
+Entity-Destination(e1,e2)	3	6	We have imported grain into developing countries in Asia several times .
+Product-Producer(e2,e1)	2	6	When the statesman threw together a draft of the constitution in 1776 , he probably did not realise he would be working in a couple of the positions specified quite so soon .
+Cause-Effect(e2,e1)	1	11	The changes now seen in the endometrium are caused by a hormone called progesterone .
+Entity-Destination(e1,e2)	2	5	I gave water to the plants .
+Cause-Effect(e1,e2)	1	16	The waste , a mixture of gasoline , water and caustic soda , gave off toxic fumes .
+Entity-Destination(e1,e2)	1	6	The debris were thrown into the air .
+Entity-Origin(e2,e1)	0	1	Coconut oil is extracted from the kernel or meat of matured coconut harvested from the coconut palm ( Cocos nucifera ) .
+Content-Container(e2,e1)	8	11	The mission introduced the spoon bowl , a plastic container with dehydrated food inside .
+Member-Collection(e2,e1)	3	6	He had a parcel of twelve deer grazing his land as well as some cows so he probably required a larger water supply -- hence the Canal .
+Entity-Origin(e1,e2)	2	7	The two populations started from the same gene pool .
+Component-Whole(e1,e2)	1	4	The nape on the male has a turquoise blue wash over the light green base feathers .
+Message-Topic(e1,e2)	2	7	The remaining articles run the gamut of sociological research .
+Product-Producer(e1,e2)	5	21	Pearson identified the Bittangabee Bay ruins as having been built as a store house by the Imlay brothers , early European inhabitants .
+Entity-Destination(e1,e2)	4	8	I am draining the wort into the fermenting bucket .
+Other	1	16	Case studies , some of them book long , have made a notable contribution to scientific medicine .
+Component-Whole(e1,e2)	6	9	Below is a list of the books of the bible .
+Entity-Destination(e1,e2)	6	11	Other private sector stakeholders have placed funds into a separate state-specific account .
+Entity-Origin(e1,e2)	5	12	It is settled that the argument of theodicy is from an academical source which is not only not epicurean , but even anti-epicurean .
+Cause-Effect(e2,e1)	0	5	Weak ligaments are caused by problems with collagen ( protein fibres in the ligaments ) .
+Message-Topic(e1,e2)	8	13	It is a controversial topic that provokes strong arguments for and against the practice .
+Message-Topic(e1,e2)	5	11	Here , in exclusive interview clips , he talked about his career and what he thought of today 's television .
+Other	2	4	He puts creativity into use .
+Cause-Effect(e1,e2)	12	17	This article discusses the ethics of the Soldier of Fortune 's guns-for-hire advertisements that resulted in several murders across the United States .
+Product-Producer(e1,e2)	1	7	A book authored by an obscure Danish academic with little or no expertise in environmental science become an international media event .
+Member-Collection(e2,e1)	7	9	Wales ' Commonwealth hopefuls impressed the gathered throng of spectators at the Norwich Union International this weekend .
+Message-Topic(e1,e2)	1	9	Auto ads during this period tended to feature the beauty and engineering strength of the vehicle .
+Other	3	10	In 1905 the press reported extensively and vividly on the disorders in the cities and countryside , the clamor for basic reform , the political discussions .
+Other	0	6	Quotation is used to indicate the words of another speaker or writer .
+Message-Topic(e1,e2)	2	6	His famous book telling of his explorations is valuable not only for its botanical and ethnological record but also for its poetry and narrative .
+Message-Topic(e1,e2)	2	7	In the interview Josie speaks about her childhood and family in Dudley .
+Entity-Destination(e1,e2)	3	6	She threw her passion into this painting .
+Entity-Destination(e1,e2)	11	17	An 18-gauge or 21-gauge Needle Guide Kit was opened and sonoconductive gel was placed inside the sterile sheath .
+Other	10	15	The size of the thumbnails is changed with a sliding bar on the upper right corner of the window .
+Entity-Destination(e1,e2)	2	8	This music CD was misplaced into the wrong folder .
+Entity-Destination(e1,e2)	1	6	These questionnaires were sent to 144 countries .
+Component-Whole(e2,e1)	1	6	This cabin has 3 beautifully decorated bedrooms ; one on each level featuring custom made log beds , each with its own bathroom .
+Member-Collection(e2,e1)	2	8	The first board was comprised of the county judge and the five district court judges of Bexar County .
+Other	14	17	They evaluated maximum number of breached assemblies and exposed fuel area for a proposed shipment in a cask with a test leakage rate .
+Product-Producer(e2,e1)	1	5	The mason who did the stonework did a wonderful job .
+Instrument-Agency(e2,e1)	0	9	Philosophy is a special kind of discourse that uses language in order to give us access to extra-linguistic truth .
+Entity-Destination(e1,e2)	1	8	These cells have been injected into the vitreous cavity .
+Entity-Destination(e1,e2)	1	6	The sacrifices were thrown into the volcano .
+Entity-Destination(e1,e2)	2	8	This developing country has moved into the 21st century .
+Message-Topic(e2,e1)	3	9	The following good practices were pointed out during the interviews .
+Content-Container(e1,e2)	1	5	His shoes were in a box .
+Instrument-Agency(e2,e1)	1	5	A mechanic attaches a socket wrench to a bolt .
+Member-Collection(e2,e1)	4	8	We have assembled a brigade of high-profile master chefs who are creating a menu that - like Ballet Kelowna itself - exemplifies the very best of where we live .
+Entity-Destination(e1,e2)	6	10	Conflicting loads were stalled while pending stores were draining into memory .
+Cause-Effect(e1,e2)	1	4	The battle caused a panic on the frontier , and settlers in the surrounding counties fled .
+Entity-Destination(e1,e2)	2	7	The famous poet moved into a medical center .
+Content-Container(e1,e2)	4	7	I 've got the world in a jug , the stopper 's in my hand .
+Component-Whole(e1,e2)	5	9	As a general rule , chapters later in the book are designed to be studied after earlier ones .
+Cause-Effect(e2,e1)	9	13	For decades , most of the nation 's renewable power has come from dams , which supplied cheap electricity without requiring fossil fuels .
+Product-Producer(e2,e1)	0	2	Chimpanzees make tools and use them to acquire foods and for social displays .
+Component-Whole(e2,e1)	1	11	The stapler comprises a stapling head ( 2 ) and an anvil ( 3 ) .
+Cause-Effect(e2,e1)	2	10	The optical signal is generated by an externally modulated tunable laser , and introduced to the chip through a tapered fiber .
+Cause-Effect(e2,e1)	1	6	The byelection was caused by the resignation of Boris Johnson following his election as mayor of London in May .
+Cause-Effect(e2,e1)	19	23	Swissair was a victim of the clandestine wealth-transfer plaguing the productive sector as a result of the falling interest-rate structure caused by bond speculation .
+Entity-Destination(e1,e2)	5	8	Technological advances have brought the wars into the living rooms across the world .
+Entity-Destination(e1,e2)	5	9	The moving companies transport personal items to your new home .
+Component-Whole(e2,e1)	1	5	This dishwasher has the tallest tub available* and allows you to wash more than ever before .
+Entity-Destination(e1,e2)	6	10	This week we donated handcrafted fabric works to the local church .
+Other	5	8	Dee 's end caps make pier piling sidewall forms function more efficiently by locking the forms together so they stay in place .
+Cause-Effect(e2,e1)	9	13	He received reports from the residence hall presidents regarding evacuation after the fire drill .
+Content-Container(e1,e2)	1	6	The message was enclosed in a paper that was folded and sealed .
+Component-Whole(e2,e1)	3	4	He cleaned his piano keys , using the proposed tips , but also remembered : playing with clean hands can prevent future headache .
+Component-Whole(e1,e2)	5	12	The `` Happy Hour '' gathering was the best part of the event .
+Other	5	8	The frog is the environmental indicator of the land , but University of Queensland researchers reckon when it comes to the sea , we should look to the turtle .
+Entity-Destination(e1,e2)	12	18	Ballots were tallied by an independent third party and locked in a bag which was locked in a safe .
+Component-Whole(e2,e1)	6	13	The Worcester Greenstar 30 CDi Conventional boiler works with a hot water storage cylinder to provide hot water .
+Message-Topic(e1,e2)	4	7	The point of the article is that food forms an important part of CNY .
+Cause-Effect(e2,e1)	1	6	The tsunamis triggered by the massive earthquakes plunged those provinces into crisis : the number of people dead and missing has reached to 245,782 people .
+Entity-Origin(e1,e2)	11	17	The human body is the product of the earth with all elements in it originating from the earth .
+Product-Producer(e1,e2)	6	11	It 's basically a trashy pseudo-18th-century novel written by a American historian at Harvard .
+Cause-Effect(e2,e1)	10	17	We have to take into account the reality of the damage that has been caused by the deregulation of nutritional supplements .
+Content-Container(e1,e2)	1	5	The anthrax was in a suitcase that the Egyptian was supposed to deliver to someone in Canada .
+Content-Container(e1,e2)	1	5	The chair was in a crate and then completely wrapped in cellophane and then bubble wrap .
+Member-Collection(e2,e1)	2	6	Riviera holiday club consists of few hotels ( look on the left part of the page ) which are located on the beach , in a nice and quite park .
+Other	1	5	The catastrophe is narrated through metaphor .
+Entity-Destination(e1,e2)	3	7	She placed the bread in a serving basket and passed it around the classroom .
+Other	16	19	Lesser Black-backed Gulls were capable of producing , on average , almost three times the normal clutch of three eggs .
+Entity-Destination(e1,e2)	1	6	The missile was placed inside a canister and loaded into a launch facility .
+Other	3	15	A Channel 4 drama set in a psychiatric unit has been criticised by a TV watchdog for its `` offensive '' title and for reinforcing prejudice against people with mental health problems .
+Cause-Effect(e1,e2)	0	9	Estrogen dominance is one of the main causes of osteoporosis , cancer , ovarian cysts , fibroids and a host of other female problems in the U.S .
+Component-Whole(e2,e1)	4	11	Many simple DC power supplies regulate the voltage using a shunt regulator such as a zener diode .
+Component-Whole(e1,e2)	9	12	He zeroed in on the metal button in the fly of my jeans as well as the metal eyelets on my shoes as the only sources of metal that likely triggered the metal detector .
+Message-Topic(e2,e1)	2	8	The essential information is found in the second sentence .
+Other	7	9	iTunes , however , is a different kettle of drums .
+Content-Container(e1,e2)	21	25	This is movingly symbolised in the film in the way that people 's homes were bare , all their memories and pictures were in a box .
+Instrument-Agency(e2,e1)	2	8	The young man watched the snow through the window , and he wanted to stay in that cafe forever .
+Member-Collection(e2,e1)	12	15	At the same time in this very same region , lived a tribe of Muslim natives known as Almamy .
+Instrument-Agency(e2,e1)	3	7	I joined the group which took the bus to Jura House Gardens for the start of our walk .
+Entity-Origin(e1,e2)	2	6	When the king had left the apartment , she withdrew her hand .
+Message-Topic(e1,e2)	5	10	It also offers a concise guide to the historical documentary resources .
+Other	4	6	Wealth is nominally a superfluity of goods required for subsistence , but the character of these goods varies with the use of wealth .
+Other	1	7	His wife is a participant in the blogosphere , and he does n't want to ruin the surprise for her .
+Message-Topic(e2,e1)	0	7	Mental disorders have often been featured in art and literature .
+Other	1	6	The scan started at the rest potential toward the positive direction .
+Message-Topic(e1,e2)	3	6	The answers to questions raised about rules governing immigration were wheeled out one after another .
+Entity-Destination(e1,e2)	2	9	The parent parameter was passed on to the QObject constructor .
+Component-Whole(e2,e1)	1	11	The tail is long and thin with a blue central tail feather .
+Entity-Destination(e1,e2)	1	12	The boat basically sails from the harbour to an area of a beach where they are supposed to transfer you to a smaller boat and go to the beach .
+Message-Topic(e2,e1)	1	9	The early years of autism is the topic of discussion .
+Entity-Origin(e1,e2)	6	13	When we arrived , a large basket of goodies was delivered from the village manager and our neighbours presented my wife with a rose to welcome us .
+Cause-Effect(e1,e2)	5	9	The great news is that germs causing recreational water illnesses are killed by chlorine .
+Product-Producer(e2,e1)	6	9	This is more of a production machine stitching 600 stitches per minute .
+Other	3	7	The EU inserted experts into the national defence .
+Other	1	9	The shop machined the part with a 1.25 inch diameter .
+Content-Container(e1,e2)	3	10	We store the tops for the containers in a shallow drawer to reduce the clutter .
+Entity-Destination(e1,e2)	4	7	The government has poured billions into education reforms .
+Product-Producer(e2,e1)	10	12	The campaign 's leaders were right to accept the arms manufacturer 's pledge .
+Entity-Origin(e1,e2)	2	8	The popular definition is rooted in an editorial error .
+Other	7	10	By chance , Toe discovers a rainbow-coloured rock with hidden power to grant wishes .
+Entity-Destination(e1,e2)	1	6	That container was put inside a vault provided by Stark Memorial Funeral Home .
+Other	6	9	The turbines are making an electricity system with low carbon emissions even greener - already , in Seattle , more than 90 percent of the power comes from renewable sources .
+Instrument-Agency(e2,e1)	4	8	Amendment 4 removed the subsection which applies the measure to partner authorities of local authorities .
+Component-Whole(e2,e1)	1	5	This oven has a meat probe so I tried it in the lasagna at a set temperature of 165 degrees .
+Entity-Origin(e1,e2)	0	6	Rum is distilled from fermented sugarcane juice , fermented sugarcane syrup or fermented molasses .
+Entity-Origin(e1,e2)	13	16	I am grateful to a former editor of Cogito for permission to reproduce material from my article 'An introduction to infinity ' , 1992 .
+Component-Whole(e1,e2)	7	10	In the process of engagement the two blades of the scissors engage a piece of tissue to cut .
+Member-Collection(e2,e1)	2	5	A handpicked regiment of 100 marksmen under General William Maxwell laid an ambush in the surrounding cover .
+Content-Container(e1,e2)	1	2	The picture frame hangs on the wall in my living room , reminding me that I 'm the only child of three to be born and live to my parents .
+Message-Topic(e1,e2)	12	14	Today , for the first time in the UK , full examination papers in chemistry and mathematics set for 16-year-old school pupils in the People 's Republic of China are to be published in English and made widely available .
+Cause-Effect(e2,e1)	1	15	The disruption has been caused by a sensitivity reaction in the brain to an ingested substance .
+Cause-Effect(e2,e1)	2	11	The enormous landslide , which was triggered by an exceptionally heavy rainfall event ( 500 mm in 24 h ) on 30 October 1998 .
+Instrument-Agency(e2,e1)	1	9	Most dieters are familiar with the usual weight loss formula : proper diet , adequate exercise , and a healthier lifestyle .
+Entity-Destination(e1,e2)	6	9	In the evening , he threw wood into the bonfire .
+Other	29	34	In the framework of a holistic approach to student development and support , Student Services are also the contact point for other functions such as student out-of-class involvement , student participation in the university governance as well as in the Student Union .
+Message-Topic(e1,e2)	1	4	His speech outlined urgent measures for stimulating the economy .
+Entity-Origin(e1,e2)	9	14	More than 20 years have passed since the last plane took off from the earth .
+Other	1	6	The market is rooted in the structure of Zanzibar household economies , and therefore proides an indispensible function in daily life .
+Component-Whole(e1,e2)	1	13	The ozone layer is a relatively small constitute part of the Earth 's atmosphere , although it accounts for a large protection measure .
+Instrument-Agency(e1,e2)	7	13	Debt-to-income ratios are referred to as the guidelines that are used by mortgage lenders in order to determine your maximum mortgage amount .
+Product-Producer(e2,e1)	1	4	The officer swore an oath of secrecy on becoming a sky marshal , so his name ca n't be revealed .
+Content-Container(e1,e2)	1	7	The wine was stored in a wine rack so the cork has been wet to prevent the wine from turning to vinegar .
+Content-Container(e1,e2)	1	22	The list of passengers and crew , handed to the purser just before the steamer left Providence , was locked in a safe , and it was not recovered .
+Message-Topic(e2,e1)	1	8	The restaurant is advertised by the official municipal website .
+Member-Collection(e1,e2)	12	15	This pecking order continues all the way down to the most subordinate wolf in the pack .
+Member-Collection(e2,e1)	1	3	A rhumba of rattlesnakes plagued a village .
+Entity-Origin(e1,e2)	1	7	My point was coming from a welding background that good goggles are most definitely not hard to find .
+Other	2	12	The complete examination process has been carried out according to the pertinent directives .
+Instrument-Agency(e2,e1)	14	18	Even if an abstract theme is at the center of the poem , the poet still uses concrete imagery in order to make it more accessible .
+Message-Topic(e1,e2)	1	7	This leaflet gives a summary of holiday entitlements .
+Cause-Effect(e1,e2)	2	5	The heated gas caused a pyrolysis on the lower part of oil shale and produced shale oil and oil shale gas are escaped from the retort through exhaust pipe .
+Other	2	6	The signoff queue is used for reports that the user has not seen before .
+Entity-Destination(e1,e2)	3	7	We put the files into a date-based directory like YY/MM/DD .
+Entity-Origin(e1,e2)	1	5	The couple hailed from Tezpur town in northern Assam .
+Content-Container(e2,e1)	17	21	In her dentist dad 's office , with the help of her brother Norman she finds a bottle full of pulled teeth .
+Content-Container(e1,e2)	1	6	My guns are locked in my room .
+Member-Collection(e1,e2)	15	20	Thus , aptitude provides no information about critical interactional processes that take place after the student has enrolled in the university .
+Entity-Origin(e1,e2)	1	7	The scream was coming from his own chambers ; he ran through them and drew to a halt at the doorway to Eirin 's room .
+Content-Container(e1,e2)	9	12	The winner has received the years worth of beauty products in a hamper .
+Product-Producer(e1,e2)	10	14	He is also a work of fiction , a software program written by a bio-scientist from St Petersburg and a finalist in a contest to find the world 's first thinking computer , staged yesterday at Reading University .
+Entity-Destination(e1,e2)	13	18	It was a significant environmental hazard in the copper smelting process when the emissions were released into the atmosphere .
+Entity-Destination(e1,e2)	2	6	The tonneau cover retracts into a canister .
+Member-Collection(e2,e1)	21	23	His reformation of many of the roman laws caused quite a bit of discomfort in the seats of power at the house of senators .
+Other	3	5	Parties have inherited entitlements to property .
+Other	2	7	The libel claimant has proved that the statement was defamatory .
+Cause-Effect(e1,e2)	3	6	The low oil prices caused the collapse of the wall and the Russian empire .
+Other	11	16	By charging odd amounts like 49 or 99 cents , the cashier very probably opened the till .
+Entity-Destination(e1,e2)	2	9	The cancer cells have increasingly been moving into the bone .
+Entity-Destination(e1,e2)	3	7	This Christmas , visitors travelled to the vineyard by the free bus .
+Entity-Destination(e1,e2)	0	6	Geodiversity has been added into the objective .
+Cause-Effect(e2,e1)	1	6	The pain was caused by the parasite entering the body through the skin during bathing or drinking of infested water .
+Member-Collection(e2,e1)	16	18	One who lives in the area of the Ural Mountains has a possibility of observing a bevy of roebucks .
+Instrument-Agency(e2,e1)	0	7	Washer works with a single cup of water .
+Cause-Effect(e2,e1)	1	7	The reaction starts at a rather low temperature ( + 5C ) , and the calorimeter is run from 40 to 130C .
+Component-Whole(e2,e1)	1	5	The accommodation briefly comprises of hall , downstairs w.c. , lounge , kitchen , three bedrooms and bathroom .
+Other	12	18	Next to Moll lived the celebrated actress Nancy Dawson , a former harlot made famous by her lascivious hornpipe in Gay 's phenomenally popular The Beggar'ss Opera .
+Member-Collection(e2,e1)	4	5	He has been a committee member for Gungarde in Cooktown .
+Component-Whole(e1,e2)	1	4	The paw of the cat thus appears to be more sensitive to temperature changes than was believed previously , and its temperature sensitivity may be comparable to that of the hand of the primate .
+Member-Collection(e2,e1)	14	18	On the Seleucid right flank Atticus deployed the elite companions screened by a single unit of Scythian horse archers .
+Content-Container(e1,e2)	1	5	A weapon was inside a wooden box behind a stereo cabinet that was suspended about seven feet above the floor .
+Member-Collection(e2,e1)	10	13	While Jackson was in the White House he kept a stable of race horses -- perhaps the only president of the United States ever to run a racing stable .
+Entity-Destination(e1,e2)	0	9	Job listings in India have been added to our careers section .
+Component-Whole(e1,e2)	1	8	The conference was a part of the Danish kortdage and was arranged by Geoforum in cooperation with GI Norden .
+Entity-Origin(e1,e2)	13	17	The left-turns are sequenced to correspond to the arrival of the group of cars from the upstream signal .
+Component-Whole(e1,e2)	10	11	He atached a handle to the upper part of a cable machine .
+Other	14	16	But we are not at all complacent and we are well aware of the challenges around recruitment .
+Component-Whole(e1,e2)	13	16	This is made possible by unscrewing the three or four screws from the button of the mouse .
+Other	2	10	The influential towns of Brownville and Fontanelle were founded that year as well .
+Content-Container(e1,e2)	6	12	On the table , a potato slice was already placed in a beaker of distilled water .
+Other	2	7	A chance discovery made by a road worker in 1956 uncovered a rich find of 360 million year old fish fossils .
+Instrument-Agency(e2,e1)	1	6	The psychiatrist killed him with the drugs she gave him .
+Component-Whole(e1,e2)	8	11	The user-friendly control device is mounted on the handgrip of the wheelchair .
+Instrument-Agency(e2,e1)	1	10	The restaurant creates dishes using farm fresh products and organic products found from local farms like Meadow Mountains and Haystack .
+Instrument-Agency(e1,e2)	9	11	I conducted a training seminar on energy efficiency best practices for engineers at the Pune Municipal Corporation .
+Message-Topic(e1,e2)	1	5	This poster advertises the 1898 exhibition of the shroud .
+Entity-Origin(e1,e2)	1	6	The alcohol was distilled from a steam bath , and the lactone was separated from the sodium bromide by extraction with ether .
+Message-Topic(e1,e2)	1	5	The survey documents children 's opinions on a wide range of social issues .
+Content-Container(e2,e1)	14	17	My grandmother came here when she was 17 years old with nothing but a suitcase full of oranges .
+Entity-Destination(e1,e2)	1	11	Each sample of the felt was enclosed in a separate glass vial with blanks of polished lead , silver and copper .
+Product-Producer(e2,e1)	1	4	The brothers wrote this movie after coming up with the characters .
+Product-Producer(e1,e2)	12	26	Elsewhere , you 'll find a real embarrassment of riches , with song after brilliant hit song from the fertile imaginations of the great Brill Building writers .
+Member-Collection(e2,e1)	7	9	When a murder of crows and a tittering of magpies get into a turf war over Susie Wu 's eucalyptus , the real winner is Susie 's cat , Mittens .
+Product-Producer(e2,e1)	1	2	The police report has cast a spotlight on America 's self-help industry .
+Entity-Destination(e1,e2)	1	6	My flight arrived at the usual gate .
+Entity-Origin(e2,e1)	10	11	The rising popularity of malted whiskies , especially single malt barley spirits , is evidenced in the growing number of distilleries and labels that have been cropping up over the past few years .
+Other	18	22	Towne Bank , which has only one retail location , was one of those opportunistic upstarts , a bank built on a bubble .
+Member-Collection(e2,e1)	6	9	Meanwhile , General Wadsworth with a detachment of militia volunteers and Winfield Scott 's regulars crossed the river to reinforce Captain Wool 's position and take command .
+Other	1	6	The helix runs away from the nucleotide .
+Cause-Effect(e2,e1)	6	8	I derive a tremendous amount of joy from teaching students in the research laboratory .
+Member-Collection(e2,e1)	2	5	Besides a galaxy of prominent footballers , his colleagues , sportspersons and people from all walks of life paid last respect to the departed footballer .
+Other	8	11	The study found that people who took the combination of cholinesterase inhibitors ( Aricept , Razadyne , or Exelon ) and Memantine , showed a significantly slower rate of cognitve decline than those who took only a cholinesterase inhibitor or no drug .
+Other	1	8	Antelope horns grows from the Southern California desert mountains across to Arkansas and up into Kansas .
+Cause-Effect(e2,e1)	3	7	A very serious problem ensued from the events of the day .
+Message-Topic(e1,e2)	1	11	The book contained not only recipes but also such things as coloring of textiles and other things concerning a household .
+Other	3	5	He sent the revellers into party mode .
+Entity-Destination(e1,e2)	11	15	Trench pudding is made from broken biscuits , condensed milk , jam put into a canteen and cooked over a little spirit stove .
+Cause-Effect(e2,e1)	2	12	A first revolution was triggered by the growing use of reading and writing .
+Message-Topic(e1,e2)	2	5	The pertinent passage describes the flag as a tricolor consisting of green , white and orange bands .
+Component-Whole(e1,e2)	2	8	A witness statement contains the witness 's factual account of the circumstances of the dispute .
+Component-Whole(e1,e2)	3	6	You shaped the bristles of the brush with clean lather still in it .
+Entity-Destination(e1,e2)	4	6	The extrusion blew the molding into paperboard .
+Other	3	6	The US regulatory agency was investigating allegations that at least one plane was considered unsafe to fly .
+Other	2	6	The resulting biofilm grows from the inside out rather than planktonic organisms attaching and promoting the growth from the outside .
+Cause-Effect(e2,e1)	1	7	The vibration caused by a heavy goods train on the Metropolitan Railway , which runs under the Exhibition premises , had shaken the figure off its balance .
+Product-Producer(e1,e2)	2	10	The other offer was from an old-line investment counsel-mutual fund company in New York .
+Entity-Destination(e1,e2)	4	10	A similar image search feature has been added to the software .
+Other	9	13	It also gives some of the history behind the formation of Wolf 's dragoons and some of the battles and campaigns the mercenary regiment has fought .
+Component-Whole(e1,e2)	1	4	The hull of the boat is carved from a single piece of wood .
+Content-Container(e1,e2)	1	16	A metal cube , one meter on each side , is enclosed in a thermally insulating jacket .
+Cause-Effect(e2,e1)	1	7	Voltage surges or spikes are caused by lightning , short circuits , power company equipment problems , and inductive spikes , among many other causes .
+Product-Producer(e1,e2)	4	6	This is a tattoo design an artist drew up .
+Cause-Effect(e2,e1)	12	16	The recovery is weak and fragile , and the economic and social damage caused by the crisis is long-lasting .
+Cause-Effect(e2,e1)	2	11	The cutaneous mycoses are caused by a homogeneous group of keratinophilic fungi termed the dermatophytes .
+Cause-Effect(e2,e1)	5	9	Recovery from the global economic crisis triggered by the collapse of Lehman Brothers was achieved with cooperation from Brazil , Russia , India and China .
+Cause-Effect(e1,e2)	1	7	The microphone converts sound into an electrical signal .
+Other	2	7	The trapped mass takes part in the movement and therefore contributes to the inertia of the system .
+Product-Producer(e2,e1)	3	6	Baird 's scanning disk produced an image of 30 lines resolution , just enough to discern a human face , from a double spiral of lenses .
+Entity-Destination(e1,e2)	4	6	Several authors have inserted implants into bone that have been subject to higher radiation doses .
+Entity-Destination(e1,e2)	6	9	The Sabah Wildlife Department has implanted transmitters into three orangutans .
+Entity-Origin(e1,e2)	1	6	The hygrometer was manufactured in the spring of 1995 , and it was calibrated for the first time in June 1995 .
+Member-Collection(e2,e1)	11	14	Next up was the climb , a slow steady rock strewn menage of eirie shadows reflecting off of tall trees and red rocks .
+Component-Whole(e2,e1)	0	7	Goatfish use a pair of large chin barbels to probe the sea bottom to detect buried prey .
+Entity-Destination(e1,e2)	5	8	Olympics have already poured one billion into the economy .
+Entity-Destination(e1,e2)	4	7	We removed the sharp items into the plastic bag .
+Component-Whole(e1,e2)	9	12	Barrymore is singing while painting the flowers on the wall in the shop .
+Entity-Destination(e1,e2)	2	7	My two friends have moved into my apartment last weekend .
+Other	4	5	I 've been a closet writer for a long time .
+Message-Topic(e1,e2)	11	14	The Commission submitted to the Council and the European Parliament a report on the application and conditions of implementation of the Agreement .
+Cause-Effect(e2,e1)	0	8	Swelling of the resin is caused by the expansion of the structure as a result of water ( or other liquid ) molecules penetrating the matrix .
+Cause-Effect(e2,e1)	2	11	There were setbacks and technical problems that ensued from the location design , flooding , and moisture that plagued the winery and bumped up the investment cost beyond the initial budgetary estimates .
+Content-Container(e2,e1)	7	9	An Israeli woman mistakenly threw out a mattress with money inside , setting off a frantic search through tons of garbage at a number of landfill sites .
+Message-Topic(e2,e1)	3	7	Lauren also explores bisexuality in this new book .
+Instrument-Agency(e2,e1)	1	8	The researchers studied the efficiencies of assessment through exams , particularly if the marking is routine or automated , are counterbalanced by its limitation .
+Entity-Destination(e1,e2)	4	8	Plastic water bottles leak toxic materials into the water .
+Entity-Destination(e1,e2)	2	9	A basic data entry has been added to the database .
+Member-Collection(e1,e2)	8	9	Prevention of CAE viral infection is important in goat herd management because there is no treatment that eliminates CAE virus or vaccine to prevent this disease .
