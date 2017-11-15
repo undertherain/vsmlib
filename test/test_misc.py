@@ -1,6 +1,8 @@
 """Tests for misc"""
 import unittest
+import logging
 from vsmlib.misc.deprecated import deprecated
+logger = logging.getLogger(__name__)
 
 
 @deprecated
@@ -11,4 +13,5 @@ def dummy():
 class Tests(unittest.TestCase):
 
     def test_deprecated(self):
+        logger.info("testing deprecated")
         dummy()
