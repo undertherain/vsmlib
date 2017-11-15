@@ -64,3 +64,21 @@ You can use the above top-similar function to get the label of the vector most c
 
 >>> vsm.get_most_similar_vectors(vsm.get_row("apple"))
 
+Filtering the vocabulary of a VSM
+---------------------------------
+
+In certain cases it may be useful to filter the vocabulary of a pre-trained VSM, e.g. to ensure that two models you are comparing have the same vocabulary. VSMlib provides a ``.filter_by_vocab()`` method that returns a new model instance, the vocabulary of which contains only the words in the provided Python list of words. The list can be empty.
+
+>>> my_vsm.get_most_similar_words("cat", cnt=5)
+[['cat', 1.0],
+ ['monkey', 0.95726192],
+ ['dog', 0.95372206],
+ ['koala', 0.94773519],
+ ['puppy', 0.94360757]]
+>>> my_new_vsm = my_vsm.filter_by_vocab(["dog", "hotdog", "zoo", "hammer", "cat"]) 
+>>> my_new_vsm.get_most_similar_words("cat", cnt=5)
+[['cat', 1.0],
+ ['dog', 0.95372206],
+ ['hotdog', 0.84262532],
+ ['hammer', 0.80627602],
+ ['zoo', 0.7463485]]
