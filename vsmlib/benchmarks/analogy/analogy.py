@@ -652,9 +652,14 @@ def get_pairs(fname):
     return pairs
 
 
-def run_all(name_dataset):
+def run_all(embeddings, name_dataset):
     global cnt_total_correct
     global cnt_total_total
+    global m
+    m = embeddings
+    if options["normalize"]:
+        # m.clip_negatives()  #make this configurable
+        m.normalize()
     m.cache_normalized_copy()
 
     register_test_func()
@@ -677,6 +682,7 @@ def run_all(name_dataset):
 
     # print("total accuracy: {:.4f}".format(cnt_total_correct/(cnt_total_total+1)))
     return results
+
 
 def subsample_dims(newdim):
     m.matrix = m.matrix[:, 0:newdim]
@@ -739,7 +745,6 @@ def main(args=None):
     options["name_dataset"] = os.path.basename(options["path_dataset"])
     options["dir_root_dataset"] = os.path.dirname(options["path_dataset"])
 
-    global m
     for d in dirs:
         if "factorized" in d:
             alpha = cfg["alpha"]
@@ -748,12 +753,8 @@ def main(args=None):
         else:
             m = vsmlib.model.load_from_dir(d)
 
-        if options["normalize"]:
-            # m.clip_negatives()  #make this configurable
-            m.normalize()
-
         print(m.name)
-        results = run_all(options["name_dataset"])
+        results = run_all(m, options["name_dataset"])
         print(results)
         print("\noverall score: {}".format(cnt_total_correct / cnt_total_total))
 
