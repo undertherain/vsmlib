@@ -327,7 +327,7 @@ class ModelDense(Model):
         if header:
             assert size_embedding == self.matrix.shape[1]
         self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words), dtype=np.int32)
-        # self.name += "_{}".format(len(rows[0]))
+        self.name = os.path.basename(os.path.dirname(os.path.normpath(path)))
 
     def filter_by_vocab(self, words):
         """reduced embeddings to the provided list of words (which can be empty)

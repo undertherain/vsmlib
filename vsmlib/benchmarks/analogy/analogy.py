@@ -21,6 +21,7 @@ import inspect
 
 logger = logging.getLogger(__name__)
 
+
 def profile_trivial(a):
     return a
 
@@ -30,11 +31,6 @@ try:
 except NameError:
     profile = profile_trivial
 
-
-options = {}
-options["name_method"] = "3CosAdd"
-options["exclude"] = True
-options["normalize"] = True
 stats = {}
 cnt_total_correct = 0
 cnt_total_total = 0
@@ -43,6 +39,7 @@ do_top5 = True
 
 # this are some hard-coded bits which will be implemented later
 need_subsample = False
+is_normalized = False
 size_cv_test = 1
 set_aprimes_test = None
 inverse_regularization_strength = 1.0
@@ -58,6 +55,13 @@ result_miss = {
 # name_kernel="linear"
 # name_kernel="poly"
 # name_kernel='rbf'
+
+
+def check_options(options):
+    if "exclude" not in options:
+        options["exclude"] = True
+    if "normalize" not in options:
+        options["normalize"] = True
 
 
 def jsonify(data):
@@ -76,7 +80,8 @@ def jsonify(data):
 
 
 def normed(v):
-    if options["normalize"]:
+    global is_normalized
+    if is_normalized:
         return v
     else:
         return v / np.linalg.norm(v)
@@ -160,6 +165,9 @@ def get_crowndedness(vector):
 
 
 class PairWise:
+    def __init__(self, options):
+        self.options = options
+
     def __call__(self, pairs_train, pairs_test):
         results = []
         for p_train, p_test in product(pairs_train, pairs_test):
@@ -184,7 +192,7 @@ class PairWise:
 
         scores, vec_b_prime_predicted = self.compute_scores(vec_a, vec_a_prime, vec_b)
         ids_max = np.argsort(scores)[::-1]
-        result = process_prediction(p_test, scores, None, None, [p_train], exclude=options["exclude"])
+        result = process_prediction(p_test, scores, None, None, [p_train], self.options)
         self.collect_stats(result, vec_a, vec_a_prime, vec_b, vec_b_prime, vec_b_prime_predicted)
         return result
 
@@ -267,47 +275,51 @@ class SimilarToB():
             vec_b = m.get_row(pair_test[0])
             vec_b_prime = m.get_row(pair_test[1][0])
             scores = get_most_similar_fast(vec_b)
-            result = process_prediction(pair_test, scores, None, None)
+            result = process_prediction(pair_test, scores, None, None, self.options)
             result["similarity to correct cosine"] = m.cmp_vectors(vec_b, vec_b_prime)
         return result
 
 
-def do_test_on_pair_3CosAvg(p_train, p_test):
-    cnt_total = 0
-    cnt_correct = 0
-    vecs_a = []
-    vecs_a_prime = []
-    for p in p_train:
-        if is_pair_missing([p]):
-            continue
-        vecs_a_prime_local = []
-        for t in p[1]:
-            if m.vocabulary.get_id(t) >= 0:
-                vecs_a_prime_local.append(m.get_row(t))
-            break
-        if len(vecs_a_prime_local) > 0:
-            vecs_a.append(m.get_row(p[0]))
-            vecs_a_prime.append(np.vstack(vecs_a_prime_local).mean(axis=0))
-    if len(vecs_a_prime) == 0:
-        print("AAAA SOMETHIGN MISSING")
-        return([])
+class TheeCosAvg():
+    def __init__(self, options):
+        self.options = options
 
-    vec_a = np.vstack(vecs_a).mean(axis=0)
-    vec_a_prime = np.vstack(vecs_a_prime).mean(axis=0)
+    def __call__(self, p_train, p_test):
+        cnt_total = 0
+        cnt_correct = 0
+        vecs_a = []
+        vecs_a_prime = []
+        for p in p_train:
+            if is_pair_missing([p]):
+                continue
+            vecs_a_prime_local = []
+            for t in p[1]:
+                if m.vocabulary.get_id(t) >= 0:
+                    vecs_a_prime_local.append(m.get_row(t))
+                break
+            if len(vecs_a_prime_local) > 0:
+                vecs_a.append(m.get_row(p[0]))
+                vecs_a_prime.append(np.vstack(vecs_a_prime_local).mean(axis=0))
+        if len(vecs_a_prime) == 0:
+            print("AAAA SOMETHIGN MISSING")
+            return([])
 
-    results = []
-    for p_test_one in p_test:
-        if is_pair_missing([p_test_one]):
-            continue
-        vec_b_prime = m.get_row(p_test_one[1][0])
-        vec_b = m.get_row(p_test_one[0])
-        vec_b_prime_predicted = vec_a_prime - vec_a + vec_b
-        # oh crap, why are we not normalizing here?
-        scores = get_most_similar_fast(vec_b_prime_predicted)
-        result = process_prediction(p_test_one, scores, None, None)
-        result["distances to correct cosine"] = m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
-        results.append(result)
-    return results
+        vec_a = np.vstack(vecs_a).mean(axis=0)
+        vec_a_prime = np.vstack(vecs_a_prime).mean(axis=0)
+
+        results = []
+        for p_test_one in p_test:
+            if is_pair_missing([p_test_one]):
+                continue
+            vec_b_prime = m.get_row(p_test_one[1][0])
+            vec_b = m.get_row(p_test_one[0])
+            vec_b_prime_predicted = vec_a_prime - vec_a + vec_b
+            # oh crap, why are we not normalizing here?
+            scores = get_most_similar_fast(vec_b_prime_predicted)
+            result = process_prediction(p_test_one, scores, None, None, options=self.options)
+            result["distances to correct cosine"] = m.cmp_vectors(vec_b_prime_predicted, vec_b_prime)
+            results.append(result)
+        return results
 
 
 def create_list_test_right(pairs):
@@ -340,9 +352,13 @@ def get_rank(source, center):
     return rank
 
 
-def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exclude=True):
+def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], options=None):
     global cnt_total_correct
     global cnt_total_total
+    if "exclude" in options:
+        exclude = options["exclude"]
+    else:
+        exclude = True
     ids_max = np.argsort(scores)[::-1]
     id_question = m.vocabulary.get_id(p_test_one[0])
     result = dict()
@@ -416,38 +432,42 @@ def process_prediction(p_test_one, scores, score_reg, score_sim, p_train=[], exc
     return result
 
 
-def do_test_on_pair_regr_old(p_train, p_test):
-    results = []
-    # create_list_test_right(p_test)
+class LRCos:
+    def __init__(self, options):
+        self.options = options
 
-    X_train, Y_train = gen_vec_single(p_train)
-    if options["name_method"].startswith("LRCos"):
-        # model_regression = LogisticRegression(class_weight = 'balanced')
-        # model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
-        model_regression = LogisticRegression(
-            class_weight='balanced',
-            C=inverse_regularization_strength)
-    if options["name_method"] == "SVMCos":
-        model_regression = sklearn.svm.SVC(
-            kernel=name_kernel,
-            cache_size=1000,
-            class_weight='balanced',
-            probability=True)
-    model_regression.fit(X_train, Y_train)
-    score_reg = model_regression.predict_proba(m.matrix)[:, 1]
-    for p_test_one in p_test:
-        if is_pair_missing([p_test_one]):
-            # file_out.write("{}\t{}\t{}\n".format(p_test_one[0],p_test_one[1],"MISSING"))
-            continue
-        vec_b = m.get_row(p_test_one[0])
-        vec_b_prime = m.get_row(p_test_one[1][0])
-        v = vec_b / np.linalg.norm(vec_b)
-        score_sim = v @ m._normalized_matrix.T
-        scores = score_sim * score_reg
-        result = process_prediction(p_test_one, scores, score_reg, score_sim)
-        result["similarity b to b_prime cosine"] = float(m.cmp_vectors(vec_b, vec_b_prime))
-        results.append(result)
-    return results
+    def __call__(self, p_train, p_test):
+        results = []
+        # create_list_test_right(p_test)
+
+        X_train, Y_train = gen_vec_single(p_train)
+        if self.options["name_method"].startswith("LRCos"):
+            # model_regression = LogisticRegression(class_weight = 'balanced')
+            # model_regression = Pipeline([('poly', PolynomialFeatures(degree=3)), ('logistic', LogisticRegression(class_weight = 'balanced',C=C))])
+            model_regression = LogisticRegression(
+                class_weight='balanced',
+                C=inverse_regularization_strength)
+        if self.options["name_method"] == "SVMCos":
+            model_regression = sklearn.svm.SVC(
+                kernel=name_kernel,
+                cache_size=1000,
+                class_weight='balanced',
+                probability=True)
+        model_regression.fit(X_train, Y_train)
+        score_reg = model_regression.predict_proba(m.matrix)[:, 1]
+        for p_test_one in p_test:
+            if is_pair_missing([p_test_one]):
+                # file_out.write("{}\t{}\t{}\n".format(p_test_one[0],p_test_one[1],"MISSING"))
+                continue
+            vec_b = m.get_row(p_test_one[0])
+            vec_b_prime = m.get_row(p_test_one[1][0])
+            v = vec_b / np.linalg.norm(vec_b)
+            score_sim = v @ m._normalized_matrix.T
+            scores = score_sim * score_reg
+            result = process_prediction(p_test_one, scores, score_reg, score_sim, options=self.options)
+            result["similarity b to b_prime cosine"] = float(m.cmp_vectors(vec_b, vec_b_prime))
+            results.append(result)
+        return results
 
 
 def do_test_on_pair_regr_filtered(p_train, p_test, file_out):
@@ -498,24 +518,24 @@ def do_test_on_pair_regr_filtered(p_train, p_test, file_out):
 do_test_on_pairs = None
 
 
-def register_test_func():
+def register_test_func(options):
     global do_test_on_pairs
     if options["name_method"] == "3CosAvg":
-        do_test_on_pairs = do_test_on_pair_3CosAvg
+        do_test_on_pairs = TheeCosAvg(options)
     elif options["name_method"] == "SimilarToAny":
-        do_test_on_pairs = SimilarToAny()
+        do_test_on_pairs = SimilarToAny(options)
     elif options["name_method"] == "SimilarToB":
-        do_test_on_pairs = SimilarToB()
+        do_test_on_pairs = SimilarToB(options)
     elif options["name_method"] == "3CosMul":
-        do_test_on_pairs = ThreeCosMul()
+        do_test_on_pairs = ThreeCosMul(options)
     elif options["name_method"] == "3CosMul2":
-        do_test_on_pairs = ThreeCosMul2()
+        do_test_on_pairs = ThreeCosMul2(options)
     elif options["name_method"] == "3CosAdd":
-        do_test_on_pairs = LinearOffset()
+        do_test_on_pairs = LinearOffset(options)
     elif options["name_method"] == "PairDistance":
-        do_test_on_pairs = PairDistance()
+        do_test_on_pairs = PairDistance(options)
     elif options["name_method"] == "LRCos" or options["name_method"] == "SVMCos":
-        do_test_on_pairs = do_test_on_pair_regr_old
+        do_test_on_pairs = LRCos(options)
     elif options["name_method"] == "LRCosF":
         do_test_on_pairs = do_test_on_pair_regr_filtered
     else:
@@ -540,7 +560,7 @@ def register_test_func():
 #    file_out.close()
 
 
-def run_category(pairs, name_dataset, name_category):
+def run_category(pairs, name_dataset, name_category, options):
     # if name_dataset.endswith("_D") or name_dataset.endswith("_I") or name_dataset.endswith("_E") or name_dataset.endswith("_L"):
        # name_dataset = name_dataset[:-2]
     logger.info("doing tests for category: " + name_category)
@@ -652,17 +672,24 @@ def get_pairs(fname):
     return pairs
 
 
-def run_all(embeddings, name_dataset):
+def run(embeddings, options):
     global cnt_total_correct
     global cnt_total_total
     global m
+    global is_normalized
+    check_options(options)
+    options["name_dataset"] = os.path.basename(options["path_dataset"])
+    options["dir_root_dataset"] = os.path.dirname(options["path_dataset"])
+    name_dataset = options["name_dataset"]
     m = embeddings
     if options["normalize"]:
         # m.clip_negatives()  #make this configurable
         m.normalize()
+    if m.metadata["normalized"]:
+        is_normalized = True
     m.cache_normalized_copy()
 
-    register_test_func()
+    register_test_func(options)
     logger.info("processing dataset " + name_dataset)
     if options["name_method"] == "SVMCos":
         logger.info("using " + options["name_method"] + "_" + name_kernel)
@@ -677,7 +704,7 @@ def run_all(embeddings, name_dataset):
             print(filename)
             pairs = get_pairs(os.path.join(root, filename))
             # print(pairs)
-            out = run_category(pairs, name_dataset, name_category=filename)
+            out = run_category(pairs, name_dataset, name_category=filename, options=options)
             results[filename] = out
 
     # print("total accuracy: {:.4f}".format(cnt_total_correct/(cnt_total_total+1)))
@@ -710,7 +737,6 @@ def subsample_dims(newdim):
 
 
 def main(args=None):
-    global options
 
     if args is None or args.path_config is None:
         if len(sys.argv) > 1:
@@ -729,6 +755,8 @@ def main(args=None):
 
     with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
+    options = {}
+    options.update(options_def)
     options["name_method"] = cfg["method"]
     options["exclude"] = cfg["exclude"]
     options["path_dataset"] = cfg["path_dataset"]
@@ -742,8 +770,6 @@ def main(args=None):
         if args.path_dataset is not None:
             options["path_dataset"] = args.path_dataset
     dirs = options["path_vectors"]
-    options["name_dataset"] = os.path.basename(options["path_dataset"])
-    options["dir_root_dataset"] = os.path.dirname(options["path_dataset"])
 
     for d in dirs:
         if "factorized" in d:
@@ -754,7 +780,7 @@ def main(args=None):
             m = vsmlib.model.load_from_dir(d)
 
         print(m.name)
-        results = run_all(m, options["name_dataset"])
+        results = run(m, options)
         print(results)
         print("\noverall score: {}".format(cnt_total_correct / cnt_total_total))
 
