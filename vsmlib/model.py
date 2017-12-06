@@ -327,7 +327,7 @@ class ModelDense(Model):
         if header:
             assert size_embedding == self.matrix.shape[1]
         self.vocabulary.lst_frequencies = np.zeros(len(self.vocabulary.lst_words), dtype=np.int32)
-        # self.name += "_{}".format(len(rows[0]))
+        self.name = os.path.basename(os.path.dirname(os.path.normpath(path)))
 
     def filter_by_vocab(self, words):
         """reduced embeddings to the provided list of words (which can be empty)
@@ -341,7 +341,7 @@ class ModelDense(Model):
         """
         if len(words) == 0:
             return self
-        else:            
+        else:
             new_embds = ModelDense()
             new_embds.vocabulary = Vocabulary()
             lst_new_vectors = []
@@ -541,11 +541,10 @@ def load_from_dir(path):
 #        if f.startswith("words") and f.endswith(".npy") \
 #               and os.path.isfile(os.path.join(path, f.replace(".npy", ".vocab"))):
 #            result = Model_Fun()
-##            result = ModelLevy()            
+#            result = ModelLevy()
 #            logger.info("Detected VSM in npy and vocab in plain text file format")
 #            result.load_from_dir(path, f[: -4])
 #            result.load_metadata(path)
 #            return result
-        
 
     raise RuntimeError("Cannot detect the format of this VSM")

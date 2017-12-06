@@ -82,6 +82,7 @@ class Vocabulary(object):
             pos += 1
         f.close()
         self.cnt_words = len(self.lst_words)
+        self.lst_frequencies = np.array(self.lst_frequencies)
         self.metadata = load_json(os.path.join(path, "metadata.json"))
 
     def load(self, path):
