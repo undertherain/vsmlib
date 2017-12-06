@@ -7,6 +7,7 @@ from vsmlib.misc.formathelper import countof_fmt
 from vsmlib.misc.data import save_json, load_json
 from vsmlib.corpus import DirTokenIterator
 import logging
+import argparse
 
 logger = logging.getLogger(__name__)
 
@@ -197,26 +198,41 @@ def parse_annotated_token(token):
     if '/' not in token or '[' not in token or ']' not in token:
         raise RuntimeError("annotated format error, should look like 'word/ne[position/deps]'")
     word = token.split('/')[0]
-    ne = token.split('/')[1].split('[')[0]
+    pos = token.split('/')[1].split('[')[0]
     dep = token.split('[')[1].split(']')[0]
-    dep_pos = dep.split('/')[0]
+    posit = dep.split('/')[0]
     dep_tag = dep.split('/')[1]
-    return word, ne, dep_pos, dep_tag
+    return word, pos, posit, dep_tag
 
 
 def get_words_from_annotated_token(token, representation): # the format should look like word/ne[position/deps]
 
-    word, ne, dep_pos, dep_tag = parse_annotated_token(token)
+    word, pos, posit, dep_tag = parse_annotated_token(token)
 
     if representation == 'word':
         return [word]
-    if representation == 'ne':
-        return [word+'/'+ne]
+    if representation == 'pos':
+        return [word+'/'+pos]
     if representation == 'deps':
         w1 = word + '/+' + dep_tag
         w2 = word + '/-' + dep_tag
         return [w1, w2]
     raise RuntimeError("no suitable context_representation find. ")
+
+
+def get_ngram_tokensList_from_word(word, min_gram, max_gram):
+    # word = '<' + word + '>'
+    word = '<' + word + '>'
+    ngram_tokensList = []
+    for gram in range(min_gram, max_gram + 1):
+        ngram_tokens = []
+        for i in range(0, len(word) - gram + 1):
+            nt = word[i:i+gram]
+            ngram_tokens.append(nt)
+        ngram_tokensList.append(ngram_tokens)
+    #　print(word)
+    # print(ngram_tokensList)
+    return ngram_tokensList
 
 
 def create_from_annotated_dir(path, min_frequency=0, representation='word'): # todo faster creation of vocab
@@ -255,4 +271,41 @@ def create_from_annotated_dir(path, min_frequency=0, representation='word'): # t
     v.metadata["context_representation"] = representation
     return v
 
+
+def create_ngram_tokens_from_dir(path, min_gram, max_gram, min_frequency=0):
+    """Collects ngram tokens from a corpus by a given path.
+
+    """
+    t_start = time.time()
+    dic_freqs = {}
+    if not os.path.isdir(path):
+        raise RuntimeError("source directory does not exist")
+    for word in DirTokenIterator(path):
+        ngram_tokensList = get_ngram_tokensList_from_word(word, min_gram, max_gram)
+        for nts in ngram_tokensList:
+            for nt in nts:
+                if nt in dic_freqs:
+                    dic_freqs[nt] += 1
+                else:
+                    dic_freqs[nt] = 1
+    v = Vocabulary_simple()
+    v.lst_frequencies = []
+    for i, word in enumerate(sorted(dic_freqs, key=dic_freqs.get, reverse=True)):
+        frequency = dic_freqs[word]
+        if frequency < min_frequency:
+            break
+        v.lst_frequencies.append(frequency)
+        v.lst_words.append(word)
+        v.dic_words_ids[word] = i
+    v.cnt_words = len(v.lst_words)
+    v.metadata["path_source"] = path
+    v.metadata["min_frequency"] = min_frequency
+    v.metadata["min_gram"] = min_gram
+    v.metadata["max_gram"] = max_gram
+    v.metadata["vsmlib_version"] = VERSION
+    v.metadata["cnt_words"] = v.cnt_words
+    t_end = time.time()
+    v.metadata["execution_time"] = t_end - t_start
+    v.metadata["timestamp"] = datetime.datetime.now().isoformat()
+    return v
 
