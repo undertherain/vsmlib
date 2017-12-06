@@ -6,6 +6,7 @@ import yaml
 from vsmlib.benchmarks.sequence_labeling import load_data
 import argparse
 import vsmlib
+from sklearn import preprocessing
 
 
 def contextwin(l, win):
@@ -59,6 +60,8 @@ def getX(input, m):
                 wv = random_vector
                 OOV_count += 1
             token_count += 1
+            # if normalize is True:
+            #     wv /= np.linalg.norm(wv)
             v.append(wv)
         v = np.array(v).flatten()
         x.append(v)
