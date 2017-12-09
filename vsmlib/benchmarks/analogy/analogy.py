@@ -632,11 +632,6 @@ def run_category(pairs, name_dataset, name_category, options):
         experiment_setup["method"] += "_honest"
     experiment_setup["timestamp"] = datetime.datetime.now().isoformat()
     out["experiment_setup"] = experiment_setup
-    
-    out["results_short"] = dict()
-    out["results_short"]["cnt_correct"] = cnt_total_correct
-    out["results_short"]["cnt_total_total"] = cnt_total_total
-    out["results_short"]["score_overall"] = cnt_total_correct / cnt_total_total
 
     out["results"] = results
     str_results = json.dumps(jsonify(out), indent=4, separators=(',', ': '), sort_keys=True)
@@ -644,7 +639,7 @@ def run_category(pairs, name_dataset, name_category, options):
     file_out.write(str_results)
     file_out.close()
     logger.info("category done")
-    return out["results_short"]
+    return results
 
 
 def get_pairs(fname):
@@ -756,7 +751,6 @@ def main(args=None):
     with open(path_config, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
     options = {}
-    options.update(options_def)
     options["name_method"] = cfg["method"]
     options["exclude"] = cfg["exclude"]
     options["path_dataset"] = cfg["path_dataset"]
@@ -784,8 +778,7 @@ def main(args=None):
         print(results)
         print("\noverall score: {}".format(cnt_total_correct / cnt_total_total))
 
-
-        return results
+    return results
 
 
 if __name__ == "__main__":
