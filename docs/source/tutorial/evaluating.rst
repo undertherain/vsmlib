@@ -154,6 +154,7 @@ The ``config_similariy.yaml`` file is structured as
 Similar to word analogy task, VSMlib also support direct call from **run(embeddings, options)** function.
 The following lines can be used to get word similarity results:
 
+
 .. code:: python
 
     path_model = "./test/data/embeddings/text/plain_with_file_header"
