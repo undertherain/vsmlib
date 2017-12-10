@@ -42,6 +42,18 @@ The configuration file is structured as follows:
 
 VSMlib also support direct call from **run(embeddings, options)** function.
 The **options** has the same parameters as that in **yaml** file.
+This function returns a dict, which indicate the word analogy results.
+
+For example, the following lines can be used to get word analogy results:
+
+.. code:: python
+    path_model = "./test/data/embeddings/text/plain_no_file_header"
+    model = vsmlib.model.load_from_dir(path_model)
+    options = {}
+    options["path_dataset"] = "./test/data/benchmarks/analogy/"
+    options["path_results"] = "/tmp/vsmlib/analogy"
+    options["name_method"] = "3CosAdd"
+    vsmlib.benchmarks.analogy.analogy.run(model, options)
 
 Dataset
 ~~~~~~~
@@ -136,6 +148,18 @@ The ``config_similariy.yaml`` file is structured as
     path_vector: /path/to/your/vsm1/
     path_dataset: /path/to/the/test/dataset
     normalize: true      # specifies if embeddings should be normalized
+
+
+Similar to word analogy task, VSMlib also support direct call from **run(embeddings, options)** function.
+The following lines can be used to get word similarity results:
+
+.. code:: python
+    path_model = "./test/data/embeddings/text/plain_with_file_header"
+    model = vsmlib.model.load_from_dir(path_model)
+    options = {}
+    options["path_dataset"] = "./test/data/benchmarks/similarity/"
+    vsmlib.benchmarks.similarity.similarity.run(model, options)
+
 
 The similarity/relatedness score file is assumed to have the following tab-separated format:
 
