@@ -47,6 +47,7 @@ This function returns a dict, which indicate the word analogy results.
 For example, the following lines can be used to get word analogy results:
 
 .. code:: python
+
     path_model = "./test/data/embeddings/text/plain_no_file_header"
     model = vsmlib.model.load_from_dir(path_model)
     options = {}
@@ -154,6 +155,7 @@ Similar to word analogy task, VSMlib also support direct call from **run(embeddi
 The following lines can be used to get word similarity results:
 
 .. code:: python
+
     path_model = "./test/data/embeddings/text/plain_with_file_header"
     model = vsmlib.model.load_from_dir(path_model)
     options = {}
