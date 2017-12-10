@@ -44,7 +44,7 @@ Dataset
 ~~~~~~~
 
 The BATS dataset can be `downloaded
-here <https://my.pcloud.com/publink/show?code=XZx9L07ZoMmTOoVfwvbGkW2VJFQHqzBKf6zX>`__.
+here <https://my.pcloud.com/publink/show?code=XZOn0J7Z8fzFMt7Tw1mGS6uI1SYfCfTyJQTV>`__.
 The script expects the input dataset to be a tab-separated file formatted as follows:
 
 ::
