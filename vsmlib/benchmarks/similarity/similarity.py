@@ -30,7 +30,7 @@ def evaluate(m, data):
     actual, expected = zip(*results)
     return spearmanr(actual, expected)[0]
 
-def test(embeddings, options):
+def run(embeddings, options):
     results = {}
     for file in os.listdir(options["path_dataset"]):
         testset = read_test_set(os.path.join(options["path_dataset"], file))
@@ -75,7 +75,7 @@ def main(args=None):
         # m.clip_negatives()  #make this configurable
         m.normalize()
 
-    results = test(m, options)
+    results = run(m, options)
     return results
 
 

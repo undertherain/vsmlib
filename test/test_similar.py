@@ -34,4 +34,4 @@ class Tests(unittest.TestCase):
         model = vsmlib.model.load_from_dir(path_model)
         options = {}
         options["path_dataset"] = "./test/data/benchmarks/similarity/"
-        vsmlib.benchmarks.similarity.similarity.test(model, options)
+        vsmlib.benchmarks.similarity.similarity.run(model, options)

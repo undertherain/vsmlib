@@ -667,7 +667,7 @@ def get_pairs(fname):
     return pairs
 
 
-def test(embeddings, options):
+def run(embeddings, options):
     global cnt_total_correct
     global cnt_total_total
     global m
@@ -775,7 +775,7 @@ def main(args=None):
             m = vsmlib.model.load_from_dir(d)
 
         print(m.name)
-        results = test(m, options)
+        results = run(m, options)
         print(results)
         print("\noverall score: {}".format(cnt_total_correct / cnt_total_total))
 

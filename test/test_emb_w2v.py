@@ -10,6 +10,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 path_text = "./test/data/corpora/plain/sense_small.txt"
 path_vocab = "./test/data/vocabs/plain"
+path_vocab_ngram_tokens = "./test/data/vocabs/_plain/ngram_tokens/1/1"
 path_muliple = "./test/data/corpora/multiple_files"
 
 
@@ -26,12 +27,12 @@ class Tests(unittest.TestCase):
         args.negative_size = 5
         args.model = "skipgram"
         args.subword = "none"
-        args.maxWordLength = 20
         args.window = 4
         args.batchsize = 1000
         args.epoch = 5
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
+        args.path_vocab_ngram_tokens = path_vocab_ngram_tokens
         args.path_corpus = path_text
         vsmlib.embeddings.train_word2vec.run(args)
 
@@ -46,12 +47,12 @@ class Tests(unittest.TestCase):
         args.negative_size = 5
         args.model = "skipgram"
         args.subword = "none"
-        args.maxWordLength = 20
         args.window = 4
         args.batchsize = 1000
         args.epoch = 5
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
+        args.path_vocab_ngram_tokens = path_vocab_ngram_tokens
         args.path_corpus = path_text
         vsmlib.embeddings.train_word2vec.run(args)
 
@@ -66,12 +67,12 @@ class Tests(unittest.TestCase):
         args.negative_size = 5
         args.model = "skipgram"
         args.subword = "none"
-        args.maxWordLength = 20
         args.window = 4
         args.batchsize = 1000
         args.epoch = 3
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
+        args.path_vocab_ngram_tokens = path_vocab_ngram_tokens
         args.path_corpus = path_muliple
         vsmlib.embeddings.train_word2vec.run(args)
 
@@ -86,12 +87,12 @@ class Tests(unittest.TestCase):
         args.negative_size = 5
         args.model = "skipgram"
         args.subword = "none"
-        args.maxWordLength = 20
         args.window = 4
         args.batchsize = 1000
         args.epoch = 3
         args.path_out = "/tmp/vsmlib/w2v"
         args.path_vocab = path_vocab
+        args.path_vocab_ngram_tokens = path_vocab_ngram_tokens
         args.path_corpus = "./test/data/corpora/empty"
         try:
             vsmlib.embeddings.train_word2vec.run(args)
