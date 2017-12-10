@@ -30,14 +30,21 @@ def evaluate(m, data):
     actual, expected = zip(*results)
     return spearmanr(actual, expected)[0]
 
-options = {}
-def main(args=None):
+def test(embeddings, options):
+    results = {}
+    for file in os.listdir(options["path_dataset"]):
+        testset = read_test_set(os.path.join(options["path_dataset"], file))
+        result = evaluate(embeddings, testset)
+        results[os.path.splitext(file)[0]] = result
+    print(results)
+    return results
 
+def main(args=None):
     # use ArgumentParser
     # args = parse_args()
 
     # use yaml
-    global options
+    options = {}
     if args is None or args.path_config is None:
         if len(sys.argv) > 1:
             path_config = sys.argv[1]
@@ -68,13 +75,7 @@ def main(args=None):
         # m.clip_negatives()  #make this configurable
         m.normalize()
 
-
-    results = {}
-    for file in os.listdir(options["path_dataset"]):
-        testset = read_test_set(os.path.join(options["path_dataset"], file))
-        result = evaluate(m, testset)
-        results[os.path.splitext(file)[0]] = result
-    print(results)
+    results = test(m, options)
     return results
 
 
