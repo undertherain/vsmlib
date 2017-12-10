@@ -40,6 +40,9 @@ The configuration file is structured as follows:
     path_results: "/path/where/to/save/results"
     # Subfolders for datasets and embeddings willl be created automatically  
 
+VSMlib also support direct call from **run(embeddings, options)** function.
+The **options** has the same parameters as that in **yaml** file.
+
 Dataset
 ~~~~~~~
 
