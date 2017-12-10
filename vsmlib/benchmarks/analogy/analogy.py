@@ -756,6 +756,7 @@ def main(args=None):
     options["path_dataset"] = cfg["path_dataset"]
     options["path_results"] = cfg["path_results"]
     options["normalize"] = cfg["normalize"]
+    options["path_vectors"] = cfg["path_vectors"]
 
     # overwrite params
     if args is not None:
