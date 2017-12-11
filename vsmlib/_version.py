@@ -1,3 +1,3 @@
 """Version of vsmlib package."""
 
-VERSION = "0.1.22"
+VERSION = "0.1.23"
