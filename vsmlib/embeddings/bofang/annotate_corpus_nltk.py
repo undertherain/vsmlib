@@ -18,7 +18,7 @@ parser.add_argument('--corpus_path', default='./news.toy.txt',
 parser.add_argument('--annotated_corpus_path', default='./news.toy.annotated.txt',
                     help='Directory to annotated corpus')
 parser.add_argument('--parser_model', '-o', choices=['edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz', 'edu/stanford/nlp/models/parser/nndep/english_UD.gz'],
-                    default='edu/stanford/nlp/models/parser/nndep/english_UD.gz',
+                    default='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz',
                     help='stanford parser model')
 
 args = parser.parse_args()
@@ -62,6 +62,7 @@ class dependency_parser():
                     for dep, index in node['deps'].items():
                         dependency_str += ',{}/{}'.format(str(index[0] - 1), dep)
                     dependency_str = dependency_str[1:]
+                    dependency_str = '{}/{}'.format(node['rel'], node['head'])
                     out += '{}/{}[{}] '.format(node['word'], node['tag'], dependency_str)
                 out += "\n"
             return out
@@ -78,7 +79,7 @@ dependency_parser = dependency_parser(
 
 
 start_time = time.time()
-
+print(dependency_parser.parse("Alice's dog also likes eating sausage from Russia"))
 # dependency_parser.parse('Information about the stages 50km to 80km), booking for food and accommodation (R450-38 per night) and downloadable maps are on the Freedom Challenge website  call 00 27 84 567 4152 ')
 
 block_size = 0
