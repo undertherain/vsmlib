@@ -119,6 +119,7 @@ class SkipGram(chainer.Chain):
         e = F.reshape(e, (shape[0] * shape[1], shape[2]))
         x = F.reshape(x, (shape[0] * shape[1],))
         loss = self.loss_func(e, x)
+        # shouldn't we divide loss by batch size?
         reporter.report({'loss': loss}, self)
         return loss
 
