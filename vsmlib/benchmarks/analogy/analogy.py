@@ -566,7 +566,7 @@ def run_category(pairs, name_dataset, name_category, options):
     logger.info("doing tests for category: " + name_category)
     global cnt_total_total
     global cnt_total_correct
-    results = []
+    details = []
     name_file_out = os.path.join(options["path_results"], name_dataset, options["name_method"])
     if options["name_method"] == "SVMCos":
         name_file_out += "_" + name_kernel
@@ -619,27 +619,32 @@ def run_category(pairs, name_dataset, name_category, options):
             #print("done")
             # print(p_train)
             # print(p_test)
-            results += do_test_on_pairs(p_train, p_test)
+            details += do_test_on_pairs(p_train, p_test)
+
 
     out = dict()
     experiment_setup = dict() 
     experiment_setup["cnt_questions_total"] = cnt_total_total
     experiment_setup["embeddings"] = m.metadata
     experiment_setup["category"] = name_category
-    experiment_setup["dataset"] = name_dataset
+    experiment_setup["type"] = options['type']
+    experiment_setup["dataset"] = name_dataset + '_' + name_category
     experiment_setup["method"] = options["name_method"]
+    experiment_setup["task"] = "word_analogy"
+    experiment_setup["measurement"] = "accuracy"
     if not options["exclude"]:
         experiment_setup["method"] += "_honest"
     experiment_setup["timestamp"] = datetime.datetime.now().isoformat()
     out["experiment_setup"] = experiment_setup
+    out["details"] = details
 
-    out["results"] = results
     str_results = json.dumps(jsonify(out), indent=4, separators=(',', ': '), sort_keys=True)
     file_out = open(name_file_out, "w", errors="replace")
     file_out.write(str_results)
     file_out.close()
     logger.info("category done")
-    return results
+    return out
+
 
 
 def get_pairs(fname):
@@ -693,18 +698,52 @@ def run(embeddings, options):
     dir_tests = os.path.join(options["dir_root_dataset"], name_dataset)
     if not os.path.exists(dir_tests):
         raise Exception("test dataset dir does not exist:" + dir_tests)
-    results = {}
+    results = []
     for root, dirnames, filenames in os.walk(dir_tests):
         for filename in fnmatch.filter(sorted(filenames), '*'):
             print(filename)
             pairs = get_pairs(os.path.join(root, filename))
             # print(pairs)
+            options['type'] = os.path.basename(root)
             out = run_category(pairs, name_dataset, name_category=filename, options=options)
-            results[filename] = out
+            results.append(out)
+
+    results.extend(group_results(results))
 
     # print("total accuracy: {:.4f}".format(cnt_total_correct/(cnt_total_total+1)))
     return results
 
+
+def group_results(results):
+    # group analogy results, based on the filename's first character
+    rs = {}
+    for r in results:
+        cnt_correct = 0
+        cnt_total = 0
+        for t in r['details']:
+            if t['rank'] == 0:
+                cnt_correct += 1
+            cnt_total += 1
+
+        k = r['experiment_setup']['type']
+
+        if k in rs:
+            rs[k]['details']['cnt_correct'] += cnt_correct
+            rs[k]['details']['cnt_total'] += cnt_total
+        else:
+            rs[k] = {}
+            rs[k]['experiment_setup'] = r['experiment_setup']
+            del rs[k]['experiment_setup']['category']
+            rs[k]['experiment_setup']['dataset'] = k
+            rs[k]['details'] = {}
+            rs[k]['details']['cnt_correct'] = cnt_correct
+            rs[k]['details']['cnt_total'] = cnt_total
+    for k, v in rs.items():
+        rs[k]['result'] = rs[k]['details']['cnt_correct'] * 1.0 / rs[k]['details']['cnt_total']
+    out = []
+    for k, v in rs.items():
+        out.append(rs[k])
+    return out
 
 def subsample_dims(newdim):
     m.matrix = m.matrix[:, 0:newdim]
