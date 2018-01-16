@@ -6,6 +6,7 @@ import yaml
 from vsmlib.benchmarks.sequence_labeling import load_data
 import argparse
 import vsmlib
+import datetime
 from sklearn import preprocessing
 
 
@@ -134,7 +135,27 @@ def run(embeddings, options):
 
         results = {"train": f1_score_train, "test":f1_score_test}
     print(results)
-    return results
+
+    out = dict()
+    out["result"] = results['test']
+    out['details'] = results
+    experiment_setup = dict()
+    experiment_setup["cnt_train_words"] = len(my_train_input)
+    experiment_setup["cnt_test_words"] = len(my_test_input)
+    experiment_setup["embeddings"] = embeddings.metadata
+    experiment_setup["category"] = "default"
+    experiment_setup["dataset"] = task
+    experiment_setup["method"] = "logistic_regression"
+    if task == 'pos':
+        experiment_setup["measurement"] = "accuracy"
+    else:
+        experiment_setup["measurement"] = "F1_score"
+    experiment_setup["task"] = "sequence_labeling"
+    experiment_setup["timestamp"] = datetime.datetime.now().isoformat()
+    out["experiment_setup"] = experiment_setup
+
+
+    return out
 
 
 def main(args=None):
@@ -177,7 +198,8 @@ def main(args=None):
     if options["normalize"]:
         # m.clip_negatives()  #make this configurable
         m.normalize()
-    results = run(m, options)
+    results = []
+    results.append(run(m, options))
     return results
 
 

@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score
 import sys
+import datetime
 import yaml
 from vsmlib.benchmarks.sequence_labeling import load_data
 import argparse
@@ -31,12 +32,26 @@ def evaluate(m, data):
     return spearmanr(actual, expected)[0]
 
 def run(embeddings, options):
-    results = {}
+    results = []
     for file in os.listdir(options["path_dataset"]):
         testset = read_test_set(os.path.join(options["path_dataset"], file))
-        result = evaluate(embeddings, testset)
-        results[os.path.splitext(file)[0]] = result
-    print(results)
+
+        out = dict()
+        out["result"] = evaluate(embeddings, testset)
+
+        experiment_setup = dict()
+        experiment_setup["cnt_pairs_total"] = len(testset)
+        experiment_setup["embeddings"] = embeddings.metadata
+        experiment_setup["category"] = "default"
+        experiment_setup["dataset"] = os.path.splitext(file)[0]
+        experiment_setup["method"] = "cosine_distance"
+        experiment_setup["measurement"] = "spearman"
+        experiment_setup["task"] = "word_similarity"
+        experiment_setup["timestamp"] = datetime.datetime.now().isoformat()
+        out["experiment_setup"] = experiment_setup
+
+        results.append(out)
+
     return results
 
 def main(args=None):
