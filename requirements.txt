@@ -10,3 +10,4 @@ pyyaml
 chainer
 system-query
 pillow
+traitlets
