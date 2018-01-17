@@ -37,5 +37,10 @@ The most commonly used vsmblib commands are:
     def create_vocab(self):
         print("CLI not implemented yet")
 
-if __name__ == '__main__':
+
+def main():
     CLI()
+
+
+if __name__ == '__main__':
+    main()
