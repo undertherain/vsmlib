@@ -35,7 +35,7 @@ The most commonly used vsmblib commands are:
         main_eval(sys.argv[2:])
 
     def create_vocab(self):
-        print("CLI not implemented yet")
+        print("CLI for vocabulary routines not implemented yet")
 
 
 def main():
