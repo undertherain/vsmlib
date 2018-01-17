@@ -10,9 +10,9 @@ from vsmlib.benchmarks.analogy import analogy
 from vsmlib.benchmarks.similarity import similarity
 from vsmlib.benchmarks.sequence_labeling import sequence_labeling
 import json
-from traitlets.config.loader import load_pyconfig_files
+import vsmlib.config
 
-c = load_pyconfig_files(['vsmlib_config.py'], path="./")
+c = vsmlib.config.load_config()
 print(c)
 print(c.Evaluate.path_root_dataset)
 
@@ -102,7 +102,7 @@ def run(args):
         for subtask in c.Evaluate.sequence_labeling.subtasks:
             args.path_config = os.path.join(args.path_root_config, c.Evaluate.sequence_labeling.config_folder_name, 'config.yaml')
             args.path_dataset = os.path.join(args.path_root_dataset, c.Evaluate.sequence_labeling.dataset_folder_name, subtask)
-            args.task = 'pos'
+            args.task = subtask
             tmp_results.extend(sequence_labeling.main(args))
         write_results(args, tmp_results)
 
