@@ -9,21 +9,25 @@ from vsmlib.benchmarks.analogy import analogy
 from vsmlib.benchmarks.similarity import similarity
 from vsmlib.benchmarks.sequence_labeling import sequence_labeling
 import json
+from traitlets.config.loader import load_pyconfig_files
 
-results_file_name = "results_0113.json"
-test_morph = False
-test_word_similarity = False
-test_word_analogy_bats = True
-test_word_analogy_google = False
-test_sequence_labeling = False
+c = load_pyconfig_files(['vsmlib_config.py'], path="./")
+print(c)
+print(c.Evaluate.path_root_dataset)
+
+test_morph = c.Evaluate.test_morph
+test_word_similarity = c.Evaluate.test_word_similarity
+test_word_analogy_bats = c.Evaluate.test_word_analogy_bats
+test_word_analogy_google = c.Evaluate.test_word_analogy_google
+test_sequence_labeling = c.Evaluate.test_sequence_labeling
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path_root_dataset', default='/work/data/NLP/datasets/')
-    parser.add_argument('--path_root_config', default='/home/bofang/vsmlib/vsmlib/benchmarks/')
-    parser.add_argument('--path_json_output', default='/tmp/vsmlib/' + str(1) + '/')  # random.randint(0, 10000)
+    parser.add_argument('--path_root_dataset', default=c.Evaluate.path_root_dataset)
+    parser.add_argument('--path_root_config', default=c.Evaluate.path_root_config)
     parser.add_argument('--path_vector', help='path to the vector', required=True)
+    parser.add_argument('--path_output', help='path to the output', required=True)
 
     args = parser.parse_args()
     return args
@@ -31,15 +35,36 @@ def parse_args():
 
 def get_file_name(json_data):
     print(json.dumps(json_data, sort_keys=True, indent=4))
-    return json_data["task"] + "_" + json_data["dataset"] + "_" + json_data["method"] + "_" + json_data["measurement"]
+    name = ''
+    for key in c.Evaluate.folder_name_keys:
+        if key in json_data:
+            name += '_' + str(json_data[key])
+    name = name[1:]
+    return name
 
+def get_default_embedding_folder(json_data):
+    print(json.dumps(json_data, sort_keys=True, indent=4))
+    name = ''
+    for key in c.Embedding.folder_name_keys:
+        if key in json_data:
+            name += '_' + str(json_data[key])
+    name = name[1:]
+    return name
 
 def write_results(args, results):
     for result in results:
         print(result)
         file_name = get_file_name(result['experiment_setup'])
         print(file_name)
-        with open(os.path.join(args.path_json_output, file_name + ".json"), 'w') as output:
+        embedding_folder_name = get_default_embedding_folder(result['experiment_setup']['embeddings'])
+        print(embedding_folder_name)
+
+        path = os.path.join(args.path_output, embedding_folder_name, file_name + ".json")
+
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+
+        with open(path, 'w') as output:
             output.write(json.dumps(result, sort_keys=True, indent=4))
 
 
@@ -50,44 +75,34 @@ def run(args):
             and not os.path.isfile(os.path.join(args.path_vector, "vectors.bin")):
         return
 
-    if not os.path.exists(os.path.dirname(args.path_json_output)):
-        os.makedirs(os.path.dirname(args.path_json_output))
 
     if test_word_similarity is True:
-        args.path_dataset = os.path.join(args.path_root_dataset, 'similarity')
-        args.path_config = os.path.join(args.path_root_config, 'similarity', 'config.yaml')
+        args.path_config = os.path.join(args.path_root_config, c.Evaluate.word_similarity.config_folder_name, 'config.yaml')
+        args.path_dataset = os.path.join(args.path_root_dataset, c.Evaluate.word_similarity.dataset_folder_name)
         tmp_results = similarity.main(args)
         write_results(args, tmp_results)
 
     if test_word_analogy_google is True:
-        args.path_config = os.path.join(args.path_root_config, 'analogy', 'config_analogy.yaml')
-        args.path_dataset = os.path.join(args.path_root_dataset, 'analogies', 'Google_dir')
+        args.path_config = os.path.join(args.path_root_config, c.Evaluate.word_analogy_google.config_folder_name, 'config_analogy.yaml')
+        args.path_dataset = os.path.join(args.path_root_dataset, c.Evaluate.word_analogy_google.dataset_folder_name)
         tmp_results = analogy.main(args)
         print(tmp_results)
         write_results(args, tmp_results)
 
     if test_word_analogy_bats is True:
-        args.path_config = os.path.join(args.path_root_config, 'analogy', 'config_analogy.yaml')
-        args.path_dataset = os.path.join(args.path_root_dataset, 'analogies', 'BATS_3.0')
+        args.path_config = os.path.join(args.path_root_config, c.Evaluate.word_analogy_bats.config_folder_name, 'config_analogy.yaml')
+        args.path_dataset = os.path.join(args.path_root_dataset, c.Evaluate.word_analogy_bats.dataset_folder_name)
         tmp_results = analogy.main(args)
         print(tmp_results)
         write_results(args, tmp_results)
 
     if test_sequence_labeling is True:
         tmp_results = []
-        args.path_config = os.path.join(args.path_root_config, 'sequence_labeling', 'config.yaml')
-        args.path_dataset = os.path.join(args.path_root_dataset, 'sequence_labeling', 'pos')
-        args.task = 'pos'
-        tmp_results.extend(sequence_labeling.main(args))
-
-        args.path_dataset = os.path.join(args.path_root_dataset, 'sequence_labeling', 'chunk')
-        args.task = 'chunk'
-        tmp_results.extend(sequence_labeling.main(args))
-
-        args.path_dataset = os.path.join(args.path_root_dataset, 'sequence_labeling', 'ner')
-        args.task = 'ner'
-        tmp_results.extend(sequence_labeling.main(args))
-
+        for subtask in c.Evaluate.sequence_labeling.subtasks:
+            args.path_config = os.path.join(args.path_root_config, c.Evaluate.sequence_labeling.config_folder_name, 'config.yaml')
+            args.path_dataset = os.path.join(args.path_root_dataset, c.Evaluate.sequence_labeling.dataset_folder_name, subtask)
+            args.task = 'pos'
+            tmp_results.extend(sequence_labeling.main(args))
         write_results(args, tmp_results)
 
 
