@@ -8,3 +8,4 @@ A summary of changes in VSMlib releases.
 
 - unified format for json files with benchmark outputs across tasks
 - single entry point to run all benchmarks
+- command line interface for vsmlib supports benchmarks
