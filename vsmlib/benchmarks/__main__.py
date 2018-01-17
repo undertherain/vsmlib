@@ -1,2 +1,4 @@
-def main():
-    print("runnng all benchmarks on current embeddings!")
+from .evaluate_all import main
+
+if __name__ == "__main__":
+    main()

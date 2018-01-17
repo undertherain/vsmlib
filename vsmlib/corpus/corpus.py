@@ -7,12 +7,24 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+_default_tokenizer_patter = r"[\w\-']+|[.,!?…]"
+
+
+class LineTokenizer:
+
+    def __init__(self, re_pattern=_default_tokenizer_patter):
+        self.re_token = re.compile(re_pattern)
+
+    def __call__(self, s):
+        tokens = self.re_token.findall(s)
+        return tokens
+
 
 class FileTokenIterator:
 
-    def __init__(self, path, re_pattern = r"[\w\-']+|[.,!?…]"):
+    def __init__(self, path, re_pattern=_default_tokenizer_patter):
         self.path = path
-        self.re_token = re.compile(re_pattern)
+        self.tokenizer = LineTokenizer(re_pattern)
 
     def __iter__(self):
         return self.next()
@@ -22,13 +34,13 @@ class FileTokenIterator:
             for line in f:
                 s = line.strip().lower()
                 # todo lower should be parameter
-                tokens = self.re_token.findall(s)
+                tokens = self.tokenizer(s)
                 for token in tokens:
                     yield token
 
 
 class DirTokenIterator:
-    def __init__(self, path, re_pattern = r"[\w\-']+|[.,!?…]"):
+    def __init__(self, path, re_pattern=_default_tokenizer_patter):
         self.path = path
         self.__gen__ = self.gen(re_pattern)
 

@@ -5,6 +5,7 @@ this script evaluate all available benchmarks on vsmlib
 """
 import argparse
 import os
+import sys
 from vsmlib.benchmarks.analogy import analogy
 from vsmlib.benchmarks.similarity import similarity
 from vsmlib.benchmarks.sequence_labeling import sequence_labeling
@@ -22,14 +23,14 @@ test_word_analogy_google = c.Evaluate.test_word_analogy_google
 test_sequence_labeling = c.Evaluate.test_sequence_labeling
 
 
-def parse_args():
+def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--path_root_dataset', default=c.Evaluate.path_root_dataset)
     parser.add_argument('--path_root_config', default=c.Evaluate.path_root_config)
     parser.add_argument('--path_vector', help='path to the vector', required=True)
     parser.add_argument('--path_output', help='path to the output', required=True)
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     return args
 
 
@@ -106,8 +107,8 @@ def run(args):
         write_results(args, tmp_results)
 
 
-def main():
-    args = parse_args()
+def main(args=None):
+    args = parse_args(args)
     path_vector = args.path_vector
 
     run(args)

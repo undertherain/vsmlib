@@ -73,7 +73,7 @@ def setup():
         description=description,
         long_description=parse_readme(),
         packages=setuptools.find_packages(exclude=['contrib', 'docs', 'test*']),
-        entry_points={'console_scripts': ['vsmlib=vsmlib:main']},
+        entry_points={'console_scripts': ['vsmlib=vsmlib.cli:main']},
         package_data={"vsmlib": ['benchmarks/data/toefl/*']},
         include_package_data=True
     )
