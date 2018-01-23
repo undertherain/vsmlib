@@ -21,7 +21,7 @@ class Vocabulary(object):
         self.metadata = {}
 
     def tokens_to_ids(self, tokens):
-        ids = np.ones(len(tokens)) * -1
+        ids = np.ones(len(tokens), dtype=np.int32) * -1
         for i, t in enumerate(tokens):
             ids[i] = self.get_id(t)
         return ids
