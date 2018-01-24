@@ -11,6 +11,8 @@ from vsmlib.benchmarks.similarity import similarity
 from vsmlib.benchmarks.sequence_labeling import sequence_labeling
 import json
 import vsmlib.config
+from multiprocessing import Pool
+from multiprocessing import Process
 
 c = vsmlib.config.load_config()
 print(c)
@@ -29,6 +31,9 @@ def parse_args(args=None):
     parser.add_argument('--path_root_config', default=c.Evaluate.path_root_config)
     parser.add_argument('--path_vector', help='path to the vector', required=True)
     parser.add_argument('--path_output', help='path to the output', required=True)
+    parser.add_argument('--duplicate_folder', default=True)
+    parser.add_argument('--processes', help='processes to run the evaluation', default=10)
+
 
     args = parser.parse_args(args)
     return args
@@ -54,16 +59,21 @@ def get_default_embedding_folder(json_data):
 
 def write_results(args, results):
     for result in results:
-        print(result)
+
+        v = 0
+        while True:
+            embedding_folder_name = get_default_embedding_folder(result['experiment_setup']['embeddings'])
+            embedding_folder_name += str(v)
+            v+=1
+            path = os.path.join(args.path_output, embedding_folder_name)
+            if not os.path.exists(path):
+                os.makedirs(path)
+                break
+            if args.duplicate_folder:
+                break
+
         file_name = get_file_name(result['experiment_setup'])
-        print(file_name)
-        embedding_folder_name = get_default_embedding_folder(result['experiment_setup']['embeddings'])
-        print(embedding_folder_name)
-
-        path = os.path.join(args.path_output, embedding_folder_name, file_name + ".json")
-
-        if not os.path.exists(os.path.dirname(path)):
-            os.makedirs(os.path.dirname(path))
+        path = os.path.join(path,file_name + ".json")
 
         with open(path, 'w') as output:
             output.write(json.dumps(result, sort_keys=True, indent=4))
@@ -112,11 +122,17 @@ def main(args=None):
     path_vector = args.path_vector
 
     run(args)
+
+    pool = Pool(processes=args.processes)
+
     for root, dirs, files in os.walk(path_vector, topdown=False):
         for name in dirs:
             args.path_vector = os.path.join(root, name)
-            run(args)
+            # run(args)
+            pool.apply_async(run, args=(args,))
 
+    pool.close()
+    pool.join()
 
 if __name__ == "__main__":
     main()
