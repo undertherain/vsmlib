@@ -19,3 +19,10 @@ class Tests(unittest.TestCase):
         vocab = Vocabulary()
         vocab.load(path_vocab)
         print("the:", vocab.get_id("the"))
+
+    def test_tokens_to_ids(self):
+        vocab = Vocabulary()
+        vocab.load(path_vocab)
+        tokens = ["the", "apple"]
+        ids = vocab.tokens_to_ids(tokens)
+        print("ids:", ids)

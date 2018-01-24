@@ -7,7 +7,6 @@ from vsmlib.misc.formathelper import countof_fmt
 from vsmlib.misc.data import save_json, load_json
 from vsmlib.corpus import DirTokenIterator
 import logging
-import argparse
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +19,12 @@ class Vocabulary(object):
         self.lst_words = []
         self.lst_frequencies = []
         self.metadata = {}
+
+    def tokens_to_ids(self, tokens):
+        ids = np.ones(len(tokens), dtype=np.int32) * -1
+        for i, t in enumerate(tokens):
+            ids[i] = self.get_id(t)
+        return ids
 
     def get_id(self, w):
         try:
