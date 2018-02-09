@@ -9,6 +9,7 @@ import argparse
 import vsmlib
 from scipy.stats.stats import spearmanr
 import os
+import random
 
 def read_test_set(path):
     test = []
@@ -22,12 +23,15 @@ def read_test_set(path):
 def evaluate(m, data):
     results = []
     for (x, y), sim in data:
+        x = x.lower()
+        y = y.lower()
         # print(x,y)
         if m.has_word(x) and m.has_word(y):
             # print(m.get_row(x).dot(m.get_row(y)))
             results.append((m.get_row(x).dot(m.get_row(y)), sim))
         else:
-            pass
+            results.append((-1, sim))
+            # results.append((0, sim))
     actual, expected = zip(*results)
     return spearmanr(actual, expected)[0]
 
@@ -84,8 +88,10 @@ def main(args=None):
         if args.path_dataset is not None:
             options["path_dataset"] = args.path_dataset
 
+
     # get the embeddings
     m = vsmlib.model.load_from_dir(options['path_vector'])
+
     if options["normalize"]:
         # m.clip_negatives()  #make this configurable
         m.normalize()
