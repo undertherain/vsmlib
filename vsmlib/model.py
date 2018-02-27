@@ -265,6 +265,19 @@ class ModelDense(Model):
         self.save_matr_to_hdf5(path)
         save_json(self.metadata, os.path.join(path, "metadata.json"))
 
+    def save_to_dir_plain_txt(self, path):
+        if not os.path.exists(path):
+            os.makedirs(path)
+        with open(os.path.join(path, 'vectors.txt'), 'w') as output:
+            for i,w in enumerate(self.vocabulary.lst_words):
+                if len(w.strip()) == 0:
+                    continue
+                output.write(w + ' ')
+                for j in range(self.matrix[i].shape[0]):
+                    output.write(str(self.matrix[i][j]))
+                    output.write(' ')
+                output.write("\n")
+
     def load_with_alpha(self, path, power=0.6):
         # self.load_provenance(path)
         f = tables.open_file(os.path.join(path, 'vectors.h5p'), 'r')
@@ -302,6 +315,7 @@ class ModelDense(Model):
         self.vocabulary = Vocabulary()
         rows = []
         header = False
+        vec_size = -1
         with detect_archive_format_and_open(path) as f:
             for line in f:
                 tokens = line.split()
@@ -316,13 +330,18 @@ class ModelDense(Model):
                 self.vocabulary.dic_words_ids[word] = i
                 self.vocabulary.lst_words.append(word)
                 str_vec = tokens[1:]
+                if vec_size == -1:
+                    vec_size = len(str_vec)
+                if vec_size != len(str_vec):
+                    print(line)
+                    continue
                 row = np.zeros(len(str_vec), dtype=np.float32)
                 for j in range(len(str_vec)):
                     row[j] = float(str_vec[j])
                 rows.append(row)
                 i += 1
-        if header:
-            assert cnt_words == len(rows)
+        # if header:
+        #     assert cnt_words == len(rows)
         self.matrix = np.vstack(rows)
         if header:
             assert size_embedding == self.matrix.shape[1]
