@@ -17,7 +17,7 @@ import copy
 
 
 def run(path):
-    if not os.path.isfile(os.path.join(path, "vectors.h5p")):
+    if not os.path.isfile(os.path.join(path, "vectors.h5p")) and not os.path.isfile(os.path.join(path, "vectors.txt")):
         return
     if os.path.isfile(os.path.join(path, "vectorsb.txt")):
         return
@@ -25,6 +25,8 @@ def run(path):
         return
 
     m = vsmlib.model.load_from_dir(path)
+    m.normalize()
+
     print(path)
     with open(os.path.join(path, "vectorsb.txt"), 'w') as output:
         for k, v in m.vocabulary.dic_words_ids.items():
@@ -36,7 +38,8 @@ def run(path):
 
 
 def main():
-    path_vector = "/home/bofang/Documents/embeddings/"
+    path_vector = "/home/bofang/Documents/embeddings/final_ner/"
+    # path_vector = '/home/bofang/Documents/embeddings/text8/_none/1/1/w3r/u300/e3/'
 
     for root, dirs, files in os.walk(path_vector, topdown=False):
         for name in dirs:
