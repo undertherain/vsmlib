@@ -18,7 +18,7 @@ import logging
 import os
 import vsmlib
 from vsmlib.vocabulary import Vocabulary
-from vsmlib.vocabulary.vocabulary import create_from_dir, create_from_annotated_dir
+from vsmlib.vocabulary.vocabulary import create_from_dir, create_ngram_tokens_from_dir, create_from_annotated_dir
 from vsmlib.corpus import load_file_as_ids
 from vsmlib.model import ModelNumbered
 from vsmlib.embeddings.window_iterators import WindowIterator, DirWindowIterator
@@ -37,13 +37,13 @@ def parse_args():
     parser.add_argument('--context_type', '-ct', choices=['linear', 'deps'],
                         default='linear',
                         help='context type, for deps context, the annotated corpus is required')
-    parser.add_argument('--context_representation', '-cp', choices=['word', 'deps', 'ne', ],
+    parser.add_argument('--context_representation', '-cp', choices=['word', 'deps', 'pos', 'posit', 'lr'], # todo lr posit, interation for deps
                         default='word',
                         help='context representation, for deps (dependency information) and ne (named entity), '
                              'the annotated corpus is required')
     parser.add_argument('--window', '-w', default=5, type=int,
                         help='window size')
-    parser.add_argument('--batchsize', '-b', type=int, default=1000,
+    parser.add_argument('--batchsize', '-b', type=int, default=100,
                         help='learning minibatch size')
     parser.add_argument('--epoch', '-e', default=20, type=int,
                         help='number of epochs to learn')
@@ -52,8 +52,6 @@ def parse_args():
     parser.add_argument('--subword', '-sw', choices=['none', 'rnn'],
                         default='none',
                         help='specify if subword-level approach should be used ')
-    parser.add_argument('--maxWordLength', default=20, type=int,
-                        help='max word length (currently only used for char-level subword)')
     parser.add_argument('--negative-size', default=5, type=int,
                         help='number of negative samples')
     parser.add_argument('--out_type', '-o', choices=['hsm', 'ns', 'original'],
@@ -63,6 +61,9 @@ def parse_args():
     parser.add_argument('--path_vocab',
                         default='',
                         help='path to the vocabulary', required=False)
+    parser.add_argument('--path_vocab_ngram_tokens',
+                        default='',
+                        help='path to the vocabulary of ngram tokens (used for subword models)', required=False)
     parser.add_argument('--path_corpus', help='path to the corpus', required=True)
     parser.add_argument('--path_out', help='path to save embeddings', required=True)
     parser.add_argument('--test', dest='test', default=False, action='store_true')
@@ -112,6 +113,9 @@ class SkipGram(chainer.Chain):
     def getEmbeddings(self):
         return self.embed.W.data
 
+    def getEmbeddings_context(self):
+        return self.loss_func.W.data
+
     def __call__(self, x, context):
         e = self.embed(context)
         shape = e.shape
@@ -159,6 +163,7 @@ def create_model(args, net, vocab):
     model.metadata.update(vars(args))
     model.metadata["vsmlib_version"] = vsmlib.__version__
     model.matrix = cuda.to_cpu(net.getEmbeddings())
+    model.matrix_context = cuda.to_cpu(net.getEmbeddings_context())
     return model
 
 
@@ -184,24 +189,26 @@ def get_loss_func(args, vocab_context):
         loss_func.W.data[...] = 0
     elif args.out_type == 'original':
         loss_func = SoftmaxCrossEntropyLoss(args.dimensions, vocab_context.cnt_words)
-    else:
+
+    if loss_func is None:
         raise Exception('Unknown output type: {}'.format(args.out_type))
     return loss_func
 
 
-def get_model(args, loss_func, vocab):
-    if args.model == 'skipgram':
-        if args.subword == 'none':
+def get_model(args, loss_func, vocab, vocab_ngram_tokens):
+    model = None
+    if args.subword == 'none':
+        if args.model == 'skipgram':
             model = SkipGram(vocab.cnt_words, args.dimensions, loss_func)
-        if args.subword == "rnn":
-            model = utils_subword_rnn.SkipGram(vocab, args.maxWordLength, args.dimensions, loss_func)
-
-    elif args.model == 'cbow':
-        if args.subword == 'none':
+        if args.model == 'cbow':
             model = ContinuousBoW(vocab.cnt_words, args.dimensions, loss_func)
-        if args.subword == "rnn":
-            model = utils_subword_rnn.ContinuousBoW(vocab, args.maxWordLength, args.dimensions, loss_func)
-    else:
+    if args.subword == "rnn":
+        if args.model == 'skipgram':
+            model = utils_subword_rnn.SkipGram(vocab, vocab_ngram_tokens, args.dimensions, loss_func)
+        if args.model == 'cbow':
+            model = utils_subword_rnn.ContinuousBoW(vocab, vocab_ngram_tokens, args.dimensions, loss_func)
+
+    if model is None:
         raise Exception('Unknown model type: {}'.format(args.model))
     return model
 
@@ -225,8 +232,14 @@ def train(args):
     else :
         vocab_context = vocab
 
+    vocab_ngram_tokens = None
+    if args.subword != 'none':
+        vocab_ngram_tokens = Vocabulary()
+        vocab_ngram_tokens.load(args.path_vocab_ngram_tokens)
+
+
     loss_func = get_loss_func(args, vocab_context)
-    model = get_model(args, loss_func, vocab)
+    model = get_model(args, loss_func, vocab, vocab_ngram_tokens)
 
     if args.gpu >= 0:
         model.to_gpu()
@@ -264,7 +277,12 @@ def train(args):
 
 def run(args):
     model = train(args)
+    model.metadata["embeddings_type"] = "vanilla"
     model.save_to_dir(args.path_out)
+    if model.matrix_context is not None:
+        model.matrix = model.matrix_context
+        model.metadata["embeddings_type"] = "context"
+        model.save_to_dir(os.path.join(args.path_out, 'context'))
     logger.info("model saved to " + args.path_out)
 
 
