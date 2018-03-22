@@ -10,6 +10,7 @@ import vsmlib
 from scipy.stats.stats import spearmanr
 import os
 import random
+import math
 
 def read_test_set(path):
     test = []
@@ -22,18 +23,24 @@ def read_test_set(path):
 
 def evaluate(m, data):
     results = []
+    count = 0
     for (x, y), sim in data:
         x = x.lower()
         y = y.lower()
         # print(x,y)
-        if m.has_word(x) and m.has_word(y):
+        if m.has_word(x) and m.has_word(y) and not math.isnan(m.get_row(x).dot(m.get_row(y))):
             # print(m.get_row(x).dot(m.get_row(y)))
             results.append((m.get_row(x).dot(m.get_row(y)), sim))
+            count += 1
         else:
-            results.append((-1, sim))
+            # results.append((-1, sim))
             # results.append((0, sim))
+            pass
+    if len(results) <= 2:
+        return -1, count
     actual, expected = zip(*results)
-    return spearmanr(actual, expected)[0]
+    # print(actual)
+    return spearmanr(actual, expected)[0], count
 
 def run(embeddings, options):
     results = []
@@ -41,9 +48,10 @@ def run(embeddings, options):
         testset = read_test_set(os.path.join(options["path_dataset"], file))
 
         out = dict()
-        out["result"] = evaluate(embeddings, testset)
+        out["result"], count = evaluate(embeddings, testset)
 
         experiment_setup = dict()
+        experiment_setup["cnt_finded_pairs_total"] = count
         experiment_setup["cnt_pairs_total"] = len(testset)
         experiment_setup["embeddings"] = embeddings.metadata
         experiment_setup["category"] = "default"
