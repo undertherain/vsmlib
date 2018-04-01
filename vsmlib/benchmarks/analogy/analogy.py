@@ -652,6 +652,8 @@ def get_pairs(fname):
     with open(fname) as f:
         id_line = 0
         for line in f:
+            if line.strip() == '':
+                continue
             try:
                 id_line += 1
                 if "\t" in line:
