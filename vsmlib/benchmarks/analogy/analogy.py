@@ -141,7 +141,15 @@ def gen_vec_single(pairs):
     # a_prime=[i for sublist in a_prime for i in sublist]
     a_prime = [i for i in a_prime if m.vocabulary.get_id(i) >= 0]
     a = [i for i in a if m.vocabulary.get_id(i) >= 0]
-    noise = [random.choice(m.vocabulary.lst_words) for i in range(len(a))]
+
+    l = len(a)
+    if l == 0:
+        l = 1
+    noise = [random.choice(m.vocabulary.lst_words) for i in range(l)]
+
+    if len(a_prime) == 0:
+        a_prime.append(random.choice(m.vocabulary.lst_words))
+
     x = list(a_prime) + list(a) + list(a) + list(a) + list(a) + noise
     X = np.array([m.get_row(i) for i in x])
     Y = np.hstack([np.ones(len(a_prime)), np.zeros(len(x) - len(a_prime))])
@@ -453,6 +461,7 @@ class LRCos:
                 cache_size=1000,
                 class_weight='balanced',
                 probability=True)
+        # print(Y_train)
         model_regression.fit(X_train, Y_train)
         score_reg = model_regression.predict_proba(m.matrix)[:, 1]
         for p_test_one in p_test:
@@ -657,9 +666,11 @@ def get_pairs(fname):
             try:
                 id_line += 1
                 if "\t" in line:
-                    left, right = line.lower().split("\t")
+                    s = line.lower().split("\t")
                 else:
-                    left, right = line.lower().split()
+                    s = line.lower().split()
+                left = s[0]
+                right = s[1]
                 right = right.strip()
                 if "/" in right:
                     right = [i.strip() for i in right.split("/")]
