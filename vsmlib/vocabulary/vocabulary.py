@@ -5,7 +5,7 @@ import datetime
 from vsmlib._version import VERSION
 from vsmlib.misc.formathelper import countof_fmt
 from vsmlib.misc.data import save_json, load_json
-from vsmlib.corpus import DirTokenIterator
+from vsmlib.corpus import DirTokenIterator, FileTokenIterator
 import logging
 
 logger = logging.getLogger(__name__)
@@ -167,15 +167,10 @@ class Vocabulary_cooccurrence(Vocabulary_simple):
 
         # most_frequent = np.argsort(l_frequencies)[-10:]
 
-def create_from_dir(path, min_frequency=0):
-    """Collects vocabulary from a corpus by a given path.
-
-    """
+def _create_from_iterator(iterator, min_frequency=0):
     t_start = time.time()
     dic_freqs = {}
-    if not os.path.isdir(path):
-        raise RuntimeError("source directory does not exist")
-    for w in DirTokenIterator(path):
+    for w in iterator:
         if w in dic_freqs:
             dic_freqs[w] += 1
         else:
@@ -190,13 +185,34 @@ def create_from_dir(path, min_frequency=0):
         v.lst_words.append(word)
         v.dic_words_ids[word] = i
     v.cnt_words = len(v.lst_words)
-    v.metadata["path_source"] = path
     v.metadata["min_frequency"] = min_frequency
     v.metadata["vsmlib_version"] = VERSION
     v.metadata["cnt_words"] = v.cnt_words
     t_end = time.time()
     v.metadata["execution_time"] = t_end - t_start
     v.metadata["timestamp"] = datetime.datetime.now().isoformat()
+    return v
+
+
+def create_from_dir(path, min_frequency=0):
+    """Collects vocabulary from a corpus by a given directory path.
+    """
+    if not os.path.isdir(path):
+        raise RuntimeError("source directory does not exist")
+    iter = DirTokenIterator(path)
+    v = _create_from_iterator(iter, min_frequency)
+    v.metadata["path_source"] = path
+    return v
+
+
+def create_from_file(path, min_frequency=0):
+    """Collects vocabulary from a corpus by a given file path.
+    """
+    if not os.path.isfile(path):
+        raise RuntimeError("source file does not exist")
+    iter = FileTokenIterator(path)
+    v = _create_from_iterator(iter, min_frequency)
+    v.metadata["path_source"] = path
     return v
 
 
