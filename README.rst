@@ -1,5 +1,14 @@
-VSMlib
-******
+
+!!VSMlib became VECTO!!
+***********************
+
+
+VSMlib had become vecto, please check https://github.com/vecto-ai/vecto
+This repository will not be maintained further. 
+
+
+-----old stuff below------
+
 
 .. image:: https://api.travis-ci.org/undertherain/vsmlib.svg?branch=master
     :target: https://travis-ci.org/undertherain/vsmlib
@@ -13,7 +22,10 @@ VSMlib
     :target: https://badge.fury.io/py/vsmlib
     :alt: pypi version
 
-VSMlibs helps to perform a range of tasks within a framework of vector space models of computational linguistics.
+
+
+
+VSMlib helps to perform a range of tasks within a framework of vector space models of computational linguistics.
 
 What functionality is included
 ==============================
